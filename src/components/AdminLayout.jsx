@@ -13,7 +13,10 @@ import {
   Search,
   Menu,
   X,
-  Database
+  Database,
+  Tags,
+  FileText,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
@@ -60,6 +63,9 @@ const AdminLayout = ({ children }) => {
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Products', path: '/admin/products', icon: Package },
+    { name: 'Categories', path: '/admin/categories', icon: Tags },
+    { name: 'Content', path: '/admin/content', icon: FileText },
+    { name: 'Media', path: '/admin/media', icon: ImageIcon },
     { name: 'Orders', path: '/admin/orders', icon: ShoppingCart },
     { name: 'Customers', path: '/admin/customers', icon: Users },
     { name: 'Analytics', path: '/admin/analytics', icon: BarChart3 },

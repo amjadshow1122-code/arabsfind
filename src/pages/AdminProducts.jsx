@@ -13,9 +13,12 @@ import {
   Package,
   X,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Loader2,
+  GripVertical
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { optimizeImage } from '../lib/imageOptimization';
 
 const AdminProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,15 +26,18 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
     category: '',
     image_url: '',
+    images: [], // Multiple images array
     rating: 5,
     is_featured: false
   });
+  const [dbCategories, setDbCategories] = useState([]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -48,9 +54,74 @@ const AdminProducts = () => {
     setLoading(false);
   };
 
+  const fetchDbCategories = async () => {
+    const { data } = await supabase
+      .from('categories')
+      .select('name')
+      .order('name', { ascending: true });
+    if (data) setDbCategories(data);
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchDbCategories();
   }, []);
+
+  const handleMultipleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const uploadPromises = files.map(async (file) => {
+        // Optimize image to WebP before upload
+        const optimizedFile = file.type.startsWith('image/') 
+          ? await optimizeImage(file, 0.8) 
+          : file;
+
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.webp`;
+        const filePath = `products/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('backups')
+          .upload(filePath, optimizedFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('backups')
+          .getPublicUrl(filePath);
+
+        return publicUrl;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      
+      const newImages = [...formData.images, ...uploadedUrls];
+      setFormData({ 
+        ...formData, 
+        images: newImages,
+        image_url: formData.image_url || uploadedUrls[0] // Set first image as main if none exists
+      });
+    } catch (err) {
+      alert('Error uploading images: ' + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeImage = (index) => {
+    const newImages = formData.images.filter((_, i) => i !== index);
+    setFormData({ 
+      ...formData, 
+      images: newImages,
+      image_url: formData.image_url === formData.images[index] ? (newImages[0] || '') : formData.image_url
+    });
+  };
+
+  const setMainImage = (url) => {
+    setFormData({ ...formData, image_url: url });
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -75,6 +146,7 @@ const AdminProducts = () => {
       price: product.price,
       category: product.category || '',
       image_url: product.image_url || '',
+      images: product.images || (product.image_url ? [product.image_url] : []),
       rating: product.rating || 5,
       is_featured: product.is_featured || false
     });
@@ -109,7 +181,7 @@ const AdminProducts = () => {
     } else {
       setIsModalOpen(false);
       setEditingProduct(null);
-      setFormData({ name: '', description: '', price: '', category: '', image_url: '', rating: 5, is_featured: false });
+      setFormData({ name: '', description: '', price: '', category: '', image_url: '', images: [], rating: 5, is_featured: false });
       fetchProducts();
     }
     setLoading(false);
@@ -138,7 +210,7 @@ const AdminProducts = () => {
         <button 
           onClick={() => {
             setEditingProduct(null);
-            setFormData({ name: '', description: '', price: '', category: '', image_url: '', rating: 5, is_featured: false });
+            setFormData({ name: '', description: '', price: '', category: '', image_url: '', images: [], rating: 5, is_featured: false });
             setIsModalOpen(true);
           }}
           className="btn btn-primary gap-2 py-3 px-6"
@@ -189,7 +261,12 @@ const AdminProducts = () => {
                         <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-primary">{product.name}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="text-sm font-bold text-primary">{product.name}</div>
+                          {product.is_featured && (
+                            <span className="text-[8px] font-bold uppercase tracking-widest bg-secondary/10 text-secondary px-1.5 py-0.5 rounded">Featured</span>
+                          )}
+                        </div>
                         <div className="text-[10px] text-gray-400">ID: #PROD-{product.id}</div>
                       </div>
                     </div>
@@ -220,13 +297,6 @@ const AdminProducts = () => {
                   </td>
                 </tr>
               ))}
-              {!loading && filteredProducts.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="px-6 py-20 text-center text-gray-500">
-                    No products found. Start by adding your first luxury item.
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
@@ -248,7 +318,7 @@ const AdminProducts = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl relative z-10 overflow-hidden"
+              className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl relative z-10 overflow-hidden"
             >
               <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                 <h3 className="text-xl font-heading font-bold text-primary">
@@ -259,8 +329,41 @@ const AdminProducts = () => {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-6 max-h-[70vh] overflow-y-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+                {/* Multi-Image Upload Area */}
+                <div className="flex flex-col gap-4">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Product Gallery</label>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {formData.images.map((img, idx) => (
+                      <div key={idx} className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${formData.image_url === img ? 'border-secondary shadow-lg' : 'border-gray-100'}`}>
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                           <button type="button" onClick={() => setMainImage(img)} className="text-[10px] font-bold bg-white text-primary px-2 py-1 rounded">Set Main</button>
+                           <button type="button" onClick={() => removeImage(idx)} className="text-[10px] font-bold bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+                        </div>
+                        {formData.image_url === img && (
+                          <div className="absolute top-2 left-2 bg-secondary text-white text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded">Main</div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    <label className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-secondary transition-all group bg-gray-50/50">
+                       {isUploading ? (
+                         <Loader2 size={24} className="text-secondary animate-spin" />
+                       ) : (
+                         <>
+                           <Plus size={24} className="text-gray-300 group-hover:text-secondary mb-1" />
+                           <span className="text-[10px] font-bold text-gray-400 uppercase">Add Image</span>
+                         </>
+                       )}
+                       <input type="file" multiple className="hidden" accept="image/*" onChange={handleMultipleImageUpload} disabled={isUploading} />
+                    </label>
+                  </div>
+                  <p className="text-[10px] text-gray-400">Upload multiple images. Click "Set Main" to pick the primary thumbnail.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-50 pt-6">
                   <div className="flex flex-col gap-2">
                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Product Name</label>
                     <input 
@@ -269,7 +372,6 @@ const AdminProducts = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                       className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl outline-none focus:border-secondary transition-all"
-                      placeholder="e.g. Royal Oud Fragrance"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -281,11 +383,9 @@ const AdminProducts = () => {
                       className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl outline-none focus:border-secondary transition-all"
                     >
                       <option value="">Select Category</option>
-                      <option value="Fragrances">Fragrances</option>
-                      <option value="Traditional Wear">Traditional Wear</option>
-                      <option value="Jewelry">Jewelry</option>
-                      <option value="Home Decor">Home Decor</option>
-                      <option value="Accessories">Accessories</option>
+                      {dbCategories.map(cat => (
+                        <option key={cat.name} value={cat.name}>{cat.name}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -300,7 +400,6 @@ const AdminProducts = () => {
                       value={formData.price}
                       onChange={(e) => setFormData({...formData, price: e.target.value})}
                       className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl outline-none focus:border-secondary transition-all"
-                      placeholder="0.00"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -318,32 +417,16 @@ const AdminProducts = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Image URL</label>
-                  <div className="relative">
-                    <ImageIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input 
-                      type="url" 
-                      required
-                      value={formData.image_url}
-                      onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                      className="w-full bg-gray-50 border border-gray-100 pl-12 pr-4 py-3 rounded-xl outline-none focus:border-secondary transition-all"
-                      placeholder="https://images.unsplash.com/..."
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Description</label>
                   <textarea 
                     rows="4"
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl outline-none focus:border-secondary transition-all resize-none"
-                    placeholder="Describe the heritage and luxury of this item..."
+                    className="w-full bg-gray-50 border border-transparent focus:bg-white focus:border-secondary px-4 py-3 rounded-xl text-sm outline-none transition-all resize-none shadow-inner"
                   ></textarea>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
                   <input 
                     type="checkbox" 
                     id="is_featured"
@@ -351,30 +434,16 @@ const AdminProducts = () => {
                     onChange={(e) => setFormData({...formData, is_featured: e.target.checked})}
                     className="w-5 h-5 accent-secondary"
                   />
-                  <label htmlFor="is_featured" className="text-sm font-bold text-primary cursor-pointer">Featured Product</label>
+                  <div>
+                    <label htmlFor="is_featured" className="text-sm font-bold text-primary cursor-pointer block">Featured Product</label>
+                    <p className="text-[10px] text-gray-400">Show this product on the homepage slider/grid.</p>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-50 mt-4">
-                  <button 
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-6 py-3 text-sm font-bold text-gray-500 hover:text-primary transition-all"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit"
-                    disabled={loading}
-                    className="btn btn-primary px-10 py-3 gap-2"
-                  >
-                    {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    ) : (
-                      <>
-                        <Upload size={18} />
-                        {editingProduct ? 'Update Product' : 'Create Product'}
-                      </>
-                    )}
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 text-sm font-bold text-gray-500 hover:text-primary">Cancel</button>
+                  <button type="submit" disabled={loading || isUploading} className="btn btn-primary px-10 py-3 gap-2 shadow-lg shadow-primary/20">
+                    {loading ? <Loader2 size={20} className="animate-spin" /> : <><Upload size={18} /> {editingProduct ? 'Update Product' : 'Create Product'}</>}
                   </button>
                 </div>
               </form>
