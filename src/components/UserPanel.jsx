@@ -24,17 +24,15 @@ const UserPanel = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setUser(user);
-        }
-      } catch (err) {
-        console.log('Auth check skipped for preview mode');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUser(user);
+      } else {
+        navigate('/login');
       }
     };
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

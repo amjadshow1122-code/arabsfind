@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Shield, Truck, RotateCcw } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const categories = [
     { name: 'Traditional Wear', image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&q=80&w=800', count: '120+ Items' },
     { name: 'Home Decor', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=800', count: '85+ Items' },
@@ -12,12 +16,26 @@ const Home = () => {
     { name: 'Jewelry', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800', count: '60+ Items' },
   ];
 
-  const featuredProducts = [
-    { id: 1, name: 'Royal Oud Fragrance', price: '$120.00', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600', rating: 5 },
-    { id: 2, name: 'Handcrafted Silk Abaya', price: '$245.00', image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&q=80&w=600', rating: 4.8 },
-    { id: 3, name: 'Golden Calligraphy Plate', price: '$85.00', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=600', rating: 4.9 },
-    { id: 4, name: 'Emerald Pendant', price: '$450.00', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=600', rating: 5 },
-  ];
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .limit(4)
+        .order('rating', { ascending: false });
+      
+      if (data) setFeaturedProducts(data);
+      setLoading(false);
+    };
+    fetchFeatured();
+  }, []);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price);
+  };
 
   return (
     <div className="flex flex-col">
@@ -150,7 +168,7 @@ const Home = () => {
             {featuredProducts.map((product) => (
               <div key={product.id} className="group flex flex-col gap-4">
                 <Link to={`/product/${product.id}`} className="relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-sm block">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute top-4 right-4 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                     <ArrowRight size={16} className="text-primary" />
                   </div>
@@ -164,7 +182,7 @@ const Home = () => {
                   <Link to={`/product/${product.id}`}>
                     <h3 className="text-xl mb-1 group-hover:text-secondary transition-colors cursor-pointer">{product.name}</h3>
                   </Link>
-                  <p className="font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{product.price}</p>
+                  <p className="font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(product.price)}</p>
                   <button 
                     onClick={() => navigate('/cart')}
                     className="mt-4 btn btn-primary w-full py-2 text-xs"

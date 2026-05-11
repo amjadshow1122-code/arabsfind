@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Heart, Share2, ShoppingCart, ShieldCheck, Truck, RotateCcw, ChevronRight, Minus, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -9,6 +10,27 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [isAdding, setIsAdding] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [mainImage, setMainImage] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+      
+      if (data) {
+        setProduct(data);
+        setMainImage(data.image_url);
+      }
+      setLoading(false);
+    };
+    fetchProduct();
+  }, [id]);
 
   const handleAddToCart = () => {
     setIsAdding(true);
@@ -18,28 +40,29 @@ const ProductDetail = () => {
     }, 800);
   };
 
-  const product = {
-    id: 1,
-    name: 'Royal Oud Fragrance',
-    price: '$120.00',
-    category: 'Fragrances',
-    rating: 4.9,
-    reviews: 128,
-    images: [
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=1000',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1000',
-      'https://images.unsplash.com/photo-1592914610354-fd354ea45e48?auto=format&fit=crop&q=80&w=1000',
-    ],
-    description: 'Experience the essence of royal luxury with our signature Oud fragrance. Sourced from the finest resinous heartwood, this scent captures the mystery and heritage of the East.',
-    details: [
-      '100% Natural Oud Extract',
-      'Long-lasting formula (12+ hours)',
-      'Handcrafted crystal bottle',
-      'Sustainably sourced ingredients',
-    ]
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price);
   };
 
-  const [mainImage, setMainImage] = useState(product.images[0]);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+        <h2 className="text-2xl font-bold">Product not found</h2>
+        <Link to="/shop" className="btn btn-primary">Back to Shop</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white pb-20">
@@ -67,18 +90,20 @@ const ProductDetail = () => {
             >
               <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
             </motion.div>
-            <div className="flex gap-4">
-              {product.images.map((img, idx) => (
-                <button 
-                  key={idx}
-                  onClick={() => setMainImage(img)}
-                  className={`w-24 h-24 rounded-sm overflow-hidden border-2 transition-all ${mainImage === img ? 'border-secondary' : 'border-transparent opacity-60'}`}
-                  style={{ borderColor: mainImage === img ? 'var(--color-secondary)' : 'transparent' }}
-                >
-                  <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            {product.images && product.images.length > 0 && (
+              <div className="flex gap-4">
+                {product.images.map((img, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setMainImage(img)}
+                    className={`w-24 h-24 rounded-sm overflow-hidden border-2 transition-all ${mainImage === img ? 'border-secondary' : 'border-transparent opacity-60'}`}
+                    style={{ borderColor: mainImage === img ? 'var(--color-secondary)' : 'transparent' }}
+                  >
+                    <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -91,12 +116,12 @@ const ProductDetail = () => {
               <div className="flex items-center gap-4">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={16} fill={i < 4.9 ? "var(--color-secondary)" : "none"} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
+                    <Star key={i} size={16} fill={i < Math.floor(product.rating || 5) ? "var(--color-secondary)" : "none"} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 font-bold">({product.reviews} Customer Reviews)</span>
+                <span className="text-sm text-gray-500 font-bold">({product.reviews || 0} Customer Reviews)</span>
               </div>
-              <p className="text-3xl font-bold text-primary mt-2">{product.price}</p>
+              <p className="text-3xl font-bold text-primary mt-2">{formatPrice(product.price)}</p>
             </div>
 
             <p className="text-gray-500 leading-relaxed text-lg">
@@ -188,20 +213,21 @@ const ProductDetail = () => {
             {activeTab === 'description' ? (
               <div className="flex flex-col gap-6 text-gray-500 leading-relaxed">
                 <p>
-                  Crafted with precision and reverence for tradition, the Royal Oud Fragrance is more than just a scent—it's an experience. Each bottle contains high-concentration oud extracts sourced responsibly from aged agarwood trees.
-                </p>
-                <p>
-                  The top notes open with a hint of rare spices and saffron, leading into a heart of pure, rich oud. The base notes settle into a warm, woody embrace of sandalwood and amber, ensuring a presence that lingers gracefully throughout the day.
+                  {product.description || 'No description available for this exquisite piece.'}
                 </p>
               </div>
             ) : (
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
-                {product.details.map((detail, idx) => (
-                  <li key={idx} className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="w-1.5 h-1.5 rounded-full bg-secondary" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
-                    {detail}
-                  </li>
-                ))}
+                {product.details ? (
+                  product.details.map((detail, idx) => (
+                    <li key={idx} className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="w-1.5 h-1.5 rounded-full bg-secondary" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
+                      {detail}
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-gray-500 italic">No additional details available.</p>
+                )}
               </ul>
             )}
           </div>

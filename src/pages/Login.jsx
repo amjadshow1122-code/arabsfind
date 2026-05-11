@@ -27,7 +27,7 @@ const Login = () => {
         if (error) throw error;
         navigate('/profile');
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -37,7 +37,15 @@ const Login = () => {
           },
         });
         if (error) throw error;
-        alert('Check your email for the confirmation link!');
+        
+        if (data?.user && data?.session) {
+          // User is signed up and logged in (email confirmation might be disabled)
+          navigate('/profile');
+        } else {
+          // User is signed up but needs to confirm email
+          alert('Check your email for the confirmation link!');
+          setIsLogin(true); // Switch to login view
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -160,16 +168,6 @@ const Login = () => {
               {isLogin ? 'Sign In' : 'Sign Up'}
               <ArrowRight size={18} />
             </button>
-
-            {isLogin && (
-              <button 
-                type="button"
-                onClick={() => navigate('/profile')}
-                className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-secondary border border-secondary/20 rounded-sm hover:bg-secondary/5 transition-all"
-              >
-                Enter as Test User (Preview)
-              </button>
-            )}
           </form>
 
           <div className="relative">

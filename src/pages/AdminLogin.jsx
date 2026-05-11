@@ -2,21 +2,48 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Lock, User, ArrowRight, Activity, Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleAdminLogin = (e) => {
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Mock admin login
-    setTimeout(() => {
-      setLoading(false);
+    setError(null);
+
+    try {
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) throw authError;
+
+      // Check if user is admin
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (profileError) throw new Error('Could not verify admin status.');
+      
+      if (!profileData.is_admin) {
+        await supabase.auth.signOut();
+        throw new Error('Access denied. Administrator privileges required.');
+      }
+
       navigate('/admin');
-    }, 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +69,16 @@ const AdminLogin = () => {
               <p className="text-gray-400 text-sm mt-1 uppercase tracking-[0.2em] font-bold">Arab Finds Management System</p>
             </div>
           </div>
+
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="bg-red-500/10 text-red-500 p-4 rounded-xl text-xs font-bold border border-red-500/20 text-center"
+            >
+              {error}
+            </motion.div>
+          )}
 
           <form onSubmit={handleAdminLogin} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
@@ -87,14 +124,6 @@ const AdminLogin = () => {
                   Initialize Session
                 </>
               )}
-            </button>
-
-            <button 
-              type="button"
-              onClick={() => navigate('/admin')}
-              className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 border border-white/5 rounded-xl hover:bg-white/5 transition-all"
-            >
-              Quick Access (Bypass)
             </button>
           </form>
 

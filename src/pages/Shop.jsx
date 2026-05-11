@@ -1,28 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Filter, Grid, List, ChevronDown, Search, Star, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const Shop = () => {
   const [view, setView] = useState('grid');
   const [activeCategory, setActiveCategory] = useState('All');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const categories = ['All', 'Traditional Wear', 'Home Decor', 'Fragrances', 'Jewelry', 'Accessories'];
 
-  const products = [
-    { id: 1, name: 'Royal Oud Fragrance', price: '$120.00', category: 'Fragrances', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600', rating: 5 },
-    { id: 2, name: 'Handcrafted Silk Abaya', price: '$245.00', category: 'Traditional Wear', image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&q=80&w=600', rating: 4.8 },
-    { id: 3, name: 'Golden Calligraphy Plate', price: '$85.00', category: 'Home Decor', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=600', rating: 4.9 },
-    { id: 4, name: 'Emerald Pendant', price: '$450.00', category: 'Jewelry', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=600', rating: 5 },
-    { id: 5, name: 'Moroccan Leather Slippers', price: '$65.00', category: 'Accessories', image: 'https://images.unsplash.com/photo-1590673885247-aa7f709d90a1?auto=format&fit=crop&q=80&w=600', rating: 4.7 },
-    { id: 6, name: 'Damascus Steel Knife', price: '$320.00', category: 'Home Decor', image: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&q=80&w=600', rating: 4.9 },
-    { id: 7, name: 'Amber Prayer Beads', price: '$110.00', category: 'Accessories', image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&q=80&w=600', rating: 4.8 },
-    { id: 8, name: 'Copper Tea Set', price: '$180.00', category: 'Home Decor', image: 'https://images.unsplash.com/photo-1576092762791-dd9e2220abd1?auto=format&fit=crop&q=80&w=600', rating: 5 },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (data) {
+        setProducts(data);
+      }
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price);
+  };
 
   const filteredProducts = activeCategory === 'All' 
     ? products 
     : products.filter(p => p.category === activeCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background min-h-screen pb-20">
@@ -137,7 +161,7 @@ const Shop = () => {
                   }`}
                 >
                   <Link to={`/product/${product.id}`} className={`relative overflow-hidden bg-gray-50 block ${view === 'list' ? 'w-full md:w-1/3' : 'aspect-[4/5]'}`}>
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute top-4 left-4 bg-secondary text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm" style={{ backgroundColor: 'var(--color-secondary)' }}>
                       New
                     </div>
@@ -155,7 +179,7 @@ const Shop = () => {
                     <Link to={`/product/${product.id}`}>
                       <h3 className="text-lg font-heading group-hover:text-secondary transition-colors cursor-pointer">{product.name}</h3>
                     </Link>
-                    <p className="text-xl font-bold text-primary">{product.price}</p>
+                    <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>
                     {view === 'list' && (
                       <p className="text-sm text-gray-500 mb-4">
                         Experience the elegance of this fine heritage piece. Hand-selected for its quality and cultural significance.

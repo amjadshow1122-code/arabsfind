@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -16,11 +16,46 @@ import {
   Database
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate('/admin/login');
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!profile || !profile.is_admin) {
+        navigate('/admin/login');
+      } else {
+        setIsAdmin(true);
+      }
+    };
+
+    checkAdmin();
+  }, [navigate]);
+
+  if (isAdmin === null) {
+    return (
+      <div className="min-h-screen bg-[#001236] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
