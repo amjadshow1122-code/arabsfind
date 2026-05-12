@@ -25,17 +25,27 @@ const Header = () => {
       supabase.auth.onAuthStateChange((_event, session) => {
         setSession(session);
       });
+      
+      // Fetch dynamic menu
+      supabase.from('site_settings').select('header_config').eq('id', 1).single().then(({ data }) => {
+        if (data?.header_config?.nav_links) {
+          setNavLinks(data.header_config.nav_links.map(link => ({
+            name: link.label,
+            path: link.url
+          })));
+        }
+      });
     });
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
+  const [navLinks, setNavLinks] = useState([
     { name: 'Home', path: '/' },
     { name: 'Shop', path: '/shop' },
     { name: 'Collections', path: '/collections' },
     { name: 'About', path: '/about' },
-  ];
+  ]);
 
   return (
     <header 

@@ -9,24 +9,38 @@ const Shop = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
   const navigate = useNavigate();
 
-  const categories = ['All', 'Traditional Wear', 'Home Decor', 'Fragrances', 'Jewelry', 'Accessories'];
+  const [categories, setCategories] = useState(['All']);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Fetch categories
+      const { data: catData } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name', { ascending: true });
+        
+      if (catData) {
+        setCategories(['All', ...catData.map(c => c.name)]);
+      }
+
+      // Fetch products
+      const { data: prodData } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (data) {
-        setProducts(data);
+      if (prodData) {
+        setProducts(prodData);
       }
       setLoading(false);
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   const formatPrice = (price) => {
@@ -39,6 +53,12 @@ const Shop = () => {
   const filteredProducts = activeCategory === 'All' 
     ? products 
     : products.filter(p => p.category === activeCategory);
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   if (loading) {
     return (
@@ -93,7 +113,10 @@ const Shop = () => {
                 {categories.map((cat) => (
                   <button 
                     key={cat}
-                    onClick={() => setActiveCategory(cat)}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setCurrentPage(1);
+                    }}
                     className={`text-left text-sm py-2 transition-all flex justify-between items-center ${
                       activeCategory === cat ? 'text-secondary font-bold pl-2 border-l-2 border-secondary' : 'text-gray-500 hover:text-primary'
                     }`}
@@ -139,7 +162,10 @@ const Shop = () => {
                     <List size={18} />
                   </button>
                 </div>
-                <span className="text-gray-400 text-sm">Showing {filteredProducts.length} of {products.length} products</span>
+                <span className="text-gray-400 text-sm">
+                  Showing {filteredProducts.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}-
+                  {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} products
+                </span>
               </div>
 
               <div className="flex items-center gap-4">
@@ -152,7 +178,7 @@ const Shop = () => {
 
             {/* Product Grid */}
             <div className={view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8' : 'flex flex-col gap-8'}>
-              {filteredProducts.map((product) => (
+              {paginatedProducts.map((product) => (
                 <motion.div 
                   layout
                   key={product.id} 
@@ -200,14 +226,32 @@ const Shop = () => {
             </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-center gap-4 mt-16">
-              <button className="w-10 h-10 flex items-center justify-center rounded-sm bg-primary text-white font-bold">1</button>
-              <button className="w-10 h-10 flex items-center justify-center rounded-sm bg-white border border-gray-200 hover:border-primary transition-all font-bold">2</button>
-              <button className="w-10 h-10 flex items-center justify-center rounded-sm bg-white border border-gray-200 hover:border-primary transition-all font-bold">3</button>
-              <button className="flex items-center gap-2 text-sm font-bold text-primary hover:text-secondary transition-colors ml-4 uppercase tracking-widest">
-                Next <ArrowRight size={16} />
-              </button>
-            </div>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-4 mt-16">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button 
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-sm transition-all font-bold ${
+                      currentPage === i + 1 
+                        ? 'bg-primary text-white' 
+                        : 'bg-white border border-gray-200 hover:border-primary text-primary'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                
+                {currentPage < totalPages && (
+                  <button 
+                    onClick={() => setCurrentPage(prev => prev + 1)}
+                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-secondary transition-colors ml-4 uppercase tracking-widest"
+                  >
+                    Next <ArrowRight size={16} />
+                  </button>
+                )}
+              </div>
+            )}
           </main>
         </div>
       </div>

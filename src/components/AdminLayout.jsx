@@ -16,7 +16,12 @@ import {
   Database,
   Tags,
   FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Clock,
+  AlertCircle,
+  ShoppingBag,
+  UserPlus,
+  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
@@ -24,6 +29,9 @@ import { supabase } from '../lib/supabase';
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -46,11 +54,76 @@ const AdminLayout = ({ children }) => {
         navigate('/admin/login');
       } else {
         setIsAdmin(true);
+        fetchNotifications();
       }
     };
 
     checkAdmin();
   }, [navigate]);
+
+  const fetchNotifications = async () => {
+    try {
+      const newNotifications = [];
+      
+      // 1. Fetch recent orders (last 24h)
+      try {
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        const { data: recentOrders } = await supabase
+          .from('orders')
+          .select('id, total_amount, created_at')
+          .gte('created_at', yesterday)
+          .order('created_at', { ascending: false });
+
+        if (recentOrders) {
+          recentOrders.forEach(order => {
+            newNotifications.push({
+              id: `order-${order.id}`,
+              type: 'order',
+              title: 'New Order Received',
+              message: `A new order of $${order.total_amount} was placed.`,
+              time: new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              icon: ShoppingBag,
+              color: 'text-green-500',
+              bg: 'bg-green-50'
+            });
+          });
+        }
+      } catch (err) {
+        console.warn('Orders table not found or not accessible yet.');
+      }
+
+      // 2. Fetch low stock items (with error handling for missing column)
+      try {
+        const { data: lowStock, error } = await supabase
+          .from('products')
+          .select('name, stock')
+          .lt('stock', 5)
+          .gt('stock', 0);
+
+        if (!error && lowStock) {
+          lowStock.forEach(product => {
+            newNotifications.push({
+              id: `stock-${product.name}`,
+              type: 'stock',
+              title: 'Low Stock Alert',
+              message: `${product.name} has only ${product.stock} units left.`,
+              time: 'System',
+              icon: AlertCircle,
+              color: 'text-red-500',
+              bg: 'bg-red-50'
+            });
+          });
+        }
+      } catch (err) {
+        console.warn('Stock column missing in products table. Run SQL migration to fix.');
+      }
+
+      setNotifications(newNotifications);
+      setUnreadCount(newNotifications.length);
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
 
   if (isAdmin === null) {
     return (
@@ -99,7 +172,7 @@ const AdminLayout = ({ children }) => {
           </button>
         </div>
 
-        <nav className="flex-grow py-6 flex flex-col gap-2">
+        <nav className="flex-grow py-6 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
           {menuItems.map((item) => (
             <NavLink
               key={item.path}
@@ -158,10 +231,69 @@ const AdminLayout = ({ children }) => {
           </div>
           
           <div className="flex items-center gap-6">
-            <button className="relative p-2 text-gray-400 hover:text-primary transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className={`relative p-2 transition-colors ${showNotifications ? 'text-secondary' : 'text-gray-400 hover:text-primary'}`}
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[8px] flex items-center justify-center text-white font-bold">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {showNotifications && (
+                  <>
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60]"
+                    >
+                      <div className="p-4 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
+                        <h4 className="font-bold text-primary text-sm uppercase tracking-widest">Notifications</h4>
+                        <button onClick={() => setUnreadCount(0)} className="text-[10px] font-bold text-secondary uppercase tracking-widest hover:underline">Mark all read</button>
+                      </div>
+                      <div className="max-h-[400px] overflow-y-auto">
+                        {notifications.length > 0 ? (
+                          notifications.map((notif) => (
+                            <div key={notif.id} className="p-4 flex gap-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group cursor-pointer">
+                              <div className={`w-10 h-10 rounded-xl ${notif.bg} flex items-center justify-center shrink-0`}>
+                                <notif.icon className={notif.color} size={18} />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <p className="text-xs font-bold text-primary">{notif.title}</p>
+                                <p className="text-[11px] text-gray-500 leading-relaxed">{notif.message}</p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Clock size={10} className="text-gray-300" />
+                                  <span className="text-[10px] text-gray-400 font-medium">{notif.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-12 text-center flex flex-col items-center gap-3">
+                            <CheckCircle2 className="text-gray-100" size={40} />
+                            <p className="text-gray-400 text-xs italic">All caught up! No new alerts.</p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4 bg-gray-50/50 border-t border-gray-50 text-center">
+                         <button className="text-[10px] font-bold text-primary uppercase tracking-widest hover:text-secondary transition-colors">View All Activity</button>
+                      </div>
+                    </motion.div>
+                    <div 
+                      className="fixed inset-0 z-[55]" 
+                      onClick={() => setShowNotifications(false)}
+                    />
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div className="h-8 w-[1px] bg-gray-100"></div>
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
