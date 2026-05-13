@@ -4,8 +4,10 @@ import { Star, Heart, Share2, ShoppingCart, ShieldCheck, Truck, RotateCcw, Chevr
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useCurrency } from '../lib/useCurrency';
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = () => {
+  const { addToCart } = useCart();
   const { id } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
@@ -33,12 +35,80 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     setIsAdding(true);
-    setTimeout(() => {
-      setIsAdding(false);
-      navigate('/cart');
-    }, 800);
+    await addToCart(product, quantity);
+    setIsAdding(false);
+    navigate('/cart');
+  };
+
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  const checkWishlist = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !product?.id) return;
+
+      const { data, error } = await supabase
+        .from('wishlist')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('product_id', parseInt(product.id))
+        .maybeSingle();
+      
+      if (error) throw error;
+      if (data) setIsInWishlist(true);
+    } catch (err) {
+      console.warn('Wishlist check suppressed:', err.message);
+    }
+  };
+
+  useEffect(() => {
+    if (product) checkWishlist();
+  }, [product]);
+
+  const toggleWishlist = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    setWishlistLoading(true);
+    if (isInWishlist) {
+      await supabase
+        .from('wishlist')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('product_id', product.id);
+      setIsInWishlist(false);
+    } else {
+      await supabase
+        .from('wishlist')
+        .insert([{ user_id: user.id, product_id: product.id }]);
+      setIsInWishlist(true);
+    }
+    setWishlistLoading(false);
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: product.name,
+      text: `Check out this amazing find: ${product.name}`,
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
   };
 
   const { formatPrice } = useCurrency();
@@ -159,10 +229,17 @@ const ProductDetail = () => {
                     </>
                   )}
                 </button>
-                <button className="btn border border-gray-200 text-primary hover:bg-gray-50 px-6">
-                  <Heart size={20} />
+                <button 
+                  onClick={toggleWishlist}
+                  disabled={wishlistLoading}
+                  className={`btn border border-gray-200 px-6 transition-all ${isInWishlist ? 'bg-red-50 border-red-100 text-red-500' : 'text-primary hover:bg-gray-50'}`}
+                >
+                  <Heart size={20} fill={isInWishlist ? "currentColor" : "none"} />
                 </button>
-                <button className="btn border border-gray-200 text-primary hover:bg-gray-50 px-6">
+                <button 
+                  onClick={handleShare}
+                  className="btn border border-gray-200 text-primary hover:bg-gray-50 px-6"
+                >
                   <Share2 size={20} />
                 </button>
               </div>

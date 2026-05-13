@@ -4,8 +4,10 @@ import { Filter, Grid, List, ChevronDown, Search, Star, ArrowRight } from 'lucid
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useCurrency } from '../lib/useCurrency';
+import { useCart } from '../context/CartContext';
 
 const Shop = () => {
+  const { addToCart } = useCart();
   const [view, setView] = useState('grid');
   const [activeCategory, setActiveCategory] = useState('All');
   const [products, setProducts] = useState([]);
@@ -211,7 +213,10 @@ const Shop = () => {
                       </p>
                     )}
                     <button 
-                      onClick={() => navigate('/cart')}
+                      onClick={async () => {
+                        await addToCart(product);
+                        navigate('/cart');
+                      }}
                       className="mt-auto btn btn-primary w-full py-3"
                     >
                       Add to Cart

@@ -260,18 +260,28 @@ const AdminLayout = ({ children }) => {
                       <div className="max-h-[400px] overflow-y-auto">
                         {notifications.length > 0 ? (
                           notifications.map((notif) => (
-                            <div key={notif.id} className="p-4 flex gap-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group cursor-pointer">
+                            <div key={notif.id} className="p-4 flex gap-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group cursor-pointer relative">
                               <div className={`w-10 h-10 rounded-xl ${notif.bg} flex items-center justify-center shrink-0`}>
                                 <notif.icon className={notif.color} size={18} />
                               </div>
-                              <div className="flex flex-col gap-1">
+                              <div className="flex flex-col gap-1 flex-grow">
                                 <p className="text-xs font-bold text-primary">{notif.title}</p>
-                                <p className="text-[11px] text-gray-500 leading-relaxed">{notif.message}</p>
+                                <p className="text-[11px] text-gray-500 leading-relaxed pr-6">{notif.message}</p>
                                 <div className="flex items-center gap-2 mt-1">
                                   <Clock size={10} className="text-gray-300" />
                                   <span className="text-[10px] text-gray-400 font-medium">{notif.time}</span>
                                 </div>
                               </div>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setNotifications(prev => prev.filter(n => n.id !== notif.id));
+                                  setUnreadCount(prev => Math.max(0, prev - 1));
+                                }}
+                                className="absolute right-4 top-4 p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                              >
+                                <X size={14} />
+                              </button>
                             </div>
                           ))
                         ) : (

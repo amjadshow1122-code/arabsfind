@@ -3,40 +3,13 @@ import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrency } from '../lib/useCurrency';
+import { useCart } from '../context/CartContext';
 
 const Cart = () => {
   const { formatPrice } = useCurrency();
-  // Mock cart data
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Royal Oud Fragrance',
-      price: 120.00,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=200',
-      category: 'Fragrances'
-    },
-    {
-      id: 2,
-      name: 'Handcrafted Silk Abaya',
-      price: 245.00,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&q=80&w=200',
-      category: 'Traditional Wear'
-    }
-  ]);
+  const { cartItems, removeFromCart, updateQuantity, cartTotal, loading } = useCart();
 
-  const updateQuantity = (id, delta) => {
-    setCartItems(prev => prev.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
-
-  const removeItem = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const subtotal = cartTotal;
   const shipping = subtotal > 500 ? 0 : 25.00;
   const total = subtotal + shipping;
 
@@ -90,14 +63,14 @@ const Cart = () => {
 
                   <div className="flex items-center border border-gray-100 rounded-lg">
                     <button 
-                      onClick={() => updateQuantity(item.id, -1)}
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       className="p-3 text-gray-400 hover:text-primary transition-colors"
                     >
                       <Minus size={14} />
                     </button>
                     <span className="w-10 text-center text-sm font-bold">{item.quantity}</span>
                     <button 
-                      onClick={() => updateQuantity(item.id, 1)}
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="p-3 text-gray-400 hover:text-primary transition-colors"
                     >
                       <Plus size={14} />
@@ -107,7 +80,7 @@ const Cart = () => {
                   <div className="text-right min-w-[100px]">
                     <p className="text-lg font-bold text-primary">{formatPrice(item.price * item.quantity)}</p>
                     <button 
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors uppercase tracking-widest mt-2"
                     >
                       Remove

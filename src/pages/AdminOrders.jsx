@@ -23,6 +23,11 @@ const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(null);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -37,6 +42,151 @@ const AdminOrders = () => {
       setOrders(data);
     }
     setLoading(false);
+  };
+
+  const fetchOrderItems = async (orderId) => {
+    setDetailsLoading(true);
+    const { data, error } = await supabase
+      .from('order_items')
+      .select('*, products!fk_order_items_product(name, image_url)')
+      .eq('order_id', orderId);
+    
+    if (!error && data) {
+      setOrderDetails(data);
+    }
+    setDetailsLoading(false);
+  };
+
+  const handleUpdateStatus = async (orderId, newStatus) => {
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus })
+      .eq('id', orderId);
+    
+    if (error) {
+      console.error('Error updating order status:', error);
+      alert('Failed to update status: ' + error.message);
+    } else {
+      setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder({ ...selectedOrder, status: newStatus });
+      }
+    }
+    setActiveMenu(null);
+  };
+
+  const handlePrintInvoice = async (order) => {
+    // 1. Fetch items if we don't have them
+    const { data: items, error } = await supabase
+      .from('order_items')
+      .select('*, products(name)')
+      .eq('order_id', order.id);
+
+    if (error || !items) {
+      alert('Could not fetch order items for invoice.');
+      return;
+    }
+
+    // 2. Create printable content
+    const printWindow = window.open('', '_blank');
+    const invoiceHtml = `
+      <html>
+        <head>
+          <title>Invoice - #ORD-${order.id.slice(0, 8)}</title>
+          <style>
+            body { font-family: 'Inter', sans-serif; padding: 40px; color: #1a1a1a; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 40px; }
+            .logo { font-size: 24px; font-weight: bold; color: #1a1a1a; }
+            .invoice-info { text-align: right; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+            .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #999; font-weight: bold; margin-bottom: 5px; }
+            .value { font-size: 14px; font-weight: 500; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+            th { text-align: left; background: #f9f9f9; padding: 12px; font-size: 10px; text-transform: uppercase; color: #999; }
+            td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+            .total-section { text-align: right; border-top: 2px solid #1a1a1a; pt: 20px; }
+            .total-row { display: flex; justify-content: flex-end; gap: 40px; margin-top: 10px; }
+            @media print { .no-print { display: none; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="logo">ARAB FINDS</div>
+            <div class="invoice-info">
+              <div class="label">Invoice Number</div>
+              <div class="value">#ORD-${order.id.slice(0, 8)}</div>
+              <div class="label" style="margin-top: 10px;">Date</div>
+              <div class="value">${new Date(order.created_at).toLocaleDateString()}</div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div>
+              <div class="label">Billed To</div>
+              <div class="value">${order.customer_email}</div>
+              <div class="value" style="margin-top: 5px;">${order.shipping_address?.firstName} ${order.shipping_address?.lastName}</div>
+              <div class="value">${order.shipping_address?.phone}</div>
+            </div>
+            <div>
+              <div class="label">Shipping Address</div>
+              <div class="value">${order.shipping_address?.address}</div>
+              <div class="value">${order.shipping_address?.city}, ${order.shipping_address?.country}</div>
+              <div class="value">${order.shipping_address?.postalCode || ''}</div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Product Description</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(item => `
+                <tr>
+                  <td>${item.products?.name}</td>
+                  <td>${item.quantity}</td>
+                  <td>${formatPrice(item.price_at_time || item.price)}</td>
+                  <td style="text-align: right;">${formatPrice((item.price_at_time || item.price) * item.quantity)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="total-section">
+            <div class="total-row">
+              <span class="label">Subtotal</span>
+              <span class="value">${formatPrice(order.total_amount)}</span>
+            </div>
+            <div class="total-row" style="margin-top: 20px;">
+              <span class="label" style="font-size: 14px; color: #1a1a1a;">Grand Total</span>
+              <span class="value" style="font-size: 24px; color: #d4af37;">${formatPrice(order.total_amount)}</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 80px; text-align: center; font-size: 12px; color: #999;">
+            Thank you for your purchase from Arab Finds. Your heritage treasure is on its way.
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(invoiceHtml);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
+  };
+
+  const handleViewDetails = (order) => {
+    setSelectedOrder(order);
+    setShowDetails(true);
+    fetchOrderItems(order.id);
   };
 
   useEffect(() => {
@@ -129,8 +279,8 @@ const AdminOrders = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+        <div className="overflow-x-visible">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-gray-50 text-[10px] font-bold uppercase tracking-widest text-gray-400">
@@ -173,16 +323,46 @@ const AdminOrders = () => {
                       <span className="text-sm font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(order.total_amount)}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 text-gray-400 hover:text-primary transition-colors" title="View Details">
+                      <div className="flex items-center justify-end gap-2">
+                        <button 
+                          onClick={() => handleViewDetails(order)}
+                          className="p-2 text-gray-400 hover:text-primary transition-colors bg-gray-50 rounded-lg hover:bg-gray-100" 
+                          title="View Details"
+                        >
                           <Eye size={18} />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-primary transition-colors" title="Print Invoice">
+                        <button 
+                          onClick={() => handlePrintInvoice(order)}
+                          className="p-2 text-gray-400 hover:text-primary transition-colors bg-gray-50 rounded-lg hover:bg-gray-100" 
+                          title="Print Invoice"
+                        >
                           <Printer size={18} />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-secondary transition-colors" title="Manage Order">
-                          <MoreVertical size={18} />
-                        </button>
+                        <div className="relative">
+                          <button 
+                            onClick={() => setActiveMenu(activeMenu === order.id ? null : order.id)}
+                            className="p-2 text-gray-400 hover:text-secondary transition-colors bg-gray-50 rounded-lg hover:bg-gray-100" 
+                            title="Change Status"
+                          >
+                            <MoreVertical size={18} />
+                          </button>
+                          {activeMenu === order.id && (
+                            <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-[50]">
+                              {['Pending', 'Processing', 'In Transit', 'Delivered', 'Cancelled'].map((status) => (
+                                <button 
+                                  key={status}
+                                  onClick={() => {
+                                    handleUpdateStatus(order.id, status);
+                                    setActiveMenu(null);
+                                  }}
+                                  className="w-full text-left px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-gray-600 hover:bg-gray-50 hover:text-primary transition-all"
+                                >
+                                  {status}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -215,6 +395,110 @@ const AdminOrders = () => {
           </div>
         </div>
       </div>
+
+      {/* Order Details Modal */}
+      {showDetails && selectedOrder && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => setShowDetails(false)}
+            className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
+          ></motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white w-full max-w-2xl rounded-xl shadow-2xl relative z-10 overflow-hidden max-h-[90vh] flex flex-col"
+          >
+            <div className="p-6 border-b border-gray-50 flex items-center justify-between bg-primary text-white">
+              <div>
+                <h3 className="text-xl font-heading font-bold">Order Details</h3>
+                <p className="text-[10px] text-white/60 font-bold uppercase tracking-widest mt-1">#ORD-{selectedOrder.id.slice(0, 8)}</p>
+              </div>
+              <button onClick={() => setShowDetails(false)} className="hover:rotate-90 transition-transform">
+                <XCircle size={24} />
+              </button>
+            </div>
+
+            <div className="p-8 overflow-y-auto flex-1 flex flex-col gap-8">
+              {/* Customer & Status */}
+              <div className="grid grid-cols-2 gap-8">
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Customer Info</span>
+                  <p className="text-sm font-bold text-primary">{selectedOrder.customer_email}</p>
+                  <p className="text-xs text-gray-500">Method: {selectedOrder.payment_method}</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Order Status</span>
+                  <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1.5 w-fit ${getStatusStyles(selectedOrder.status)}`}>
+                    {getStatusIcon(selectedOrder.status)}
+                    {selectedOrder.status}
+                  </span>
+                </div>
+              </div>
+
+              {/* Shipping Address */}
+              <div className="flex flex-col gap-2 p-4 bg-gray-50 rounded-lg">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Shipping Address</span>
+                <p className="text-sm text-primary leading-relaxed">
+                  {selectedOrder.shipping_address?.firstName} {selectedOrder.shipping_address?.lastName}<br />
+                  {selectedOrder.shipping_address?.address}<br />
+                  {selectedOrder.shipping_address?.city}, {selectedOrder.shipping_address?.country}<br />
+                  <span className="font-bold">Phone: {selectedOrder.shipping_address?.phone}</span>
+                </p>
+              </div>
+
+              {/* Items List */}
+              <div className="flex flex-col gap-4">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Purchased Items</span>
+                <div className="flex flex-col gap-3">
+                  {detailsLoading ? (
+                    <div className="py-10 flex justify-center">
+                      <Loader2 className="animate-spin text-secondary" />
+                    </div>
+                  ) : orderDetails.map((item) => {
+                    const product = item?.['products!fk_order_items_product'] || item?.products;
+                    return (
+                      <div key={item.id} className="flex items-center gap-4 p-3 border border-gray-100 rounded-lg">
+                        <div className="w-12 h-12 rounded bg-gray-50 overflow-hidden border border-gray-50">
+                          <img src={product?.image_url} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-bold text-primary">{product?.name || 'Product Item'}</p>
+                          <p className="text-[10px] text-gray-400">Qty: {item.quantity} × {formatPrice(item.price_at_time || item.price)}</p>
+                        </div>
+                        <p className="text-sm font-bold text-primary">{formatPrice((item.price_at_time || item.price) * item.quantity)}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Total */}
+              <div className="border-t border-gray-50 pt-6 flex justify-between items-center">
+                <span className="text-sm font-bold text-primary uppercase tracking-widest">Total Amount</span>
+                <span className="text-2xl font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(selectedOrder.total_amount)}</span>
+              </div>
+            </div>
+
+            <div className="p-6 bg-gray-50 flex gap-4">
+              <button 
+                onClick={() => handleUpdateStatus(selectedOrder.id, 'Cancelled')}
+                className="flex-1 py-3 border border-red-100 text-red-500 font-bold uppercase tracking-widest text-[10px] rounded hover:bg-red-50 transition-all"
+              >
+                Cancel Order
+              </button>
+              <button 
+                onClick={() => handleUpdateStatus(selectedOrder.id, 'Delivered')}
+                className="flex-1 btn btn-primary py-3 text-[10px]"
+              >
+                Mark as Delivered
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

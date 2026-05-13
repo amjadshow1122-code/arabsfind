@@ -31,6 +31,7 @@ import AdminContent from './pages/AdminContent';
 import AdminMedia from './pages/AdminMedia';
 import MaintenancePage from './pages/MaintenancePage';
 import { supabase } from './lib/supabase';
+import { CartProvider } from './context/CartContext';
 
 // Helper component to guard against maintenance mode
 const MaintenanceGuard = ({ children }) => {
@@ -87,40 +88,42 @@ function App() {
   return (
     <Router>
       <MaintenanceGuard>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            
-            {/* User Panel Routes */}
-            <Route path="/profile" element={<UserPanel><UserDashboard /></UserPanel>} />
-            <Route path="/profile/orders" element={<UserPanel><UserOrders /></UserPanel>} />
-            <Route path="/profile/wishlist" element={<UserPanel><UserWishlist /></UserPanel>} />
-            <Route path="/profile/settings" element={<UserPanel><UserSettings /></UserPanel>} />
-            <Route path="/profile/addresses" element={<UserPanel><UserAddresses /></UserPanel>} />
-            <Route path="/profile/notifications" element={<UserPanel><UserNotifications /></UserPanel>} />
+        <CartProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              
+              {/* User Panel Routes */}
+              <Route path="/profile" element={<UserPanel><UserDashboard /></UserPanel>} />
+              <Route path="/profile/orders" element={<UserPanel><UserOrders /></UserPanel>} />
+              <Route path="/profile/wishlist" element={<UserPanel><UserWishlist /></UserPanel>} />
+              <Route path="/profile/settings" element={<UserPanel><UserSettings /></UserPanel>} />
+              <Route path="/profile/addresses" element={<UserPanel><UserAddresses /></UserPanel>} />
+              <Route path="/profile/notifications" element={<UserPanel><UserNotifications /></UserPanel>} />
 
-            <Route path="/admin/login" element={<AdminLogin />} />
-            
-            <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
-            <Route path="/admin/products" element={<AdminLayout><AdminProducts /></AdminLayout>} />
-            <Route path="/admin/categories" element={<AdminLayout><AdminCategories /></AdminLayout>} />
-            <Route path="/admin/content" element={<AdminLayout><AdminContent /></AdminLayout>} />
-            <Route path="/admin/media" element={<AdminLayout><AdminMedia /></AdminLayout>} />
-            <Route path="/admin/orders" element={<AdminLayout><AdminOrders /></AdminLayout>} />
-            <Route path="/admin/customers" element={<AdminLayout><AdminCustomers /></AdminLayout>} />
-            <Route path="/admin/analytics" element={<AdminLayout><AdminAnalytics /></AdminLayout>} />
-            <Route path="/admin/settings" element={<AdminLayout><AdminSettings /></AdminLayout>} />
-            <Route path="/admin/backup" element={<AdminLayout><AdminBackup /></AdminLayout>} />
-          </Routes>
-        </Layout>
+              <Route path="/admin/login" element={<AdminLogin />} />
+              
+              <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+              <Route path="/admin/products" element={<AdminLayout><AdminProducts /></AdminLayout>} />
+              <Route path="/admin/categories" element={<AdminLayout><AdminCategories /></AdminLayout>} />
+              <Route path="/admin/content" element={<AdminLayout><AdminContent /></AdminLayout>} />
+              <Route path="/admin/media" element={<AdminLayout><AdminMedia /></AdminLayout>} />
+              <Route path="/admin/orders" element={<AdminLayout><AdminOrders /></AdminLayout>} />
+              <Route path="/admin/customers" element={<AdminLayout><AdminCustomers /></AdminLayout>} />
+              <Route path="/admin/analytics" element={<AdminLayout><AdminAnalytics /></AdminLayout>} />
+              <Route path="/admin/settings" element={<AdminLayout><AdminSettings /></AdminLayout>} />
+              <Route path="/admin/backup" element={<AdminLayout><AdminBackup /></AdminLayout>} />
+            </Routes>
+          </Layout>
+        </CartProvider>
       </MaintenanceGuard>
     </Router>
   );

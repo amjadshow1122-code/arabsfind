@@ -14,8 +14,10 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useCurrency } from '../lib/useCurrency';
+import { useCart } from '../context/CartContext';
 
 const Home = () => {
+  const { addToCart } = useCart();
   const navigate = useNavigate();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [content, setContent] = useState({});
@@ -282,7 +284,15 @@ const Home = () => {
                       <h3 className="text-xl mb-1 group-hover:text-secondary transition-colors cursor-pointer">{product.name}</h3>
                     </Link>
                     <p className="font-bold text-secondary">{formatPrice(product.price)}</p>
-                    <button onClick={() => navigate('/cart')} className="mt-4 btn btn-primary w-full py-2 text-xs">Add to Cart</button>
+                    <button 
+                      onClick={async () => {
+                        await addToCart(product);
+                        navigate('/cart');
+                      }} 
+                      className="mt-4 btn btn-primary w-full py-2 text-xs"
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               ))}

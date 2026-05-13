@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
+  const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [session, setSession] = useState(null);
@@ -93,9 +95,11 @@ const Header = () => {
           </Link>
           <Link to="/cart" className="relative text-primary hover:text-secondary transition-colors">
             <ShoppingCart size={20} />
-            <span className="absolute -top-2 -right-2 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
-              0
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
           </Link>
           <button 
             className="md:hidden text-primary"

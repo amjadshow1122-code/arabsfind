@@ -76,7 +76,6 @@ const AdminCustomers = () => {
       .from('profiles')
       .update({
         full_name: selectedCustomer.full_name,
-        is_admin: selectedCustomer.is_admin,
         rewards_points: parseInt(selectedCustomer.rewards_points) || 0
       })
       .eq('id', selectedCustomer.id);
@@ -245,19 +244,7 @@ const AdminCustomers = () => {
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Rewards Points</label>
                   <input type="number" value={selectedCustomer.rewards_points || 0} onChange={(e) => setSelectedCustomer({...selectedCustomer, rewards_points: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl outline-none focus:border-secondary transition-all" />
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                  <input 
-                    type="checkbox" 
-                    id="is_admin_check"
-                    checked={selectedCustomer.is_admin || false}
-                    onChange={(e) => setSelectedCustomer({...selectedCustomer, is_admin: e.target.checked})}
-                    className="w-5 h-5 accent-secondary"
-                  />
-                  <label htmlFor="is_admin_check" className="text-sm font-bold text-primary flex items-center gap-2 cursor-pointer">
-                    <ShieldAlert size={16} className="text-secondary" />
-                    Grant Administrator Privileges
-                  </label>
-                </div>
+                {/* Administrator privileges removed from here for security */}
                 <button type="submit" disabled={isSaving} className="btn btn-primary w-full py-4 gap-2 mt-2">
                   {isSaving ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><Save size={18} /> Save Changes</>}
                 </button>
