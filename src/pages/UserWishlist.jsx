@@ -80,8 +80,8 @@ const UserWishlist = () => {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="text-3xl font-heading font-bold text-primary">My Wishlist</h2>
-        <p className="text-gray-500 text-sm">Save your favorite heritage pieces for later.</p>
+        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">My Wishlist</h2>
+        <p className="text-gray-500 text-xs sm:text-sm">Save your favorite heritage pieces for later.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,33 +98,33 @@ const UserWishlist = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex gap-6 group hover:border-secondary transition-all"
+                className="bg-white p-4 sm:p-6 rounded-xl border border-gray-100 shadow-sm flex gap-4 sm:gap-6 group hover:border-secondary transition-all"
               >
-                <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
                   <img src={product.image_url || 'https://images.unsplash.com/photo-1618365908648-e71bd5716cba?auto=format&fit=crop&q=80&w=200'} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <div className="flex flex-col gap-1 flex-grow">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{product.category || 'Product'}</span>
+                <div className="flex flex-col gap-0.5 sm:gap-1 flex-grow min-w-0">
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-400">{product.category || 'Product'}</span>
                   <Link to={`/product/${product.id}`}>
-                    <h3 className="text-lg font-heading font-bold text-primary hover:text-secondary transition-colors line-clamp-1">{product.name || 'Unknown Product'}</h3>
+                    <h3 className="text-base sm:text-lg font-heading font-bold text-primary hover:text-secondary transition-colors truncate">{product.name || 'Unknown Product'}</h3>
                   </Link>
                   <div className="flex gap-0.5 mb-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={10} fill={i < Math.floor(product.rating || 5) ? "var(--color-secondary)" : "none"} className={i < Math.floor(product.rating || 5) ? "text-secondary" : "text-gray-200"} />
+                      <Star key={i} size={8} fill={i < Math.floor(product.rating || 5) ? "var(--color-secondary)" : "none"} className={i < Math.floor(product.rating || 5) ? "text-secondary" : "text-gray-200"} />
                     ))}
                   </div>
-                  <p className="text-lg font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(product.price || 0)}</p>
+                  <p className="text-base sm:text-lg font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(product.price || 0)}</p>
                 </div>
-                <div className="flex flex-col justify-between items-end">
+                <div className="flex flex-col justify-between items-end shrink-0">
                   <button 
                     onClick={() => handleRemoveFromWishlist(item.id)}
-                    className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                    className="p-1.5 sm:p-2 text-gray-300 hover:text-red-500 transition-colors active:scale-90"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} className="sm:w-4.5 sm:h-4.5" />
                   </button>
-                  <button className="p-2 bg-primary text-white rounded-lg hover:bg-primary-light transition-all">
-                    <ShoppingCart size={18} />
-                  </button>
+                  <Link to={`/product/${product.id}`} className="p-1.5 sm:p-2 bg-primary text-white rounded-lg hover:bg-primary-light transition-all active:scale-90">
+                    <ShoppingCart size={16} className="sm:w-4.5 sm:h-4.5" />
+                  </Link>
                 </div>
               </motion.div>
             );

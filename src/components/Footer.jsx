@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Globe, Share2, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
+import { Globe, Share2, MessageCircle, Mail, Phone, MapPin, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Footer = () => {
   const [config, setConfig] = useState(null);
@@ -19,6 +20,15 @@ const Footer = () => {
   const copyright = config?.copyright || '';
   
   const columns = config?.columns || [];
+  const [openSections, setOpenSections] = useState({});
+
+  const toggleSection = (idx) => {
+    if (window.innerWidth >= 768) return;
+    setOpenSections(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }));
+  };
 
   return (
     <footer className="bg-primary text-white pt-20 pb-10" style={{ backgroundColor: 'var(--color-primary)' }}>
@@ -49,33 +59,85 @@ const Footer = () => {
 
           {/* Dynamic Columns */}
           {columns.map((col, idx) => (
-            <div key={idx} className="flex flex-col gap-6">
-              <h3 className="text-lg font-heading font-bold uppercase tracking-widest text-secondary" style={{ color: 'var(--color-secondary)' }}>{col.title}</h3>
-              <ul className="flex flex-col gap-3">
-                {col.links.map((link, lidx) => (
-                  <li key={lidx}><Link to={link.url} className="text-gray-400 hover:text-white transition-colors text-sm">{link.label}</Link></li>
-                ))}
-              </ul>
+            <div key={idx} className="flex flex-col md:gap-6 border-b border-gray-800 md:border-0">
+              <button 
+                onClick={() => toggleSection(idx)}
+                className="w-full flex items-center justify-between py-4 md:py-0 text-left group"
+              >
+                <h3 className="text-sm md:text-lg font-heading font-bold uppercase tracking-widest text-secondary" style={{ color: 'var(--color-secondary)' }}>
+                  {col.title}
+                </h3>
+                <ChevronDown 
+                  size={16} 
+                  className={`text-secondary transition-transform duration-300 md:hidden ${openSections[idx] ? 'rotate-180' : ''}`} 
+                  style={{ color: 'var(--color-secondary)' }}
+                />
+              </button>
+              <AnimatePresence>
+                {(openSections[idx] || window.innerWidth >= 768) && (
+                  <motion.div
+                    initial={window.innerWidth < 768 ? { height: 0, opacity: 0 } : false}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <ul className="flex flex-col gap-3 pb-6 md:pb-0">
+                      {col.links.map((link, lidx) => (
+                        <li key={lidx}>
+                          <Link to={link.url} className="text-gray-400 hover:text-white transition-colors text-xs md:text-sm">
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
 
           {/* Contact Info */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-lg font-heading font-bold uppercase tracking-widest text-secondary" style={{ color: 'var(--color-secondary)' }}>Contact Us</h3>
-            <ul className="flex flex-col gap-4">
-              <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-gray-400 text-sm">{config?.contact_info?.address || ''}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-gray-400 text-sm">{config?.contact_info?.phone || ''}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-gray-400 text-sm">{config?.contact_info?.email || ''}</span>
-              </li>
-            </ul>
+          <div className="flex flex-col md:gap-6 border-b border-gray-800 md:border-0">
+            <button 
+              onClick={() => toggleSection('contact')}
+              className="w-full flex items-center justify-between py-4 md:py-0 text-left group"
+            >
+              <h3 className="text-sm md:text-lg font-heading font-bold uppercase tracking-widest text-secondary" style={{ color: 'var(--color-secondary)' }}>
+                Contact Us
+              </h3>
+              <ChevronDown 
+                size={16} 
+                className={`text-secondary transition-transform duration-300 md:hidden ${openSections['contact'] ? 'rotate-180' : ''}`} 
+                style={{ color: 'var(--color-secondary)' }}
+              />
+            </button>
+            <AnimatePresence>
+              {(openSections['contact'] || window.innerWidth >= 768) && (
+                <motion.div
+                  initial={window.innerWidth < 768 ? { height: 0, opacity: 0 } : false}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <ul className="flex flex-col gap-4 pb-6 md:pb-0">
+                    <li className="flex items-start gap-3">
+                      <MapPin size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
+                      <span className="text-gray-400 text-xs md:text-sm">{config?.contact_info?.address || ''}</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Phone size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
+                      <span className="text-gray-400 text-xs md:text-sm">{config?.contact_info?.phone || ''}</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Mail size={18} className="text-secondary flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
+                      <span className="text-gray-400 text-xs md:text-sm">{config?.contact_info?.email || ''}</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 

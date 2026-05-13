@@ -222,19 +222,19 @@ const UserOrders = () => {
   return (
     <div className="flex flex-col gap-8">
       {/* ... (Header) */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-heading font-bold text-primary">My Orders</h2>
-          <p className="text-gray-500 text-sm">Track your heritage acquisitions and order history.</p>
+          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">My Orders</h2>
+          <p className="text-gray-500 text-xs sm:text-sm">Track your heritage acquisitions and order history.</p>
         </div>
-        <div className="relative">
-          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="relative w-full sm:w-auto">
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
-            placeholder="Search by Order ID..." 
+            placeholder="Search Order ID..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-white border border-gray-100 pl-12 pr-4 py-2.5 rounded-lg text-sm outline-none focus:border-secondary w-full md:w-64"
+            className="bg-white border border-gray-100 pl-12 pr-4 py-3 rounded-lg text-sm outline-none focus:border-secondary w-full sm:w-64"
           />
         </div>
       </div>
@@ -253,32 +253,32 @@ const UserOrders = () => {
               transition={{ delay: idx * 0.1 }}
               className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden group hover:border-secondary transition-all"
             >
-              <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="flex items-center gap-6">
-                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
+              <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
                     <img src={order.image} alt="Product" className="w-full h-full object-cover" />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg font-bold text-primary">{order.displayId}</span>
-                      <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center gap-1.5 ${getStatusColor(order.status)}`}>
+                  <div className="flex flex-col gap-0.5 sm:gap-1">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <span className="text-base sm:text-lg font-bold text-primary">{order.displayId}</span>
+                      <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center gap-1.5 ${getStatusColor(order.status)}`}>
                         {getStatusIcon(order.status)}
                         {order.status}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-400">Ordered on {order.date} • {order.items} {order.items === 1 ? 'Item' : 'Items'}</span>
-                    <span className="text-lg font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(order.total_amount)}</span>
+                    <span className="text-xs sm:text-sm text-gray-400">Ordered on {order.date} • {order.items} {order.items === 1 ? 'Item' : 'Items'}</span>
+                    <span className="text-base sm:text-lg font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(order.total_amount)}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <button 
                     onClick={() => {
                       setSelectedOrder(order);
                       setShowTracking(true);
                     }}
-                    className="btn border border-gray-100 text-primary hover:bg-gray-50 px-6 py-2 text-xs font-bold transition-all"
+                    className="flex-1 sm:flex-none btn border border-gray-100 text-primary hover:bg-gray-50 px-4 sm:px-6 py-2.5 text-[10px] sm:text-xs font-bold transition-all"
                   >
-                    Track Order
+                    Track
                   </button>
                   <button 
                     onClick={() => {
@@ -286,20 +286,20 @@ const UserOrders = () => {
                       setShowDetails(true);
                       fetchOrderItems(order.id);
                     }}
-                    className="btn btn-primary px-6 py-2 text-xs font-bold gap-2 transition-all active:scale-95"
+                    className="flex-1 sm:flex-none btn btn-primary px-4 sm:px-6 py-2.5 text-[10px] sm:text-xs font-bold gap-2 transition-all active:scale-95"
                   >
-                    View Details
-                    <ExternalLink size={14} />
+                    Details
+                    <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
               </div>
-              <div className="bg-gray-50 px-6 py-3 border-t border-gray-50 flex items-center justify-between">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              <div className="bg-gray-50 px-4 sm:px-6 py-2.5 sm:py-3 border-t border-gray-50 flex items-center justify-between">
+                <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-400">
                   {order.status === 'Delivered' ? 'Order delivered successfully' : 'Status will update dynamically'}
                 </p>
                 <button 
                   onClick={() => handlePrintInvoice(order)}
-                  className="text-[10px] font-bold uppercase tracking-widest text-secondary hover:underline"
+                  className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-secondary hover:underline"
                 >
                   Invoice (PDF)
                 </button>
@@ -356,9 +356,9 @@ const UserOrders = () => {
       {showTracking && selectedOrder && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setShowTracking(false)} className="absolute inset-0 bg-primary/20 backdrop-blur-sm" />
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white w-full max-w-md rounded-xl shadow-2xl relative z-10 p-8">
-            <h3 className="text-xl font-bold text-primary mb-8 text-center">Track Your Order</h3>
-            <div className="flex flex-col gap-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white w-full max-w-sm rounded-xl shadow-2xl relative z-10 p-6 sm:p-8">
+            <h3 className="text-lg sm:text-xl font-bold text-primary mb-6 sm:mb-8 text-center">Track Your Order</h3>
+            <div className="flex flex-col gap-6 sm:gap-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100">
               {[
                 { label: 'Order Placed', status: ['Pending', 'Processing', 'In Transit', 'Delivered'] },
                 { label: 'Processing', status: ['Processing', 'In Transit', 'Delivered'] },
@@ -367,16 +367,16 @@ const UserOrders = () => {
               ].map((step, i) => {
                 const isCompleted = step.status.includes(selectedOrder.status);
                 return (
-                  <div key={i} className="flex items-center gap-6 relative z-10">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 ${isCompleted ? 'bg-secondary border-secondary text-white' : 'bg-white border-gray-100 text-gray-300'}`}>
-                      {isCompleted && <CheckCircle2 size={12} />}
+                  <div key={i} className="flex items-center gap-4 sm:gap-6 relative z-10">
+                    <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border-2 ${isCompleted ? 'bg-secondary border-secondary text-white' : 'bg-white border-gray-100 text-gray-300'}`}>
+                      {isCompleted && <CheckCircle2 size={10} className="sm:w-3 sm:h-3" />}
                     </div>
-                    <span className={`text-sm font-bold ${isCompleted ? 'text-primary' : 'text-gray-300'}`}>{step.label}</span>
+                    <span className={`text-xs sm:text-sm font-bold ${isCompleted ? 'text-primary' : 'text-gray-300'}`}>{step.label}</span>
                   </div>
                 );
               })}
             </div>
-            <button onClick={() => setShowTracking(false)} className="w-full mt-10 btn btn-primary py-3">Close Tracking</button>
+            <button onClick={() => setShowTracking(false)} className="w-full mt-8 sm:mt-10 btn btn-primary py-3 text-sm">Close Tracking</button>
           </motion.div>
         </div>
       )}

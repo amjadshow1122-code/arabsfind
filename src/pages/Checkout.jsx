@@ -164,51 +164,51 @@ const Checkout = () => {
 
   if (step === 3) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center py-20 px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center py-10 sm:py-20 px-4">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-md w-full bg-white p-12 rounded-xl shadow-xl border border-gray-100 text-center flex flex-col items-center gap-6"
+          className="max-w-md w-full bg-white p-8 sm:p-12 rounded-xl shadow-xl border border-gray-100 text-center flex flex-col items-center gap-4 sm:gap-6"
         >
-          <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-2">
-            <CheckCircle2 size={48} />
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-2">
+            <CheckCircle2 size={32} className="sm:w-12 sm:h-12" />
           </div>
-          <h1 className="text-3xl font-heading font-bold text-primary">Order Confirmed!</h1>
-          <p className="text-gray-500 leading-relaxed">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Order Confirmed!</h1>
+          <p className="text-sm sm:text-base text-gray-500 leading-relaxed">
             Thank you for your purchase. Your heritage find is being prepared for its journey to your doorstep.
           </p>
           <div className="w-full p-4 bg-gray-50 rounded-lg text-left">
-            <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">
+            <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
               <span>Order Number</span>
               <span className="text-primary">{orderNumber}</span>
             </div>
-            <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-400">
-              <span>Estimated Delivery</span>
-              <span className="text-primary">3 - 5 Business Days</span>
+            <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              <span>Delivery</span>
+              <span className="text-primary">3 - 5 Days</span>
             </div>
           </div>
-          <Link to="/" className="btn btn-primary w-full py-4 mt-4">
+          <Link to="/" className="btn btn-primary w-full py-4 mt-2">
             Back to Home
           </Link>
-          <p className="text-xs text-gray-400">A confirmation email has been sent to your address.</p>
+          <p className="text-[10px] text-gray-400">A confirmation email has been sent to your address.</p>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="bg-background min-h-screen py-20">
+    <div className="bg-background min-h-screen py-10 sm:py-20 px-4 sm:px-0">
       <div className="container">
         {/* Progress Header */}
-        <div className="flex items-center justify-center gap-4 md:gap-8 mb-16">
-          <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>1</div>
-            <span className={`text-sm font-bold uppercase tracking-widest hidden sm:block ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Shipping</span>
+        <div className="flex items-center justify-center gap-3 sm:gap-8 mb-10 sm:mb-16">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>1</div>
+            <span className={`text-[10px] sm:text-sm font-bold uppercase tracking-widest ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Shipping</span>
           </div>
-          <div className="w-12 h-[1px] bg-gray-200"></div>
-          <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>2</div>
-            <span className={`text-sm font-bold uppercase tracking-widest hidden sm:block ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Payment</span>
+          <div className="w-8 sm:w-12 h-[1px] bg-gray-200"></div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>2</div>
+            <span className={`text-[10px] sm:text-sm font-bold uppercase tracking-widest ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Payment</span>
           </div>
         </div>
 
@@ -224,15 +224,15 @@ const Checkout = () => {
                   exit={{ opacity: 0, x: 20 }}
                   className="flex flex-col gap-8"
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h2 className="text-3xl font-heading font-bold text-primary">Shipping Information</h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Shipping Information</h2>
                     {savedAddresses.length > 0 && (
                       <button 
                         onClick={() => setShowAddressPicker(!showAddressPicker)}
-                        className="text-xs font-bold uppercase tracking-widest text-secondary hover:underline flex items-center gap-2"
+                        className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-secondary hover:underline flex items-center gap-2 w-fit"
                       >
-                        <CheckCircle2 size={16} />
-                        {showAddressPicker ? 'Close Saved Addresses' : 'Select from Saved Addresses'}
+                        <CheckCircle2 size={14} className="sm:w-4 sm:h-4" />
+                        {showAddressPicker ? 'Close Saved' : 'Use Saved Address'}
                       </button>
                     )}
                   </div>
@@ -363,10 +363,10 @@ const Checkout = () => {
                   className="flex flex-col gap-8"
                 >
                   <div className="flex items-center gap-4 mb-2">
-                    <button onClick={() => setStep(1)} className="text-gray-400 hover:text-primary">
+                    <button onClick={() => setStep(1)} className="p-2 -ml-2 text-gray-400 hover:text-primary">
                       <ArrowLeft size={20} />
                     </button>
-                    <h2 className="text-3xl font-heading font-bold text-primary">Payment Details</h2>
+                    <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Payment Details</h2>
                   </div>
 
                   <div className="p-6 border border-secondary bg-secondary/5 rounded-sm flex flex-col gap-6" style={{ borderColor: 'var(--color-secondary)' }}>
@@ -428,42 +428,42 @@ const Checkout = () => {
 
           {/* Sidebar Order Review */}
           <aside className="w-full lg:w-1/3">
-            <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-8 sticky top-32">
-              <h3 className="text-xl font-heading font-bold border-b border-gray-50 pb-4">Review Order</h3>
+            <div className="bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-6 sm:gap-8 sticky top-32">
+              <h3 className="text-lg sm:text-xl font-heading font-bold border-b border-gray-50 pb-4">Review Order</h3>
               
-              <div className="flex flex-col gap-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="flex flex-col gap-4 sm:gap-6 max-h-[250px] sm:max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4">
-                    <div className="w-16 h-16 rounded-lg bg-gray-50 flex-shrink-0">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-gray-50 flex-shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-bold text-primary">{item.name}</span>
-                      <span className="text-[10px] text-gray-400 uppercase tracking-widest">Qty: {item.quantity}</span>
-                      <span className="text-sm font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(item.price)}</span>
+                    <div className="flex-grow flex flex-col gap-0.5">
+                      <span className="text-xs sm:text-sm font-bold text-primary truncate max-w-[150px] sm:max-w-none">{item.name}</span>
+                      <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest">Qty: {item.quantity}</span>
+                      <span className="text-xs sm:text-sm font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(item.price)}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-col gap-4 border-t border-gray-100 pt-6">
-                <div className="flex justify-between text-sm text-gray-500">
+              <div className="flex flex-col gap-3 sm:gap-4 border-t border-gray-100 pt-5 sm:pt-6">
+                <div className="flex justify-between text-xs sm:text-sm text-gray-500">
                   <span>Subtotal</span>
                   <span className="font-bold text-primary">{formatPrice(cartTotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-xs sm:text-sm text-gray-500">
                   <span>Shipping</span>
                   <span className="font-bold text-primary">{cartTotal > 500 ? 'FREE' : formatPrice(25)}</span>
                 </div>
-                <div className="flex justify-between text-lg font-bold border-t border-gray-50 pt-4">
+                <div className="flex justify-between text-base sm:text-lg font-bold border-t border-gray-50 pt-4">
                   <span className="text-primary uppercase tracking-widest">Total</span>
-                  <span className="text-2xl font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(cartTotal + (cartTotal > 500 ? 0 : 25))}</span>
+                  <span className="text-xl sm:text-2xl font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(cartTotal + (cartTotal > 500 ? 0 : 25))}</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-gray-50 rounded-lg flex gap-3 items-start">
-                <Info size={16} className="text-primary mt-0.5 flex-shrink-0" />
-                <p className="text-[10px] text-gray-400 leading-relaxed uppercase tracking-widest font-bold">
+              <div className="p-3 sm:p-4 bg-gray-50 rounded-lg flex gap-3 items-start">
+                <Info size={14} className="text-primary mt-0.5 flex-shrink-0 sm:w-4 sm:h-4" />
+                <p className="text-[9px] sm:text-[10px] text-gray-400 leading-relaxed uppercase tracking-widest font-bold">
                   All heritage items are carefully inspected and securely packaged to ensure safe delivery of your treasures.
                 </p>
               </div>

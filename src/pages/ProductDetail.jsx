@@ -133,15 +133,15 @@ const ProductDetail = () => {
   return (
     <div className="bg-white pb-20">
       {/* Breadcrumbs */}
-      <div className="bg-gray-50 py-4 mb-12">
-        <div className="container flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400">
+      <div className="bg-gray-50 py-4 mb-6 sm:mb-12">
+        <div className="container flex flex-wrap items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 px-4 sm:px-0">
           <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          <ChevronRight size={14} />
+          <ChevronRight size={10} className="sm:w-3.5 sm:h-3.5" />
           <Link to="/shop" className="hover:text-primary transition-colors">Shop</Link>
-          <ChevronRight size={14} />
-          <Link to="/shop" className="hover:text-primary transition-colors">{product.category}</Link>
-          <ChevronRight size={14} />
-          <span className="text-secondary" style={{ color: 'var(--color-secondary)' }}>{product.name}</span>
+          <ChevronRight size={10} className="sm:w-3.5 sm:h-3.5" />
+          <Link to="/shop" className="hover:text-primary transition-colors truncate max-w-[80px] sm:max-w-none">{product.category}</Link>
+          <ChevronRight size={10} className="sm:w-3.5 sm:h-3.5" />
+          <span className="text-secondary truncate max-w-[120px] sm:max-w-none" style={{ color: 'var(--color-secondary)' }}>{product.name}</span>
         </div>
       </div>
 
@@ -173,43 +173,43 @@ const ProductDetail = () => {
           </div>
 
           {/* Product Info */}
-          <div className="w-full lg:w-1/2 flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
-              <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs" style={{ color: 'var(--color-secondary)' }}>
+          <div className="w-full lg:w-1/2 flex flex-col gap-6 px-4 lg:px-0">
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <span className="text-secondary font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs" style={{ color: 'var(--color-secondary)' }}>
                 {product.category}
               </span>
-              <h1 className="text-5xl font-heading leading-tight">{product.name}</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading leading-tight">{product.name}</h1>
               <div className="flex items-center gap-4">
-                <div className="flex gap-1">
+                <div className="flex gap-0.5 sm:gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={16} fill={i < Math.floor(product.rating || 5) ? "var(--color-secondary)" : "none"} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
+                    <Star key={i} size={14} fill={i < Math.floor(product.rating || 5) ? "var(--color-secondary)" : "none"} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 font-bold">({product.reviews || 0} Customer Reviews)</span>
+                <span className="text-[11px] sm:text-sm text-gray-500 font-bold">({product.reviews || 0} Reviews)</span>
               </div>
-              <p className="text-3xl font-bold text-primary mt-2">{formatPrice(product.price)}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary mt-1 sm:mt-2">{formatPrice(product.price)}</p>
             </div>
 
             <p className="text-gray-500 leading-relaxed text-lg">
               {product.description}
             </p>
 
-            <div className="flex flex-col gap-6 border-y border-gray-100 py-8">
-              <div className="flex items-center gap-6">
-                <span className="text-sm font-bold uppercase tracking-widest w-24">Quantity</span>
+            <div className="flex flex-col gap-6 border-y border-gray-100 py-6 sm:py-8">
+              <div className="flex items-center justify-between sm:justify-start gap-6">
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-widest sm:w-24">Quantity</span>
                 <div className="flex items-center border border-gray-200 rounded-sm">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:bg-gray-50 transition-colors"
+                    className="p-2 sm:p-3 hover:bg-gray-50 transition-colors"
                   >
-                    <Minus size={16} />
+                    <Minus size={14} className="sm:w-4 sm:h-4" />
                   </button>
-                  <span className="w-12 text-center font-bold">{quantity}</span>
+                  <span className="w-10 sm:w-12 text-center font-bold text-sm sm:text-base">{quantity}</span>
                   <button 
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 hover:bg-gray-50 transition-colors"
+                    className="p-2 sm:p-3 hover:bg-gray-50 transition-colors"
                   >
-                    <Plus size={16} />
+                    <Plus size={14} className="sm:w-4 sm:h-4" />
                   </button>
                 </div>
               </div>
@@ -246,36 +246,36 @@ const ProductDetail = () => {
             </div>
 
             {/* Benefits */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-4">
-              <div className="flex flex-col items-center text-center gap-2 p-4 bg-gray-50 rounded-sm">
-                <ShieldCheck size={24} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">Guaranteed Authentic</span>
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 py-4">
+              <div className="flex flex-col items-center text-center gap-1.5 p-3 sm:p-4 bg-gray-50 rounded-sm">
+                <ShieldCheck size={20} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
+                <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest leading-tight">Authentic</span>
               </div>
-              <div className="flex flex-col items-center text-center gap-2 p-4 bg-gray-50 rounded-sm">
-                <Truck size={24} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">Fast Delivery</span>
+              <div className="flex flex-col items-center text-center gap-1.5 p-3 sm:p-4 bg-gray-50 rounded-sm">
+                <Truck size={20} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
+                <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest leading-tight">Fast Ship</span>
               </div>
-              <div className="flex flex-col items-center text-center gap-2 p-4 bg-gray-50 rounded-sm">
-                <RotateCcw size={24} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">Easy Returns</span>
+              <div className="flex flex-col items-center text-center gap-1.5 p-3 sm:p-4 bg-gray-50 rounded-sm">
+                <RotateCcw size={20} className="text-secondary" style={{ color: 'var(--color-secondary)' }} />
+                <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest leading-tight">Easy Return</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-24">
-          <div className="flex border-b border-gray-200 gap-12">
+        <div className="mt-16 sm:mt-24 px-4 sm:px-0">
+          <div className="flex border-b border-gray-200 gap-6 sm:gap-12 overflow-x-auto no-scrollbar whitespace-nowrap">
             <button 
               onClick={() => setActiveTab('description')}
-              className={`pb-6 text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'description' ? 'text-primary' : 'text-gray-400 hover:text-primary'}`}
+              className={`pb-4 sm:pb-6 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'description' ? 'text-primary' : 'text-gray-400 hover:text-primary'}`}
             >
               Description
               {activeTab === 'description' && <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 w-full h-1 bg-secondary" style={{ backgroundColor: 'var(--color-secondary)' }} />}
             </button>
             <button 
               onClick={() => setActiveTab('details')}
-              className={`pb-6 text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'details' ? 'text-primary' : 'text-gray-400 hover:text-primary'}`}
+              className={`pb-4 sm:pb-6 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'details' ? 'text-primary' : 'text-gray-400 hover:text-primary'}`}
             >
               Additional Info
               {activeTab === 'details' && <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 w-full h-1 bg-secondary" style={{ backgroundColor: 'var(--color-secondary)' }} />}

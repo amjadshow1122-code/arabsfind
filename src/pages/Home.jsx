@@ -115,7 +115,7 @@ const Home = () => {
             </motion.div>
           </AnimatePresence>
 
-          <div className="container relative z-10">
+          <div className="container relative z-10 px-6 sm:px-10">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={currentSlide}
@@ -123,22 +123,22 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6 }}
-                className="max-w-2xl text-white"
+                className="max-w-2xl text-white pt-20 md:pt-0"
               >
-                <span className="font-body text-secondary font-bold uppercase tracking-[0.3em] mb-4 block">
+                <span className="font-body text-secondary font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 block text-[10px] sm:text-xs">
                   Legacy of Excellence
                 </span>
-                <h1 className="text-6xl md:text-7xl font-heading mb-8 leading-tight text-white">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-heading mb-6 sm:mb-8 leading-tight text-white">
                   {slides[currentSlide].title}
                 </h1>
-                <p className="text-xl font-body mb-10 text-gray-200 leading-relaxed max-w-lg">
+                <p className="text-base sm:text-lg md:text-xl font-body mb-8 sm:mb-10 text-gray-200 leading-relaxed max-w-lg">
                   {slides[currentSlide].subtitle}
                 </p>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/shop" className="btn btn-secondary px-10 py-4 text-base">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link to="/shop" className="btn btn-secondary px-8 sm:px-10 py-3 sm:py-4 text-sm sm:text-base text-center">
                     {slides[currentSlide].cta_text || 'Shop Collection'}
                   </Link>
-                  <Link to="/about" className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 px-10 py-4 text-base">
+                  <Link to="/about" className="btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 px-8 sm:px-10 py-3 sm:py-4 text-sm sm:text-base text-center">
                     Our Story
                   </Link>
                 </div>
@@ -151,15 +151,15 @@ const Home = () => {
             <>
               <button 
                 onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
-                className="absolute left-10 top-1/2 -translate-y-1/2 p-4 text-white/50 hover:text-white transition-colors z-20"
+                className="absolute left-4 sm:left-10 top-1/2 -translate-y-1/2 p-2 sm:p-4 text-white/50 hover:text-white transition-colors z-20"
               >
-                <ChevronLeft size={40} />
+                <ChevronLeft size={32} className="sm:w-10 sm:h-10" />
               </button>
               <button 
                 onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-                className="absolute right-10 top-1/2 -translate-y-1/2 p-4 text-white/50 hover:text-white transition-colors z-20"
+                className="absolute right-4 sm:right-10 top-1/2 -translate-y-1/2 p-2 sm:p-4 text-white/50 hover:text-white transition-colors z-20"
               >
-                <ChevronRight size={40} />
+                <ChevronRight size={32} className="sm:w-10 sm:h-10" />
               </button>
               
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
@@ -178,35 +178,35 @@ const Home = () => {
 
       {/* Features Section */}
       {content.features && (
-        <section className="bg-white py-12 border-b border-gray-100">
+        <section className="bg-white py-8 sm:py-12 border-b border-gray-100">
           <div className="container">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="flex items-center gap-4">
-                <Truck className="text-secondary" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+              <div className="flex items-center gap-4 px-4 sm:px-0">
+                <Truck className="text-secondary shrink-0" size={24} />
                 <div>
-                  <h4 className="font-bold text-sm uppercase">{content.features.shipping_title}</h4>
-                  <p className="text-xs text-gray-500">{content.features.shipping_desc}</p>
+                  <h4 className="font-bold text-xs sm:text-sm uppercase">{content.features.shipping_title}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{content.features.shipping_desc}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Shield className="text-secondary" />
+              <div className="flex items-center gap-4 px-4 sm:px-0">
+                <Shield className="text-secondary shrink-0" size={24} />
                 <div>
-                  <h4 className="font-bold text-sm uppercase">{content.features.secure_title}</h4>
-                  <p className="text-xs text-gray-500">{content.features.secure_desc}</p>
+                  <h4 className="font-bold text-xs sm:text-sm uppercase">{content.features.secure_title}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{content.features.secure_desc}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <RotateCcw className="text-secondary" />
+              <div className="flex items-center gap-4 px-4 sm:px-0">
+                <RotateCcw className="text-secondary shrink-0" size={24} />
                 <div>
-                  <h4 className="font-bold text-sm uppercase">{content.features.returns_title}</h4>
-                  <p className="text-xs text-gray-500">{content.features.returns_desc}</p>
+                  <h4 className="font-bold text-xs sm:text-sm uppercase">{content.features.returns_title}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{content.features.returns_desc}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Star className="text-secondary" />
+              <div className="flex items-center gap-4 px-4 sm:px-0">
+                <Star className="text-secondary shrink-0" size={24} />
                 <div>
-                  <h4 className="font-bold text-sm uppercase">{content.features.quality_title}</h4>
-                  <p className="text-xs text-gray-500">{content.features.quality_desc}</p>
+                  <h4 className="font-bold text-xs sm:text-sm uppercase">{content.features.quality_title}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{content.features.quality_desc}</p>
                 </div>
               </div>
             </div>
@@ -218,13 +218,13 @@ const Home = () => {
       {content.collections_intro && (
         <section className="section-padding bg-background">
           <div className="container">
-            <div className="flex flex-col items-center text-center mb-16">
-              <h2 className="text-4xl md:text-5xl mb-4">{content.collections_intro.title}</h2>
-              <div className="w-20 h-1 bg-secondary mb-6"></div>
-              <p className="max-w-xl text-gray-500">{content.collections_intro.subtitle}</p>
+            <div className="flex flex-col items-center text-center mb-10 sm:mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl mb-4">{content.collections_intro.title}</h2>
+              <div className="w-16 sm:w-20 h-1 bg-secondary mb-4 sm:mb-6"></div>
+              <p className="max-w-xl text-gray-500 text-sm sm:text-base px-4">{content.collections_intro.subtitle}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 sm:px-0">
               {[
                 { name: 'Traditional Wear', image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&q=80&w=800' },
                 { name: 'Home Decor', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&q=80&w=800' },
@@ -234,14 +234,14 @@ const Home = () => {
                 <motion.div 
                   key={cat.name}
                   whileHover={{ y: -10 }}
-                  className="group relative h-[400px] overflow-hidden rounded-sm cursor-pointer"
+                  className="group relative h-[300px] sm:h-[400px] overflow-hidden rounded-sm cursor-pointer"
                 >
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 p-8 w-full">
-                    <h3 className="text-white text-2xl mb-4">{cat.name}</h3>
-                    <div className="flex items-center text-white text-sm font-semibold group-hover:gap-3 transition-all duration-300">
-                      Explore <ArrowRight size={16} className="ml-2" />
+                  <div className="absolute bottom-0 left-0 p-6 sm:p-8 w-full">
+                    <h3 className="text-white text-xl sm:text-2xl mb-2 sm:mb-4">{cat.name}</h3>
+                    <div className="flex items-center text-white text-xs sm:text-sm font-semibold group-hover:gap-3 transition-all duration-300">
+                      Explore <ArrowRight size={14} className="ml-2 sm:w-4 sm:h-4" />
                     </div>
                   </div>
                 </motion.div>
@@ -255,12 +255,12 @@ const Home = () => {
       {content.products_section && (
         <section className="section-padding bg-white">
           <div className="container">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
-              <div className="max-w-xl">
-                <h2 className="text-4xl md:text-5xl mb-4">{content.products_section.title}</h2>
-                <p className="text-gray-500">{content.products_section.subtitle}</p>
+            <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 sm:mb-16 gap-6 px-4 sm:px-0">
+              <div className="max-w-xl text-left">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl mb-4">{content.products_section.title}</h2>
+                <p className="text-gray-500 text-sm sm:text-base">{content.products_section.subtitle}</p>
               </div>
-              <Link to="/shop" className="btn border border-primary text-primary hover:bg-primary hover:text-white px-8">
+              <Link to="/shop" className="btn border border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 text-sm">
                 View All Products
               </Link>
             </div>
@@ -306,16 +306,16 @@ const Home = () => {
         <section className="section-padding bg-primary relative overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-secondary/10 skew-x-12 translate-x-1/2"></div>
           <div className="container relative z-10">
-            <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
-              <h2 className="text-white text-4xl md:text-5xl mb-6">{content.newsletter.title}</h2>
-              <p className="text-gray-400 mb-10 text-lg">{content.newsletter.subtitle}</p>
-              <form className="w-full max-w-md flex flex-col md:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
+            <div className="max-w-3xl mx-auto text-center flex flex-col items-center px-4">
+              <h2 className="text-white text-3xl sm:text-4xl md:text-5xl mb-4 sm:mb-6">{content.newsletter.title}</h2>
+              <p className="text-gray-400 mb-8 sm:mb-10 text-base sm:text-lg">{content.newsletter.subtitle}</p>
+              <form className="w-full max-w-md flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                 <input 
                   type="email" 
                   placeholder="Enter your email address" 
-                  className="flex-grow bg-white/10 border border-white/20 text-white px-6 py-4 rounded-sm outline-none focus:border-secondary transition-colors"
+                  className="w-full bg-white/10 border border-white/20 text-white px-6 py-4 rounded-sm outline-none focus:border-secondary transition-colors text-sm"
                 />
-                <button className="btn btn-secondary whitespace-nowrap px-8">Subscribe Now</button>
+                <button className="btn btn-secondary w-full py-4 text-sm font-bold uppercase tracking-widest">Subscribe Now</button>
               </form>
             </div>
           </div>
