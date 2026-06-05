@@ -222,7 +222,7 @@ function HomePage({ data, cardVariant, wishlist, onToggleWishlist, onShop, onNav
 
       {/* ---- Email capture ---- */}
       <section ref={emailRef} className="email-capture">
-        <div className="eyebrow" style={{ color: 'var(--gold-soft)', marginBottom: 18 }}>The DesignerSale list</div>
+        <div className="eyebrow" style={{ color: 'var(--gold-soft)', marginBottom: 18 }}>The MoaviaFragranse list</div>
         <h2>Never miss a sale.</h2>
         <p>Two emails a week, max. The new drops, the deep discounts, and the boutiques worth knowing — landing Tuesday and Friday.</p>
         <form

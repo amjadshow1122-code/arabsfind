@@ -99,7 +99,7 @@ const UserNotifications = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-heading font-bold text-primary">Notifications</h2>
-          <p className="text-gray-500 text-sm">Stay updated on new sales, boutique launches, and your orders.</p>
+          <p className="text-gray-500 text-sm">Stay updated on new sales, brand launches, and your orders.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex bg-gray-50 p-1 rounded-lg border border-gray-100">

@@ -11,25 +11,25 @@ const TermsOfUse = () => (
           <span className="text-[10px] font-bold uppercase tracking-widest text-secondary">Legal</span>
         </div>
         <h1 className="text-4xl font-heading font-bold text-primary mb-2">Terms of Use</h1>
-        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | DesignerSale.com.au</p>
+        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | MoaviaFragranse.com.au</p>
 
         <div className="space-y-8 text-gray-600 leading-relaxed text-sm">
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">1. Acceptance of Terms</h2>
-            <p>By accessing or using DesignerSale.com.au ("the Platform"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Platform. These terms are governed by the laws of New South Wales, Australia.</p>
+            <p>By accessing or using MoaviaFragranse.com.au ("the Platform"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Platform. These terms are governed by the laws of New South Wales, Australia.</p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">2. About the Platform</h2>
-            <p>DesignerSale.com.au is an aggregator platform that lists designer boutique sales and products sourced from Australian retailers. We are an independent third party and are not affiliated with, endorsed by, or acting as agents for any listed merchant.</p>
+            <p>MoaviaFragranse.com.au is an aggregator platform that lists fragrances, attars, and products sourced from global retailers. We are an independent third party and are not affiliated with, endorsed by, or acting as agents for any listed merchant.</p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">3. Affiliate Disclosure</h2>
             <div className="bg-secondary/5 border border-secondary/20 rounded-xl p-5">
               <p className="font-bold text-primary mb-2">Important: Affiliate Relationships</p>
-              <p>DesignerSale.com.au participates in affiliate programs. When you click a "Shop This Sale" or external link and make a purchase, we may receive a commission from the merchant at no additional cost to you. All outbound click-throughs are tracked through our redirect system for this purpose. This does not influence which sales are listed or how they are presented.</p>
+              <p>MoaviaFragranse.com.au participates in affiliate programs. When you click a "Shop This Sale" or external link and make a purchase, we may receive a commission from the merchant at no additional cost to you. All outbound click-throughs are tracked through our redirect system for this purpose. This does not influence which sales are listed or how they are presented.</p>
             </div>
           </section>
 
@@ -45,7 +45,7 @@ const TermsOfUse = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">5. Purchases & Payments</h2>
-            <p>For products sold directly on DesignerSale.com.au:</p>
+            <p>For products sold directly on MoaviaFragranse.com.au:</p>
             <ul className="list-disc pl-6 space-y-1.5 mt-3">
               <li>Payments are processed securely by Stripe. We never store card details.</li>
               <li>All prices are in Australian Dollars (AUD) and include GST where applicable.</li>
@@ -77,12 +77,12 @@ const TermsOfUse = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">9. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by law, DesignerSale.com.au is not liable for any indirect, incidental, or consequential damages arising from your use of the platform, including losses from merchant transactions, inaccurate sale information, or third-party website issues.</p>
+            <p>To the maximum extent permitted by law, MoaviaFragranse.com.au is not liable for any indirect, incidental, or consequential damages arising from your use of the platform, including losses from merchant transactions, inaccurate sale information, or third-party website issues.</p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">10. Intellectual Property</h2>
-            <p>All platform content, design, code, and branding is the property of DesignerSale.com.au. Merchant names, logos, and product images remain the property of their respective owners and are used for identification purposes under nominative fair use.</p>
+            <p>All platform content, design, code, and branding is the property of MoaviaFragranse.com.au. Merchant names, logos, and product images remain the property of their respective owners and are used for identification purposes under nominative fair use.</p>
           </section>
 
           <section>
@@ -92,7 +92,7 @@ const TermsOfUse = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">12. Contact</h2>
-            <p>For legal enquiries: <a href="mailto:support@designersale.com.au" className="text-secondary hover:underline">support@designersale.com.au</a></p>
+            <p>For legal enquiries: <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">support@moaviafragranse.com.au</a></p>
           </section>
         </div>
       </motion.div>

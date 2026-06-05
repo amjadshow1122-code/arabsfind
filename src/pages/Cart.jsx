@@ -21,7 +21,7 @@ const Cart = () => {
         </div>
         <h1 className="text-3xl font-heading font-bold text-primary">Your cart is empty</h1>
         <p className="text-gray-500 text-center max-w-md">
-          Explore our curated designer collections and find the perfect piece to add to your cart.
+          Explore our curated fragrance collections and find the perfect piece to add to your cart.
         </p>
         <Link to="/shop" className="btn btn-primary px-10 py-4 mt-4">
           Start Shopping

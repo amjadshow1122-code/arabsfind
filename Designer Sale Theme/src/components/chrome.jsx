@@ -132,7 +132,7 @@ function Footer({ onNav, categories }) {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 DesignerSale Pty Ltd. Made in Australia.</span>
+          <span>© 2026 MoaviaFragranse Pty Ltd. Made in Australia.</span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
             Backed by Fashion Spectrum
           </span>

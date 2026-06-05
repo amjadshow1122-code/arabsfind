@@ -56,7 +56,7 @@ const AdminMerchants = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to remove this boutique? This may delete linked sales.')) {
+    if (window.confirm('Are you sure you want to remove this brand? This may delete linked sales.')) {
       const { error } = await supabase.from('merchants').delete().eq('id', id);
       if (error) alert('Delete failed: ' + error.message);
       else fetchMerchants();
@@ -99,14 +99,14 @@ const AdminMerchants = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-primary">Boutiques & Brand Partners</h1>
-          <p className="text-gray-500 text-sm">Create and manage Australia's premium partner boutiques and affiliate configurations.</p>
+          <h1 className="text-3xl font-heading font-bold text-primary">Brands & Brand Partners</h1>
+          <p className="text-gray-500 text-sm">Create and manage Australia's premium partner brands and affiliate configurations.</p>
         </div>
         <button 
           onClick={() => { setEditingMerchant(null); setFormData({ name: '', slug: '', logo_url: '', website_url: '', description: '', location_city: '', location_state: '', social_instagram: '', status: 'active', affiliate_url_template: '' }); setIsModalOpen(true); }}
           className="btn btn-primary gap-2 py-3 px-6 text-xs"
         >
-          <Plus size={16} /> Add Boutique Partner
+          <Plus size={16} /> Add Brand Partner
         </button>
       </div>
 
@@ -116,7 +116,7 @@ const AdminMerchants = () => {
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
-            placeholder="Search boutiques by name..." 
+            placeholder="Search brands by name..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-gray-50 border border-transparent focus:bg-white focus:border-secondary pl-12 pr-4 py-2.5 rounded-lg text-xs outline-none transition-all"
@@ -132,7 +132,7 @@ const AdminMerchants = () => {
           </div>
         ) : filteredMerchants.length === 0 ? (
           <div className="col-span-full py-20 text-center text-gray-400 italic text-sm">
-            No boutiques registered yet. Click "Add Boutique Partner" to start.
+            No brands registered yet. Click "Add Brand Partner" to start.
           </div>
         ) : filteredMerchants.map((m) => (
           <motion.div 
@@ -177,13 +177,13 @@ const AdminMerchants = () => {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" />
             <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-white w-full max-w-xl rounded-2xl shadow-2xl relative z-10 overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="text-xl font-heading font-bold text-primary">{editingMerchant ? 'Edit Boutique Partner' : 'Create Boutique Partner'}</h3>
+                <h3 className="text-xl font-heading font-bold text-primary">{editingMerchant ? 'Edit Brand Partner' : 'Create Brand Partner'}</h3>
                 <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-all"><X size={20} /></button>
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-5 max-h-[75vh] overflow-y-auto">
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Boutique Name</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Brand Name</label>
                   <input type="text" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value, slug: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="e.g. Scanlan Theodore" />
                 </div>
 
@@ -223,7 +223,7 @@ const AdminMerchants = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Boutique Description</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Brand Description</label>
                   <textarea rows={3} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none resize-none" placeholder="Details about brand statements, flagships, and collections..." />
                 </div>
 

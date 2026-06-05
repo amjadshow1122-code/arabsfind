@@ -50,7 +50,7 @@ const SalesBrowse = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const getMerchant = (id) => merchants.find(m => m.id === id) || { name: 'Boutique' };
+  const getMerchant = (id) => merchants.find(m => m.id === id) || { name: 'Brand' };
 
   // Filter Logic
   const filteredSales = sales.filter(sale => {
@@ -86,10 +86,10 @@ const SalesBrowse = () => {
       {/* Header */}
       <div className="bg-primary py-16 sm:py-24 text-center relative overflow-hidden" style={{ backgroundColor: 'var(--color-primary)' }}>
         <div className="container relative z-10 px-4">
-          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">Designer Sales</span>
-          <h1 className="text-white text-3xl sm:text-5xl md:text-6xl mb-4">Active Boutique Sales</h1>
+          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">MoaviaFragranse</span>
+          <h1 className="text-white text-3xl sm:text-5xl md:text-6xl mb-4">Active Fragrance Sales</h1>
           <p className="text-gray-300 max-w-xl mx-auto text-sm sm:text-base font-light">
-            Discover curated warehouse markdowns, online sample sales, and premium boutique offers from across Australia.
+            Discover curated authentic fragrances, premium attars, and exclusive perfume offers from top artisans.
           </p>
         </div>
         <div className="absolute inset-0 opacity-10">
@@ -116,7 +116,7 @@ const SalesBrowse = () => {
               <div className="relative">
                 <input 
                   type="text" 
-                  placeholder="Boutique or sale name..." 
+                  placeholder="Brand or sale name..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-100 focus:border-secondary px-4 py-3 rounded-lg outline-none text-sm"
@@ -178,14 +178,14 @@ const SalesBrowse = () => {
           <main className="w-full lg:w-3/4 flex flex-col gap-8">
             <div className="flex items-center justify-between border-b pb-4">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                Showing {filteredSales.length} active boutique sale{filteredSales.length !== 1 ? 's' : ''}
+                Showing {filteredSales.length} active fragrance sale{filteredSales.length !== 1 ? 's' : ''}
               </span>
             </div>
 
             {filteredSales.length === 0 ? (
               <div className="bg-white p-12 rounded-xl text-center border border-gray-100 shadow-sm flex flex-col items-center justify-center">
                 <Tag size={48} className="text-gray-200 mb-4" />
-                <p className="text-gray-500 font-light mb-2">No active designer sales match your filters.</p>
+                <p className="text-gray-500 font-light mb-2">No active moaviafragranse match your filters.</p>
                 <button 
                   onClick={() => { setSearchTerm(''); setSelectedCategory('All'); setSelectedState('All'); setMinDiscount(0); }}
                   className="text-xs font-bold text-secondary uppercase tracking-widest hover:underline"
@@ -227,7 +227,7 @@ const SalesBrowse = () => {
                       {/* Content */}
                       <div className="p-6 flex flex-col gap-4 flex-grow">
                         <div>
-                          {/* Boutique Brand Name */}
+                          {/* Brand Name */}
                           <Link to={`/merchants/${merchant.slug}`} className="text-xs text-secondary font-bold uppercase tracking-widest hover:underline mb-1 block">
                             {merchant.name}
                           </Link>
@@ -241,7 +241,7 @@ const SalesBrowse = () => {
 
                         {/* Teaser Text */}
                         <p className="text-sm text-gray-500 line-clamp-2 font-light">
-                          {sale.teaser_text || 'Premium sales event featuring exclusive designer collections.'}
+                          {sale.teaser_text || 'Premium sales event featuring exclusive fragrance collections.'}
                         </p>
 
                         {/* Metadata grid */}

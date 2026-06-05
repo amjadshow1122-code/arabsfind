@@ -11,15 +11,15 @@ const PrivacyPolicy = () => (
           <span className="text-[10px] font-bold uppercase tracking-widest text-secondary">Legal</span>
         </div>
         <h1 className="text-4xl font-heading font-bold text-primary mb-2">Privacy Policy</h1>
-        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | DesignerSale.com.au</p>
+        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | MoaviaFragranse.com.au</p>
 
         <div className="prose prose-sm max-w-none space-y-8 text-gray-600 leading-relaxed">
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">1. About Us</h2>
-            <p>DesignerSale.com.au ("we", "us", "our") is an Australian designer boutique sales aggregator. We are committed to protecting your personal information in accordance with the <em>Privacy Act 1988</em> (Cth) and the Australian Privacy Principles (APPs).</p>
+            <p>MoaviaFragranse.com.au ("we", "us", "our") is an Australian fragrance sales aggregator. We are committed to protecting your personal information in accordance with the <em>Privacy Act 1988</em> (Cth) and the Australian Privacy Principles (APPs).</p>
             <div className="bg-gray-50 rounded-xl p-5 mt-4 text-sm space-y-1.5">
-              <p className="flex items-center gap-2"><Mail size={14} className="text-secondary shrink-0" /> support@designersale.com.au</p>
+              <p className="flex items-center gap-2"><Mail size={14} className="text-secondary shrink-0" /> support@moaviafragranse.com.au</p>
               <p className="flex items-center gap-2"><MapPin size={14} className="text-secondary shrink-0" /> Australia</p>
             </div>
           </section>
@@ -39,7 +39,7 @@ const PrivacyPolicy = () => (
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">3. How We Use Your Information</h2>
             <ul className="list-disc pl-6 space-y-1.5">
-              <li>To provide and improve the DesignerSale.com.au platform</li>
+              <li>To provide and improve the MoaviaFragranse.com.au platform</li>
               <li>To process your orders and send order confirmations</li>
               <li>To gate full sale details and prices behind a free account (data masking)</li>
               <li>To track affiliate click-outs for commission reconciliation</li>
@@ -51,7 +51,7 @@ const PrivacyPolicy = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">4. Affiliate Disclosure</h2>
-            <p>DesignerSale.com.au earns affiliate commissions when you click through to partner boutique websites. All outbound links are tracked through our internal redirect system (<code>/go/sale/[id]</code>). This tracking logs your user ID, the sale or product clicked, the merchant, and the timestamp. This data is used solely for commission reconciliation and is never sold.</p>
+            <p>MoaviaFragranse.com.au earns affiliate commissions when you click through to partner boutique websites. All outbound links are tracked through our internal redirect system (<code>/go/sale/[id]</code>). This tracking logs your user ID, the sale or product clicked, the merchant, and the timestamp. This data is used solely for commission reconciliation and is never sold.</p>
           </section>
 
           <section>
@@ -74,7 +74,7 @@ const PrivacyPolicy = () => (
               <li>Request deletion of your account and associated data</li>
               <li>Opt out of marketing communications at any time (unsubscribe link in every email)</li>
             </ul>
-            <p className="mt-3">To exercise these rights, contact us at <a href="mailto:support@designersale.com.au" className="text-secondary hover:underline">support@designersale.com.au</a>.</p>
+            <p className="mt-3">To exercise these rights, contact us at <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">support@moaviafragranse.com.au</a>.</p>
           </section>
 
           <section>
@@ -94,7 +94,7 @@ const PrivacyPolicy = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">10. Contact & Complaints</h2>
-            <p>For privacy enquiries or complaints, contact us at <a href="mailto:support@designersale.com.au" className="text-secondary hover:underline">support@designersale.com.au</a>. If you are unsatisfied, you may lodge a complaint with the <a href="https://www.oaic.gov.au/" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline">Office of the Australian Information Commissioner (OAIC)</a>.</p>
+            <p>For privacy enquiries or complaints, contact us at <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">support@moaviafragranse.com.au</a>. If you are unsatisfied, you may lodge a complaint with the <a href="https://www.oaic.gov.au/" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline">Office of the Australian Information Commissioner (OAIC)</a>.</p>
           </section>
         </div>
       </motion.div>

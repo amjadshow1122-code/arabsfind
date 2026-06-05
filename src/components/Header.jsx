@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User, Menu, X, Search } from 'lucide-react';
+import { User, Menu, X, Search, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,6 +12,7 @@ const Header = () => {
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
+  const { cartCount } = useCart();
   const [session, setSession] = useState(null);
   const [config, setConfig] = useState(null);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
@@ -70,13 +72,11 @@ const Header = () => {
   };
 
   const defaultNavLinks = [
-    { name: 'MAXI DRESSES', path: '/pages/maxi-dresses' },
-    { name: 'KAFTANS', path: '/pages/kaftans' },
-    { name: 'TOPS & BLOUSES', path: '/pages/tops-blouses' },
-    { name: 'COATS & JACKETS', path: '/pages/coats-jackets' },
-    { name: 'BAGS & ACCESSORIES', path: '/pages/bags-accessories' },
-    { name: 'JEWELLERY', path: '/pages/jewellery' },
-    { name: 'BOUTIQUES', path: '/pages/boutiques' }
+    { name: 'PERFUMES', path: '/shop?category=perfumes' },
+    { name: 'ATTARS', path: '/shop?category=attars' },
+    { name: 'MUSLIM CAPS', path: '/shop?category=muslim-caps' },
+    { name: 'ACCESSORIES', path: '/shop?category=accessories' },
+    { name: 'ABOUT US', path: '/about' }
   ];
 
   // Use nav_links from DB if available, otherwise fall back to defaults
@@ -128,12 +128,10 @@ const Header = () => {
         <Link to="/" className="flex items-center gap-2 min-h-[48px] justify-self-start">
           {isLoadingConfig ? (
             <div className="h-8 w-32 bg-ink/5 animate-pulse rounded"></div>
-          ) : config?.logo ? (
-            <img src={config.logo} alt="DesignerSale Logo" className="h-10 w-auto object-contain" />
           ) : (
             <div className="flex items-end gap-1">
               <span className="font-heading text-[26px] leading-none text-ink tracking-tight">
-                Designer<span className="italic text-gold-deep">Sale</span>
+                Moavia<span className="italic text-gold-deep">Fragrance</span>
               </span>
               <span className="font-mono text-[9px] opacity-50 mb-1">.com.au</span>
             </div>
@@ -164,6 +162,25 @@ const Header = () => {
           >
             <Search size={18} />
           </button>
+
+          <Link 
+            to={session ? "/profile" : "/login"}
+            className="w-[38px] h-[38px] rounded-full inline-flex items-center justify-center transition-colors hover:bg-blush-soft text-ink relative"
+          >
+            <User size={18} />
+          </Link>
+
+          <Link 
+            to="/cart"
+            className="w-[38px] h-[38px] rounded-full inline-flex items-center justify-center transition-colors hover:bg-blush-soft text-ink relative"
+          >
+            <ShoppingBag size={18} />
+            {cartCount > 0 && (
+              <span className="absolute top-1.5 right-1 w-3.5 h-3.5 bg-gold-deep text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           <button 
             onClick={() => setIsNewsletterModalOpen(true)}
@@ -226,7 +243,7 @@ const Header = () => {
                     type="text"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search sales, boutiques, products..."
+                    placeholder="Search perfumes, attars, brands..."
                     className="flex-1 bg-transparent outline-none text-lg font-medium"
                     style={{ color: '#2A2520' }}
                   />
@@ -275,14 +292,14 @@ const Header = () => {
                     </div>
                     <h3 className="font-display text-3xl text-ink mb-3">Thank You</h3>
                     <p className="text-sm text-ink/60 leading-relaxed font-medium">
-                      Thanks for subscribing! You are now on the list for exclusive access to our newest curations and boutique sales.
+                      Thanks for subscribing! You are now on the list for exclusive access to our newest fragrances and collections.
                     </p>
                   </motion.div>
                 ) : (
                   <>
                     <h3 className="font-display text-3xl text-ink mb-4">Join The List</h3>
                     <p className="text-sm text-ink/60 mb-8 leading-relaxed font-medium">
-                      Subscribe to receive updates on new arrivals, exclusive boutique discounts, and early access to sales.
+                      Subscribe to receive updates on new arrivals, exclusive fragrance discounts, and early access to collections.
                     </p>
                     
                     <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-4">

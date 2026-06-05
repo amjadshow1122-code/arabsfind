@@ -304,7 +304,7 @@ const AdminSales = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-primary">Manage Boutique Sales</h1>
+          <h1 className="text-3xl font-heading font-bold text-primary">Manage Fragrance Sales</h1>
           <p className="text-gray-500 text-sm">Directly manage, bulk upload, and spreadsheet-edit all luxury sale events.</p>
         </div>
         <div className="flex gap-3">
@@ -364,7 +364,7 @@ const AdminSales = () => {
               <thead>
                 <tr className="bg-gray-50 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b">
                   <th className="px-6 py-4">Title</th>
-                  <th className="px-6 py-4">Boutique</th>
+                  <th className="px-6 py-4">Brand</th>
                   <th className="px-6 py-4">Discount</th>
                   <th className="px-6 py-4">Dates</th>
                   <th className="px-6 py-4">Status</th>
@@ -384,7 +384,7 @@ const AdminSales = () => {
                   </tr>
                 ) : (
                   filteredSales.map((sale) => {
-                    const merchant = merchants.find(m => m.id === sale.merchant_id) || { name: 'Boutique' };
+                    const merchant = merchants.find(m => m.id === sale.merchant_id) || { name: 'Brand' };
                     return (
                       <tr key={sale.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="px-6 py-4">
@@ -602,7 +602,7 @@ const AdminSales = () => {
                 {/* Brand Selection */}
                 <div className="grid grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Boutique Brand</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Perfume Brand</label>
                     <select required value={formData.merchant_id} onChange={(e) => setFormData({...formData, merchant_id: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none">
                       <option value="">Select Brand</option>
                       {merchants.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
@@ -668,7 +668,7 @@ const AdminSales = () => {
 
                 <div className="flex flex-col gap-2">
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Description (Gated)</label>
-                  <textarea rows={4} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none resize-none" placeholder="Full rich details about sales, designers, sizes..." />
+                  <textarea rows={4} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none resize-none" placeholder="Full rich details about sales, perfumes, sizes..." />
                 </div>
 
                 {/* Category Selection */}

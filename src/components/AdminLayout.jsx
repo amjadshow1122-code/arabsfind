@@ -84,17 +84,13 @@ const AdminLayout = ({ children }) => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
-    { name: 'Sales & Deals', path: '/admin/sales', icon: Tag },
-    { name: 'Boutiques', path: '/admin/merchants', icon: Store },
-    { name: 'Click Logs', path: '/admin/clicks', icon: Clock },
+    { name: 'Orders', path: '/admin/orders', icon: ShoppingBag },
     { name: 'Products', path: '/admin/products', icon: Package },
     { name: 'Categories', path: '/admin/categories', icon: Tags },
     { name: 'Custom Pages', path: '/admin/pages', icon: FileText },
     { name: 'Content', path: '/admin/content', icon: FileText },
     { name: 'Media', path: '/admin/media', icon: ImageIcon },
-    { name: 'Subscribers', path: '/admin/customers', icon: Users },
     { name: 'Settings', path: '/admin/settings', icon: Settings },
-    { name: 'Newsletter', path: '/admin/newsletter', icon: Mail },
     { name: 'Backup', path: '/admin/backup', icon: Database },
   ];
 
@@ -110,7 +106,7 @@ const AdminLayout = ({ children }) => {
           {isSidebarOpen && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <span className="font-heading text-lg font-bold tracking-widest uppercase" style={{ color: '#FAF7F2' }}>
-                Designer<span style={{ color: '#A8854A', fontStyle: 'italic' }}>Sale</span>
+                Moavia<span style={{ color: '#A8854A', fontStyle: 'italic' }}>Fragrance</span>
               </span>
             </motion.div>
           )}

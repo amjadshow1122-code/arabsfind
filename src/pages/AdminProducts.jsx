@@ -320,7 +320,7 @@ const AdminProducts = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-heading font-bold text-primary">Manage Products</h1>
-          <p className="text-gray-500 text-sm">Directly manage, bulk upload, and spreadsheet-edit all direct and affiliate boutique products.</p>
+          <p className="text-gray-500 text-sm">Directly manage, bulk upload, and spreadsheet-edit all direct and affiliate fragrance products.</p>
         </div>
         <button 
           onClick={() => { setActiveTab('list'); setIsModalOpen(true); setEditingProduct(null); }}
@@ -663,9 +663,9 @@ const AdminProducts = () => {
                 {/* Mappings to Boutique & Sale */}
                 <div className="grid grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Boutique Owner</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Brand Owner</label>
                     <select value={formData.merchant_id} onChange={(e) => setFormData({...formData, merchant_id: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none">
-                      <option value="">Select Boutique</option>
+                      <option value="">Select Brand</option>
                       {merchants.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
                     </select>
                   </div>

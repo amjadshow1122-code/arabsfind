@@ -81,7 +81,7 @@ const UserWishlist = () => {
     <div className="flex flex-col gap-8">
       <div>
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">My Wishlist</h2>
-        <p className="text-gray-500 text-xs sm:text-sm">Save your favourite designer pieces and sales for later.</p>
+        <p className="text-gray-500 text-xs sm:text-sm">Save your favourite fragrances and collections for later.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

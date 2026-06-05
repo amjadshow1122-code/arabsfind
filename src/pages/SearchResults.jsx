@@ -76,7 +76,7 @@ const SearchResults = () => {
           <form onSubmit={handleSearchSubmit} className="relative flex shadow-md rounded-xl overflow-hidden">
             <input 
               type="text" 
-              placeholder="Search boutique sales, products, and brand partners..."
+              placeholder="Search sales, products, and brand partners..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="w-full bg-white border border-gray-100 focus:border-secondary px-6 py-4 outline-none text-sm font-light"
@@ -101,17 +101,17 @@ const SearchResults = () => {
             <ShieldAlert size={48} className="text-secondary mb-4" />
             <h3 className="text-xl font-heading font-bold text-primary mb-2">No Results Found</h3>
             <p className="text-gray-500 font-light max-w-sm leading-relaxed">
-              We couldn't find matches for "{query}". Try checking spelling or searching for boutique names like Zimmermann or categories like womenswear.
+              We couldn't find matches for "{query}". Try checking spelling or searching for brand names like Amouage or categories like oud.
             </p>
           </div>
         ) : query ? (
           <div className="flex flex-col gap-16">
             
-            {/* 1. Boutiques Results */}
+            {/* 1. Brands Results */}
             {merchants.length > 0 && (
-              <div>
-                <h2 className="text-xl font-heading font-bold text-primary mb-6 flex items-center gap-2 border-b pb-3">
-                  <Store size={18} className="text-secondary" /> Partner Boutiques ({merchants.length})
+              <div className="mb-10">
+                <h2 className="text-xl font-heading font-bold text-primary mb-6 flex items-center gap-2 border-b pb-2">
+                  <Store size={18} className="text-secondary" /> Partner Brands ({merchants.length})
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {merchants.map((m) => (
@@ -138,7 +138,7 @@ const SearchResults = () => {
             {sales.length > 0 && (
               <div>
                 <h2 className="text-xl font-heading font-bold text-primary mb-6 flex items-center gap-2 border-b pb-3">
-                  <Tag size={18} className="text-secondary" /> Active Boutique Sales ({sales.length})
+                  <Tag size={18} className="text-secondary" /> Active Fragrance Sales ({sales.length})
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {sales.map((sale) => (
@@ -213,7 +213,7 @@ const SearchResults = () => {
           </div>
         ) : (
           <div className="text-center py-20 text-gray-400 italic text-sm">
-            Enter a search term above to begin searching across designer brands, sales, and products.
+            Enter a search term above to begin searching across fragrance brands, sales, and products.
           </div>
         )}
 

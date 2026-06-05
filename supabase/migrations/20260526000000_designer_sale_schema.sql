@@ -1,4 +1,4 @@
--- DesignerSale.com.au Database Schema Migration
+-- MoaviaFragranse.com.au Database Schema Migration
 -- Upgrades prototype tables and creates the designer boutique aggregator schema
 
 -- 1. Ensure profiles has is_admin column
@@ -241,11 +241,11 @@ BEGIN
   END IF;
 END $$;
 
--- 11. Ensure site_settings has AUD and is correct for DesignerSale
+-- 11. Ensure site_settings has AUD and is correct for MoaviaFragranse
 UPDATE public.site_settings
 SET currency = 'AUD',
-    store_name = 'DesignerSale.com.au',
-    support_email = 'support@designersale.com.au',
-    footer_config = '{"copyright": "© 2026 DesignerSale.com.au. All rights reserved.", "description": "Australia''s premier designer boutique sale aggregator. Discover luxury fashion markdowns and boutique sales in one place."}'::jsonb,
-    header_config = '{"logo": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=300", "top_bar": "Free Sign Up to Unlock Gated Designer Sales & Prices!", "nav_links": [{"label": "Home", "url": "/"}, {"label": "Sales & Deals", "url": "/sales"}, {"label": "Boutiques", "url": "/merchants"}, {"label": "Direct Shop", "url": "/shop"}, {"label": "About Us", "url": "/about"}]}'::jsonb
+    store_name = 'MoaviaFragranse.com.au',
+    support_email = 'support@moaviafragranse.com.au',
+    footer_config = '{"copyright": "© 2026 MoaviaFragranse.com.au. All rights reserved.", "description": "Australia''s premier designer boutique sale aggregator. Discover luxury fashion markdowns and boutique sales in one place."}'::jsonb,
+    header_config = '{"logo": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=300", "top_bar": "Free Sign Up to Unlock Gated MoaviaFragranse & Prices!", "nav_links": [{"label": "Home", "url": "/"}, {"label": "Sales & Deals", "url": "/sales"}, {"label": "Boutiques", "url": "/merchants"}, {"label": "Direct Shop", "url": "/shop"}, {"label": "About Us", "url": "/about"}]}'::jsonb
 WHERE id = 1;

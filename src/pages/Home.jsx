@@ -101,9 +101,9 @@ const Home = () => {
 
   const allSlides = content.hero?.slides || [
     {
-      title: content.hero?.title || 'Discover the Finer Finds',
-      subtitle: content.hero?.subtitle || 'Australia\'s designer boutique sales — all in one place.',
-      image: content.hero?.bg_image || 'https://images.unsplash.com/photo-1542125387-c7128488903c?auto=format&fit=crop&q=80&w=2000',
+      title: content.hero?.title || 'Discover the Essence',
+      subtitle: content.hero?.subtitle || 'Premium perfumes, authentic attars, and traditional wear.',
+      image: content.hero?.bg_image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=2000',
       cta_text: content.hero?.cta_text || 'Shop Collection',
       is_visible: true
     }
@@ -155,7 +155,7 @@ const Home = () => {
                   transition={{ duration: 0.5 }}
                   className="flex flex-col gap-4 sm:gap-6 max-w-xl"
                 >
-                  <div className="eyebrow">Legacy of Excellence - 412 Styles on Sale</div>
+                  <div className="eyebrow">Legacy of Excellence - Authentic Fragrances</div>
                   
                   <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none">
                     {slides[currentSlide].title.split(' ').slice(0, -2).join(' ')} <br/>
@@ -176,9 +176,9 @@ const Home = () => {
                   </div>
 
                   <div className="hidden sm:flex gap-6 mt-12 pt-6 border-t border-line max-w-[400px]">
-                    <div><span className="font-mono font-bold text-ink text-sm">140+</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Boutiques</span></div>
-                    <div><span className="font-mono font-bold text-ink text-sm">1,876</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Items Live</span></div>
-                    <div><span className="font-mono font-bold text-ink text-sm">62%</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Avg Discount</span></div>
+                    <div><span className="font-mono font-bold text-ink text-sm">50+</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Master Perfumers</span></div>
+                    <div><span className="font-mono font-bold text-ink text-sm">200+</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Authentic Oils</span></div>
+                    <div><span className="font-mono font-bold text-ink text-sm">Premium</span> <span className="text-[10px] text-ink-muted uppercase tracking-[0.1em] ml-1 flex flex-col mt-0.5">Quality Guaranteed</span></div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -207,9 +207,9 @@ const Home = () => {
       {content.collections_intro && (
         <section className="section py-16 sm:py-24">
           <div className="container">
-            <div className="eyebrow mb-3">{content.collections_intro.subtitle || 'SHOP BY CATEGORY'}</div>
+            <div className="eyebrow mb-3">{content.collections_intro?.subtitle || 'SHOP BY COLLECTION'}</div>
             <div className="section-head flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-              <h2 className="text-4xl sm:text-5xl">{content.collections_intro.title || 'Every sale, sorted.'}</h2>
+              <h2 className="text-4xl sm:text-5xl">{content.collections_intro?.title || 'Find your signature scent.'}</h2>
               <Link to="/shop" className="section-head-link">VIEW ALL CATEGORIES</Link>
             </div>
 
@@ -223,18 +223,18 @@ const Home = () => {
                   </div>
                 </Link>
               )) : [
-                { name: 'Maxi Dresses', count: '412', image: 'https://images.unsplash.com/photo-1542152643-d3a3bd427fb3?auto=format&fit=crop&q=80&w=800' },
-                { name: 'Kaftans', count: '86', image: 'https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&q=80&w=800' },
-                { name: 'Tops & Blouses', count: '528', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=800' },
-                { name: 'Coats & Jackets', count: '247', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=800' },
-                { name: 'Bags & Accessories', count: '311', image: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&q=80&w=800' },
-                { name: 'Jewellery', count: '192', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Perfumes', count: '124', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Attars', count: '86', image: 'https://images.unsplash.com/photo-1583209814683-c023dd293cc6?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Muslim Caps', count: '52', image: 'https://images.unsplash.com/photo-1616422285623-146b9a896677?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Oud Wood', count: '24', image: 'https://images.unsplash.com/photo-1608688461528-76166e4a2e55?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Accessories', count: '45', image: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&q=80&w=800' },
+                { name: 'Incense', count: '38', image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&q=80&w=800' },
               ].map((cat) => (
                 <Link to={`/shop?category=${cat.name}`} key={cat.name} className="tile">
                   <img src={cat.image} alt={cat.name} />
                   <div className="tile-overlay text-center">
                     <div className="tile-label text-xl sm:text-2xl">{cat.name}</div>
-                    <div className="tile-count">{cat.count} ON SALE</div>
+                    <div className="tile-count">{cat.count} ITEMS</div>
                   </div>
                 </Link>
               ))}
@@ -247,9 +247,9 @@ const Home = () => {
       {content.products_section && (
         <section className="section py-16 sm:py-24 bg-bg-card">
           <div className="container">
-            <div className="eyebrow mb-3">JUST ADDED - LAST 48 HOURS</div>
+            <div className="eyebrow mb-3">JUST ADDED - DISCOVER NEW ARRIVALS</div>
             <div className="section-head flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-              <h2 className="text-4xl sm:text-5xl leading-tight">Fresh from the<br/><em>boutique floors.</em></h2>
+              <h2 className="text-4xl sm:text-5xl leading-tight">Fresh from the<br/><em>master perfumers.</em></h2>
               <Link to="/shop" className="section-head-link">SEE EVERYTHING NEW</Link>
             </div>
 
@@ -281,8 +281,8 @@ const Home = () => {
                     <Link to={`/product/${product.id}`}>
                       <h3 className="font-display text-[17px] font-medium leading-snug text-ink">{product.name}</h3>
                     </Link>
-                    <p className="text-[13px] text-ink-soft leading-snug line-clamp-2">{product.description || 'Beautiful designer piece'}</p>
-                    <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-ink-muted mt-0.5">AT BOUTIQUE</p>
+                    <p className="text-[13px] text-ink-soft leading-snug line-clamp-2">{product.description || 'Premium fragrance piece'}</p>
+                    <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-ink-muted mt-0.5">AUTHENTIC QUALITY</p>
                     
                     <div className="flex items-baseline gap-2.5 mt-1">
                       <span className="text-[12px] text-ink-muted line-through">{formatPrice(product.price * 1.5)}</span>
@@ -296,19 +296,19 @@ const Home = () => {
         </section>
       )}
 
-      {/* Boutique Strip */}
+      {/* Brand Strip */}
       <section className="border-y border-line grid grid-cols-2 md:grid-cols-6 divide-x divide-y md:divide-y-0 divide-line">
         {[
-          { name: 'Blue Bungalow', loc: 'NOOSA HEADS, QLD' },
-          { name: 'Pizazz Boutique', loc: 'ARMADALE, VIC' },
-          { name: 'The Edit Paddington', loc: 'PADDINGTON, NSW' },
-          { name: 'Silk & Stone', loc: 'MOSMAN, NSW' },
-          { name: 'Driftwood Byron', loc: 'BYRON BAY, NSW' },
-          { name: 'Hayman Edit Co.', loc: 'BRISBANE, QLD' },
-        ].map((boutique) => (
-          <div key={boutique.name} className="flex flex-col items-center justify-center p-8 hover:bg-bg-card hover:text-gold-deep transition-colors cursor-pointer text-ink">
-            <span className="font-display text-xl text-center leading-tight tracking-tight">{boutique.name}</span>
-            <span className="font-mono text-[9px] tracking-[0.16em] uppercase text-ink-muted mt-1 text-center">{boutique.loc}</span>
+          { name: 'Royal Oud', loc: 'PREMIUM QUALITY' },
+          { name: 'Al-Haramain', loc: 'AUTHENTIC ATTARS' },
+          { name: 'Sunnah Wear', loc: 'TRADITIONAL CAPS' },
+          { name: 'Musk Essence', loc: 'ALCOHOL-FREE' },
+          { name: 'Artisan Tasbih', loc: 'HANDCRAFTED' },
+          { name: 'Oud Master', loc: 'SIGNATURE SCENTS' },
+        ].map((brand) => (
+          <div key={brand.name} className="flex flex-col items-center justify-center p-8 hover:bg-bg-card hover:text-gold-deep transition-colors cursor-pointer text-ink">
+            <span className="font-display text-xl text-center leading-tight tracking-tight">{brand.name}</span>
+            <span className="font-mono text-[9px] tracking-[0.16em] uppercase text-ink-muted mt-1 text-center">{brand.loc}</span>
           </div>
         ))}
       </section>
@@ -354,7 +354,7 @@ const Home = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
-                    to={content.featured_brand.button_link || '/boutiques'}
+                    to={content.featured_brand.button_link || '/merchants'}
                     className="btn px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.16em]"
                     style={{ background: '#2A2520', color: '#FAF7F2', border: '1px solid #2A2520' }}
                   >
@@ -390,10 +390,10 @@ const Home = () => {
       {content.newsletter && (
         <section className="bg-ink text-bg py-24 sm:py-32 px-6 text-center">
           <div className="container max-w-3xl mx-auto">
-            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-gold-soft mb-6">THE DESIGNERSALE LIST</div>
-            <h2 className="text-4xl sm:text-6xl font-display mb-4 tracking-tight">Never miss a sale.</h2>
+            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-gold-soft mb-6">THE MOAVIAFRAGRANSE LIST</div>
+            <h2 className="text-4xl sm:text-6xl font-display mb-4 tracking-tight">Never miss a new arrival.</h2>
             <p className="text-bg/70 max-w-lg mx-auto mb-10 text-[15px] leading-relaxed">
-              Two emails a week, max. The new drops, the deep discounts, and the boutiques worth knowing — landing Tuesday and Friday.
+              Join our newsletter for the latest premium fragrances, authentic attars, and traditional wear straight to your inbox.
             </p>
             
             {isSubscribed ? (

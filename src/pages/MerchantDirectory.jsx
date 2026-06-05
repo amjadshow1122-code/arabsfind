@@ -47,10 +47,10 @@ const MerchantDirectory = () => {
       {/* Page Header */}
       <div className="bg-primary py-16 sm:py-24 text-center relative overflow-hidden" style={{ backgroundColor: 'var(--color-primary)' }}>
         <div className="container relative z-10 px-4">
-          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">Designer Boutiques</span>
-          <h1 className="text-white text-3xl sm:text-5xl md:text-6xl mb-4">Boutique Directory</h1>
+          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">Master Perfumers</span>
+          <h1 className="text-white text-3xl sm:text-5xl md:text-6xl mb-4">Brand Directory</h1>
           <p className="text-gray-300 max-w-xl mx-auto text-sm sm:text-base font-light">
-            Browse our network of Australia's premier independent designer boutiques, physical retailers, and luxury flagships.
+            Browse our network of premier independent fragrance houses, attar artisans, and traditional perfumeries.
           </p>
         </div>
         <div className="absolute inset-0 opacity-10">
@@ -76,7 +76,7 @@ const MerchantDirectory = () => {
             />
           </div>
           <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-            {filteredMerchants.length} Partner Boutiques Listed
+            {filteredMerchants.length} Perfume Houses Listed
           </span>
         </div>
 
@@ -84,7 +84,7 @@ const MerchantDirectory = () => {
         {filteredMerchants.length === 0 ? (
           <div className="bg-white p-16 rounded-xl text-center border border-gray-100 shadow-sm flex flex-col items-center justify-center">
             <Store size={48} className="text-gray-200 mb-4" />
-            <p className="text-gray-500 font-light mb-2">No boutiques found matching "{searchTerm}"</p>
+            <p className="text-gray-500 font-light mb-2">No brands found matching "{searchTerm}"</p>
             <button 
               onClick={() => setSearchTerm('')}
               className="text-xs font-bold text-secondary uppercase tracking-widest hover:underline"
@@ -118,7 +118,7 @@ const MerchantDirectory = () => {
                 </div>
 
                 <p className="text-xs text-gray-500 leading-relaxed font-light line-clamp-3">
-                  {merchant.description || 'Premium designer label showcasing the best in high-end fashion, luxury accessories, and artistic apparel designs.'}
+                  {merchant.description || 'Premium fragrance label showcasing the best in high-end perfumes, luxury attars, and artisan scents.'}
                 </p>
 
                 <div className="border-t pt-4 flex items-center justify-between mt-auto">

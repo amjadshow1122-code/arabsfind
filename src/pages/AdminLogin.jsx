@@ -62,11 +62,11 @@ const AdminLogin = () => {
         <div className="p-10 md:p-12 flex flex-col gap-10">
           <div className="flex flex-col items-center text-center gap-4">
             <div className="flex items-center justify-center">
-              <span className="font-heading text-2xl font-bold text-white tracking-widest uppercase">DESIGNER<span className="text-secondary">SALE</span></span>
+              <span className="font-heading text-2xl font-bold text-white tracking-widest uppercase">MOAVIA<span className="text-secondary">FRAGRANCE</span></span>
             </div>
             <div>
               <h1 className="text-3xl font-heading font-bold text-white tracking-tight">Admin Terminal</h1>
-              <p className="text-gray-400 text-sm mt-1 uppercase tracking-[0.2em] font-bold">DesignerSale Management System</p>
+              <p className="text-gray-400 text-sm mt-1 uppercase tracking-[0.2em] font-bold">MoaviaFragranse Management System</p>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ const AdminLogin = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@designersale.com.au"
+                  placeholder="admin@moaviafragranse.com.au"
                   className="w-full bg-[#002a70] border border-white/5 px-12 py-4 rounded-xl outline-none focus:border-secondary focus:bg-[#00348a] transition-all text-sm text-white placeholder:text-gray-600"
                 />
               </div>

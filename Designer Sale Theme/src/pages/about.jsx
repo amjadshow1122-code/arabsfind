@@ -4,10 +4,10 @@ function AboutPage({ onNav }) {
   return (
     <main>
       <section className="about-hero container-wide">
-        <div className="eyebrow" style={{ marginBottom: 28 }}>About DesignerSale</div>
+        <div className="eyebrow" style={{ marginBottom: 28 }}>About MoaviaFragranse</div>
         <h1>
           One place for every<br />
-          designer sale<br />
+          moaviafragranse<br />
           <em className="serif-it" style={{ color: 'var(--gold-deep)' }}>in Australia.</em>
         </h1>
         <p>
@@ -58,7 +58,7 @@ function AboutPage({ onNav }) {
             <div className="eyebrow" style={{ marginBottom: 12 }}>Our Story</div>
             <h3>Built by people<br/>who know fashion.</h3>
             <p>
-              DesignerSale is backed by <strong style={{ color: 'var(--ink)' }}>Fashion Spectrum</strong>, an Australian wholesale fashion house specialising in 100% silk, hand-beaded and sequined garments made in workshops outside Jaipur. We've spent twenty years stocking the boutiques on this platform.
+              MoaviaFragranse is backed by <strong style={{ color: 'var(--ink)' }}>Fashion Spectrum</strong>, an Australian wholesale fashion house specialising in 100% silk, hand-beaded and sequined garments made in workshops outside Jaipur. We've spent twenty years stocking the boutiques on this platform.
             </p>
             <ul>
               <li>Founded 2025 in Sydney</li>
@@ -100,7 +100,7 @@ function AboutPage({ onNav }) {
             "We don't shout about the discounts. We just find them, sort them, and put them somewhere you can actually look through them."
           </p>
           <div className="mono" style={{ marginTop: 28, color: 'var(--ink-muted)' }}>
-            — The DesignerSale Editors
+            — The MoaviaFragranse Editors
           </div>
         </div>
       </section>

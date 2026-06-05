@@ -15,14 +15,14 @@ const About = () => {
           >
             Our Story
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-300 max-w-2xl mx-auto font-body"
-          >
-            Connecting fashion lovers with premium Australian designer boutique markdowns and sales in one unified platform.
-          </motion.p>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-gray-300 max-w-2xl mx-auto font-body"
+            >
+              Connecting fragrance lovers with premium perfumes, authentic attar oils, and traditional Islamic wear in one unified platform.
+            </motion.p>
         </div>
         <div className="absolute inset-0 opacity-10">
           <div className="grid grid-cols-6 h-full">
@@ -39,32 +39,32 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
             <div>
               <span className="text-secondary font-bold uppercase tracking-[0.2em] text-sm mb-4 block" style={{ color: 'var(--color-secondary)' }}>Our Philosophy</span>
-              <h2 className="text-4xl md:text-5xl mb-8 leading-tight">Australia's Designer Boutique Sales — All In One Place</h2>
+              <h2 className="text-4xl md:text-5xl mb-8 leading-tight">Authentic Perfumes & Attars — All In One Place</h2>
               <p className="text-gray-500 mb-6 leading-relaxed font-light">
-                DesignerSale.com.au was founded to aggregate the finest designer markdown collections from independent physical boutiques and online sample retailers across Australia. We believe premium fashion should be accessible without sacrificing boutique integrity.
+                MoaviaFragranse.com.au was founded to aggregate the finest authentic fragrances, oud wood, and premium attars from the most respected master perfumers. We believe premium scents should be accessible without sacrificing authenticity.
               </p>
               <p className="text-gray-500 mb-10 leading-relaxed font-light">
-                Our platform integrates advanced tracking to capture authentic affiliate discounts, redirecting users directly to authorized partner channels, secure Stripe checkouts, and custom listings.
+                Our platform brings you closer to the authentic traditions of perfumery, connecting you directly to authorized artisans and global fragrance houses.
               </p>
               <div className="grid grid-cols-2 gap-8">
                 <div className="flex flex-col gap-2">
                   <h4 className="text-3xl font-heading font-bold text-primary">50+</h4>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Partner Boutiques</p>
+                  <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Master Perfumers</p>
                 </div>
                 <div className="flex flex-col gap-2">
                   <h4 className="text-3xl font-heading font-bold text-primary">100%</h4>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Authorized Stockists</p>
+                  <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Authentic Oils</p>
                 </div>
               </div>
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000" 
-                alt="Luxury Boutique" 
+                src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=1000" 
+                alt="Luxury Perfume" 
                 className="w-full h-[600px] object-cover rounded-sm shadow-md"
               />
               <div className="absolute -bottom-10 -left-10 bg-secondary p-10 hidden lg:block" style={{ backgroundColor: 'var(--color-secondary)' }}>
-                <p className="text-white text-2xl font-heading italic max-w-[200px]">"Luxury is in the curation of style."</p>
+                <p className="text-white text-2xl font-heading italic max-w-[200px]">"The true beauty is in the essence."</p>
               </div>
             </div>
           </div>
@@ -84,21 +84,21 @@ const About = () => {
                 <Shield size={32} />
               </div>
               <h3 className="text-xl font-heading font-bold">Authenticity</h3>
-              <p className="text-sm text-gray-500 leading-relaxed font-light">Every partner on our platform is a verified designer stockist, ensuring 100% genuine products.</p>
+              <p className="text-sm text-gray-500 leading-relaxed font-light">Every fragrance on our platform is sourced directly from verified master perfumers, ensuring 100% genuine products and undiluted oils.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-6">
               <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
                 <Award size={32} />
               </div>
               <h3 className="text-xl font-heading font-bold">Curation</h3>
-              <p className="text-sm text-gray-500 leading-relaxed font-light">We hand-select premium sales events so you only see high-end fashion, luxury accessories, and classic garments.</p>
+              <p className="text-sm text-gray-500 leading-relaxed font-light">We hand-select premium scents so you only see the finest perfumes, rare oud, and authentic attars.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-6">
               <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
                 <Users size={32} />
               </div>
               <h3 className="text-xl font-heading font-bold">Integrity</h3>
-              <p className="text-sm text-gray-500 leading-relaxed font-light">We build secure affiliate integrations that respect partner pricing rules and merchant data.</p>
+              <p className="text-sm text-gray-500 leading-relaxed font-light">We maintain strong relationships with global artisans and respect the craft behind every bottle.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-6">
               <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
@@ -116,7 +116,7 @@ const About = () => {
         <div className="container">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-heading italic text-primary mb-8 leading-relaxed">
-              "Our mission is to unify premium Australian boutique inventory and warehouse markdowns into a single high-end search channel, making designer fashion accessible and secure."
+              "Our mission is to bring the finest global fragrances, oud, and traditional wear into a single, trusted destination, making premium scents accessible and secure."
             </h2>
             <div className="w-12 h-[1px] bg-gray-200 mx-auto mb-8"></div>
             <span className="font-bold uppercase tracking-widest text-xs text-gray-400">Founding Vision, 2026</span>

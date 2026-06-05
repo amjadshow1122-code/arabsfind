@@ -177,7 +177,7 @@ const Checkout = () => {
           </div>
           <h1 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Order Confirmed!</h1>
           <p className="text-sm sm:text-base text-gray-500 leading-relaxed">
-            Thank you for your purchase. Your designer boutique purchase is being prepared for its journey to your doorstep.
+            Thank you for your purchase. Your premium fragrance purchase is being prepared for its journey to your doorstep.
           </p>
           <div className="w-full p-4 bg-gray-50 rounded-lg text-left">
             <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
@@ -462,7 +462,7 @@ const Checkout = () => {
               <div className="p-3 sm:p-4 bg-gray-50 rounded-lg flex gap-3 items-start">
                 <Info size={14} className="text-primary mt-0.5 flex-shrink-0 sm:w-4 sm:h-4" />
                 <p className="text-[9px] sm:text-[10px] text-gray-400 leading-relaxed uppercase tracking-widest font-bold">
-                  All designer boutique items are carefully inspected and securely packaged to ensure safe delivery of your purchases.
+                  All fragrance items are carefully inspected and securely packaged to ensure safe delivery of your purchases.
                 </p>
               </div>
             </div>

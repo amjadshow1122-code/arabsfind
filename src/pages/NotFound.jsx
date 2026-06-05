@@ -28,7 +28,7 @@ const NotFound = () => {
           Page Not Found
         </h1>
         <p className="text-gray-500 text-sm leading-relaxed mb-10 max-w-sm mx-auto">
-          The page you're looking for may have moved, expired, or never existed. Try browsing our active designer sales instead.
+          The page you're looking for may have moved, expired, or never existed. Try browsing our active moaviafragranse instead.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -45,7 +45,7 @@ const NotFound = () => {
           <div className="flex flex-wrap gap-2 justify-center">
             {[
               { label: 'All Sales', to: '/sales' },
-              { label: 'Designer Boutiques', to: '/merchants' },
+              { label: 'Master Perfumers', to: '/merchants' },
               { label: 'How It Works', to: '/how-it-works' },
               { label: 'Contact Us', to: '/contact' },
             ].map(link => (

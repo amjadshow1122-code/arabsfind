@@ -47,7 +47,7 @@ const Contact = () => {
           {/* Info Cards */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="flex flex-col gap-4">
             {[
-              { icon: Mail, label: 'Email', value: 'support@designersale.com.au', href: 'mailto:support@designersale.com.au' },
+              { icon: Mail, label: 'Email', value: 'support@moaviafragranse.com.au', href: 'mailto:support@moaviafragranse.com.au' },
               { icon: Clock, label: 'Response Time', value: 'Within 1–2 business days' },
               { icon: MapPin, label: 'Based In', value: 'Australia 🇦🇺' },
             ].map(({ icon: Icon, label, value, href }) => (
@@ -127,7 +127,7 @@ const Contact = () => {
                       className="bg-gray-50 border border-gray-100 focus:border-secondary focus:bg-white px-4 py-3 rounded-lg text-sm outline-none transition-all">
                       <option value="">Select a topic...</option>
                       <option>Sale listing enquiry</option>
-                      <option>Partnership / boutique listing</option>
+                      <option>Partnership / brand listing</option>
                       <option>Order or payment support</option>
                       <option>Technical issue</option>
                       <option>Press or media</option>

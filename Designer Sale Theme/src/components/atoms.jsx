@@ -93,7 +93,7 @@ function DiamondMark({ size = 18, color = 'currentColor', filled = false }) {
 // ---------- Logo ----------
 // No mark, no diamond — pure editorial typography. Three treatments:
 //   'editorial' (default): masthead serif "Designer/italic Sale/.com.au"
-//   'stacked'  : "DesignerSale" wordmark with centred ".COM.AU" sub-rule
+//   'stacked'  : "MoaviaFragranse" wordmark with centred ".COM.AU" sub-rule
 //   'caps'     : all-caps sans wordmark with subordinate .com.au suffix
 function Logo({ variant, size = 'md', showTagline = false, color }) {
   // Live-update when the user changes logo treatment via Tweaks.
@@ -121,7 +121,7 @@ function Logo({ variant, size = 'md', showTagline = false, color }) {
             fontWeight: 500,
             letterSpacing: '0.02em',
             textTransform: 'uppercase',
-          }}>DesignerSale</span>
+          }}>MoaviaFragranse</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ height: 1, width: 16, background: 'var(--gold-deep)', opacity: 0.55 }} />
             <span style={{
@@ -160,7 +160,7 @@ function Logo({ variant, size = 'md', showTagline = false, color }) {
             display: 'inline-flex',
             alignItems: 'baseline',
           }}>
-            DesignerSale<span style={{
+            MoaviaFragranse<span style={{
               color: 'var(--gold-deep)',
               fontWeight: 500,
               letterSpacing: '0.04em',

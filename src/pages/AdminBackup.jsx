@@ -54,7 +54,7 @@ const AdminBackup = () => {
       }
 
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-      const filename = `designersale-backup-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+      const filename = `moaviafragranse-backup-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
       
       // 1. Download to user
       const url = URL.createObjectURL(blob);

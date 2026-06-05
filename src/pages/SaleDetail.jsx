@@ -58,7 +58,7 @@ const SaleDetail = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-center px-4">
         <ShieldAlert size={48} className="text-secondary mb-4" />
         <h2 className="text-2xl font-heading font-bold mb-2">Sale Event Not Found</h2>
-        <p className="text-gray-500 mb-6 max-w-md">The boutique sale event you are looking for may have expired, been archived, or does not exist.</p>
+        <p className="text-gray-500 mb-6 max-w-md">The fragrance sale event you are looking for may have expired, been archived, or does not exist.</p>
         <Link to="/sales" className="btn btn-primary">Back to Sales</Link>
       </div>
     );
@@ -120,7 +120,7 @@ const SaleDetail = () => {
                       <div className="bg-white/90 px-6 py-4 rounded-xl border border-gray-100 shadow-md text-center max-w-sm flex flex-col items-center gap-2">
                         <Lock size={18} className="text-secondary" />
                         <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Full Description Gated</h4>
-                        <p className="text-[10px] text-gray-400">Join free to unlock details on designers, items, and sizes.</p>
+                        <p className="text-[10px] text-gray-400">Join free to unlock details on fragrances, items, and sizes.</p>
                       </div>
                     </div>
                   </div>
@@ -139,7 +139,7 @@ const SaleDetail = () => {
             
             {/* Action Card */}
             <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-6 sticky top-28">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-primary border-b pb-3">Boutique Offer</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-primary border-b pb-3">Brand Offer</h3>
               
               {/* Discounts */}
               <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
@@ -187,14 +187,14 @@ const SaleDetail = () => {
                     Shop This Sale <ExternalLink size={14} />
                   </Link>
                   <span className="text-[10px] text-gray-400 text-center leading-normal">
-                    This outbound link is secure and tracks commission referrals for Australian boutique partnerships.
+                    This outbound link is secure and tracks commission referrals for global brand partnerships.
                   </span>
                 </div>
               )}
 
               {/* Merchant Details Mini Card */}
               <div className="border-t pt-6 flex flex-col gap-4">
-                <h4 className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Boutique Profile</h4>
+                <h4 className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Brand Profile</h4>
                 <div className="flex items-center gap-4">
                   <img src={merchant.logo_url} alt={merchant.name} className="w-12 h-12 rounded-lg object-cover bg-gray-50 border" />
                   <div>

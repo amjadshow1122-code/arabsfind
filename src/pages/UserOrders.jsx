@@ -78,7 +78,7 @@ const UserOrders = () => {
         </head>
         <body>
           <div class="header">
-            <div class="logo">DESIGNERSALE.COM.AU</div>
+            <div class="logo">MOAVIAFRAGRANSE.COM.AU</div>
             <div class="invoice-info">
               <div class="label">Invoice Number</div>
               <div class="value">#ORD-${order.id.slice(0, 8)}</div>
@@ -225,7 +225,7 @@ const UserOrders = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">My Orders</h2>
-          <p className="text-gray-500 text-xs sm:text-sm">Track your designer purchases and order history.</p>
+          <p className="text-gray-500 text-xs sm:text-sm">Track your fragrance purchases and order history.</p>
         </div>
         <div className="relative w-full sm:w-auto">
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />

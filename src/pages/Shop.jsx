@@ -219,7 +219,7 @@ const Shop = () => {
                     <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>
                     {view === 'list' && (
                       <p className="text-sm text-gray-500 mb-4">
-                        A curated designer piece, hand-selected for its quality and exceptional style.
+                        A curated fragrance piece, hand-selected for its quality and exceptional scent.
                       </p>
                     )}
                     <Link 

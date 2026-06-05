@@ -99,7 +99,7 @@ const GoRedirect = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-center">
       <Loader2 className="w-10 h-10 text-secondary animate-spin mb-4" />
-      <h2 className="text-xl font-heading font-bold text-primary mb-1">Redirecting to Boutique</h2>
+      <h2 className="text-xl font-heading font-bold text-primary mb-1">Redirecting to Brand</h2>
       <p className="text-xs text-gray-400 font-light">Securing connection & establishing affiliate referral tracking...</p>
     </div>
   );

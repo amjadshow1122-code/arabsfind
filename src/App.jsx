@@ -30,7 +30,7 @@ import MaintenancePage from './pages/MaintenancePage';
 import { supabase } from './lib/supabase';
 import { CartProvider } from './context/CartContext';
 
-// DesignerSale new pages
+// MoaviaFragranse new pages
 import SalesBrowse from './pages/SalesBrowse';
 import SaleDetail from './pages/SaleDetail';
 import MerchantDirectory from './pages/MerchantDirectory';
@@ -41,6 +41,7 @@ import AdminSales from './pages/AdminSales';
 import AdminMerchants from './pages/AdminMerchants';
 import AdminClicks from './pages/AdminClicks';
 import AdminNewsletter from './pages/AdminNewsletter';
+import AdminOrders from './pages/AdminOrders';
 // New missing pages
 import OrderSuccess from './pages/OrderSuccess';
 import OrderCancelled from './pages/OrderCancelled';
@@ -54,6 +55,8 @@ import HowItWorks from './pages/HowItWorks';
 import Unsubscribe from './pages/Unsubscribe';
 import CategoryBrowse from './pages/CategoryBrowse';
 import CustomPageBrowse from './pages/CustomPageBrowse';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 
 // Helper component to guard against maintenance mode
@@ -137,6 +140,8 @@ function App() {
               <Route path="/profile/notifications" element={<UserPanel><UserNotifications /></UserPanel>} />
 
               {/* Order flow */}
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/order/success" element={<OrderSuccess />} />
               <Route path="/order/cancelled" element={<OrderCancelled />} />
 
@@ -158,6 +163,7 @@ function App() {
               <Route path="/admin/login" element={<AdminLogin />} />
               
               <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+              <Route path="/admin/orders" element={<AdminLayout><AdminOrders /></AdminLayout>} />
               <Route path="/admin/products" element={<AdminLayout><AdminProducts /></AdminLayout>} />
               <Route path="/admin/sales" element={<AdminLayout><AdminSales /></AdminLayout>} />
               <Route path="/admin/merchants" element={<AdminLayout><AdminMerchants /></AdminLayout>} />

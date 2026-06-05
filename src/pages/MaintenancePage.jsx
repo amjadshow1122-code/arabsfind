@@ -21,10 +21,10 @@ const MaintenancePage = () => {
         
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl md:text-5xl font-heading font-bold text-white leading-tight">
-            Refining the <span className="italic text-secondary">Boutique</span> Experience
+            Refining the <span className="italic text-secondary">Fragrance</span> Experience
           </h1>
           <p className="text-gray-400 text-lg leading-relaxed">
-            DesignerSale.com.au is currently undergoing scheduled updates to enhance your Australian boutique shopping experience. We'll be back shortly with new active sales.
+            MoaviaFragranse.com.au is currently undergoing scheduled updates to enhance your fragrance shopping experience. We'll be back shortly with new active sales.
           </p>
         </div>
 
@@ -37,12 +37,12 @@ const MaintenancePage = () => {
           <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center gap-2">
             <Mail className="text-secondary" size={20} />
             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Support</span>
-            <span className="text-white font-bold">support@designersale.com.au</span>
+            <span className="text-white font-bold">support@moaviafragranse.com.au</span>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/5 w-full">
-          <span className="font-heading text-xl font-bold text-white/30 tracking-widest uppercase">DESIGNER<span className="text-secondary/30">SALE</span></span>
+          <span className="font-heading text-xl font-bold text-white/30 tracking-widest uppercase">MOAVIA<span className="text-secondary/30">FRAGRANCE</span></span>
         </div>
       </motion.div>
     </div>

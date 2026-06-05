@@ -1,4 +1,4 @@
-**DesignerSale*.com.au***
+**MoaviaFragranse*.com.au***
 
 **PLATFORM DEVELOPER SPECIFICATION**
 
@@ -129,7 +129,7 @@ Frictionless return visit for users who already have an account.
 | **4** | User can browse Sales, Products, and Merchant Directory with full detail access. |
 | **5** | User can save newsletter preferences in Account Settings. |
 
-## **B3. User — Purchase on DesignerSale (Own Products)**
+## **B3. User — Purchase on MoaviaFragranse (Own Products)**
 
 For products sold directly on the platform. Stripe handles all payment processing.
 
@@ -234,7 +234,7 @@ Data models for the core entities. All tables should support created\_at, update
 | Field | Type | Required | Notes |
 | :---- | :---- | :---- | :---- |
 | id | UUID / INT | Yes | Primary key |
-| merchant\_id | INT | No | FK to merchants — NULL if DesignerSale owns it |
+| merchant\_id | INT | No | FK to merchants — NULL if MoaviaFragranse owns it |
 | sale\_id | INT | No | FK to sales — optional association |
 | title | VARCHAR 255 | Yes | Product name |
 | slug | VARCHAR 255 | Yes | URL slug |
@@ -492,4 +492,4 @@ A server-side script (cron job) runs once daily. It checks all active sales and 
 
 * Masked fields: ensure guest-visible teaser text is indexable — the full description behind login is fine to be noindexed
 
-*End of Specification — DesignerSale.com.au v1.0*
+*End of Specification — MoaviaFragranse.com.au v1.0*

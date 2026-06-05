@@ -67,9 +67,9 @@ const MerchantProfile = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-center px-4">
         <ShieldAlert size={48} className="text-secondary mb-4" />
-        <h2 className="text-2xl font-heading font-bold mb-2">Boutique Profile Not Found</h2>
+        <h2 className="text-2xl font-heading font-bold mb-2">Brand Profile Not Found</h2>
         <p className="text-gray-500 mb-6 max-w-md">The brand profile you are looking for may have been removed or does not exist.</p>
-        <Link to="/merchants" className="btn btn-primary">Back to Boutiques</Link>
+        <Link to="/merchants" className="btn btn-primary">Back to Brands</Link>
       </div>
     );
   }
@@ -91,7 +91,7 @@ const MerchantProfile = () => {
 
           <div className="flex flex-col gap-4 flex-grow">
             <div>
-              <span className="text-[10px] text-secondary font-bold uppercase tracking-widest block mb-1">Partner Boutique</span>
+              <span className="text-[10px] text-secondary font-bold uppercase tracking-widest block mb-1">Partner Brand</span>
               <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary">{merchant.name}</h1>
               <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 font-medium mt-2">
                 <span className="flex items-center gap-1"><MapPin size={14} className="text-secondary" /> {merchant.location_city}, {merchant.location_state}</span>
@@ -99,7 +99,7 @@ const MerchantProfile = () => {
             </div>
 
             <p className="text-sm text-gray-500 font-light leading-relaxed max-w-3xl">
-              {merchant.description || 'Exclusive Australian partner boutique offering curated designer statements, fine styling, and high-fashion garments.'}
+              {merchant.description || 'Exclusive Australian partner offering curated authentic fragrances, fine attars, and premium caps.'}
             </p>
 
             <div className="flex flex-wrap gap-4 mt-2">
@@ -128,12 +128,12 @@ const MerchantProfile = () => {
         {/* Sales Section */}
         <div className="mb-16">
           <h2 className="text-2xl font-heading font-bold text-primary mb-8 flex items-center gap-2">
-            <Tag size={22} className="text-secondary" /> Active Boutique Sales
+            <Tag size={22} className="text-secondary" /> Active Fragrance Sales
           </h2>
 
           {sales.length === 0 ? (
             <div className="bg-white p-10 rounded-xl border border-gray-100 text-center text-gray-400 italic text-sm shadow-sm">
-              No active boutique sales events registered for this brand currently. Check back later!
+              No active fragrance sales events registered for this brand currently. Check back later!
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -175,7 +175,7 @@ const MerchantProfile = () => {
 
           {products.length === 0 ? (
             <div className="bg-white p-10 rounded-xl border border-gray-100 text-center text-gray-400 italic text-sm shadow-sm">
-              No products mapped directly to this boutique profile currently.
+              No products mapped directly to this brand profile currently.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

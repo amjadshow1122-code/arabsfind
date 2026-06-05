@@ -1,4 +1,4 @@
-// Mock data for DesignerSale.com.au prototype.
+// Mock data for MoaviaFragranse.com.au prototype.
 // All brand and boutique names are fictional except Fashion Spectrum (per brief).
 
 window.DS_DATA = (() => {
