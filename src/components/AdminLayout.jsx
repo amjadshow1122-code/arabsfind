@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Package, 
-  Users, 
-  Settings, 
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  Settings,
   LogOut,
   Bell,
   Search,

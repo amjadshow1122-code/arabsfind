@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useCurrency } from '../lib/useCurrency';
+import { optimizeImage } from '../lib/imageOptimization';
 
 const AdminProducts = () => {
   const [activeTab, setActiveTab] = useState('list'); // 'list', 'bulk-edit', 'import'
@@ -18,6 +19,45 @@ const AdminProducts = () => {
   // Single Product Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleMultipleImagesUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    setIsUploading(true);
+    try {
+      const newUrls = [];
+      
+      for (const file of files) {
+        const optimizedFile = await optimizeImage(file, 0.8, 800);
+        const fileName = `product-${Date.now()}-${Math.random().toString(36).substring(7)}.webp`;
+        const filePath = `products/${fileName}`;
+
+        const { data, error } = await supabase.storage
+          .from('backups')
+          .upload(filePath, optimizedFile);
+
+        if (error) throw error;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('backups')
+          .getPublicUrl(filePath);
+
+        newUrls.push(publicUrl);
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        image_urls: [...prev.image_urls.filter(Boolean), ...newUrls],
+        image_url: prev.image_url || newUrls[0] || ''
+      }));
+    } catch (err) {
+      alert('Upload failed: ' + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -638,59 +678,10 @@ const AdminProducts = () => {
                   </div>
                 </div>
 
-                {/* Price & Compare price */}
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Price (AUD)</label>
-                    <input type="number" required step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Compare at RRP Price</label>
-                    <input type="number" step="0.01" value={formData.compare_at_price} onChange={(e) => setFormData({...formData, compare_at_price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Direct Stock quantity</label>
-                    <input type="number" disabled={formData.is_external} value={formData.stock_qty} onChange={(e) => setFormData({...formData, stock_qty: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none disabled:opacity-30" />
-                  </div>
-                </div>
-
-                {/* Direct Checkout Stripe Price ID */}
+                {/* Price */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Stripe Price API ID (Direct Checkout)</label>
-                  <input type="text" disabled={formData.is_external} value={formData.stripe_price_id} onChange={(e) => setFormData({...formData, stripe_price_id: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none disabled:opacity-30" placeholder="price_1H..." />
-                </div>
-
-                {/* Mappings to Boutique & Sale */}
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Brand Owner</label>
-                    <select value={formData.merchant_id} onChange={(e) => setFormData({...formData, merchant_id: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none">
-                      <option value="">Select Brand</option>
-                      {merchants.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Linked Sale Event</label>
-                    <select value={formData.sale_id} onChange={(e) => setFormData({...formData, sale_id: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none">
-                      <option value="">Select Sale</option>
-                      {sales.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                {/* External/Affiliate toggle */}
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col gap-4">
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" checked={formData.is_external} onChange={(e) => setFormData({...formData, is_external: e.target.checked})} className="accent-secondary h-4 w-4 rounded cursor-pointer" id="isExternalCheck" />
-                    <label htmlFor="isExternalCheck" className="text-xs font-bold text-gray-400 uppercase tracking-widest cursor-pointer select-none">Affiliate Product (External Link)</label>
-                  </div>
-                  
-                  {formData.is_external && (
-                    <div className="flex flex-col gap-2">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Outbound Affiliate Link</label>
-                      <input type="url" required value={formData.external_url || ''} onChange={(e) => setFormData({...formData, external_url: e.target.value})} className="w-full bg-white border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="https://example.com/product" />
-                    </div>
-                  )}
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Price (AUD)</label>
+                  <input type="number" required step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" />
                 </div>
 
                 {/* Teaser & Description */}
@@ -704,10 +695,32 @@ const AdminProducts = () => {
                   <textarea rows={3} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none resize-none" />
                 </div>
 
-                {/* Primary Image CDN URL */}
+                {/* Product Images Upload */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Primary Image CDN URL</label>
-                  <input type="url" required value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value, image_urls: [e.target.value]})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="https://cdn.com/image.jpg" />
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Product Images</label>
+                  <div className="flex flex-wrap gap-4 items-start">
+                    {formData.image_urls.filter(Boolean).map((url, idx) => (
+                      <div key={idx} className="relative group">
+                        <img src={url} alt={`Preview ${idx}`} className="w-24 h-24 object-cover rounded-xl border border-gray-100" />
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const newUrls = formData.image_urls.filter((_, i) => i !== idx);
+                            setFormData({...formData, image_urls: newUrls, image_url: newUrls[0] || ''});
+                          }} 
+                          className="absolute -top-2 -right-2 bg-white text-red-500 rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity border border-gray-100 hover:bg-red-50"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                    <div className="flex flex-col gap-2">
+                      <label className="btn border border-secondary text-secondary hover:bg-secondary/5 cursor-pointer max-w-xs justify-center text-sm py-2 h-24 w-24 flex-col gap-2 rounded-xl">
+                        {isUploading ? <div className="w-5 h-5 border-2 border-secondary border-t-transparent rounded-full animate-spin" /> : <><Upload size={20} /> <span className="text-[10px] uppercase font-bold text-center leading-tight">Upload<br/>Images</span></>}
+                        <input type="file" className="hidden" accept="image/*" multiple disabled={isUploading} onChange={handleMultipleImagesUpload} />
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Toggles */}
