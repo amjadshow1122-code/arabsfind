@@ -40,7 +40,7 @@ const Footer = () => {
                   <span className="font-heading text-2xl leading-none text-ink tracking-tight">
                     Moavia<span className="italic text-gold-deep">Fragrance</span>
                   </span>
-                  <span className="font-mono text-[8px] opacity-50 mb-0.5">.com.au</span>
+                  <span className="font-mono text-[8px] opacity-50 mb-0.5">.pk</span>
             </Link>
             <div className="font-mono text-[8px] tracking-[0.16em] uppercase text-ink-muted">
               PREMIUM PERFUMES, ATTARS, AND TRADITIONAL WEAR
@@ -123,7 +123,7 @@ const Footer = () => {
 
         <div className="border-t border-line pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[12px] text-ink-muted">
-            {copyright || `© ${new Date().getFullYear()} MoaviaFragranse Pty Ltd. Made in Australia.`}
+            {copyright || `© ${new Date().getFullYear()} MoaviaFragranse. Made in Pakistan.`}
           </p>
           <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-muted">
             AUTHENTIC FRAGRANCE SPECIALISTS

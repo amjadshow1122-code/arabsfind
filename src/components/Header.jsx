@@ -133,7 +133,7 @@ const Header = () => {
               <span className="font-heading text-[26px] leading-none text-ink tracking-tight">
                 Moavia<span className="italic text-gold-deep">Fragrance</span>
               </span>
-              <span className="font-mono text-[9px] opacity-50 mb-1">.com.au</span>
+              <span className="font-mono text-[9px] opacity-50 mb-1">.pk</span>
             </div>
           )}
         </Link>
