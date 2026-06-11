@@ -99,7 +99,7 @@ const MerchantProfile = () => {
             </div>
 
             <p className="text-sm text-gray-500 font-light leading-relaxed max-w-3xl">
-              {merchant.description || 'Exclusive Australian partner offering curated authentic fragrances, fine attars, and premium caps.'}
+              {merchant.description || 'Exclusive n partner offering curated authentic fragrances, fine attars, and premium caps.'}
             </p>
 
             <div className="flex flex-wrap gap-4 mt-2">

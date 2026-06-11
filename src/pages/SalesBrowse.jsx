@@ -86,7 +86,7 @@ const SalesBrowse = () => {
       {/* Header */}
       <div className="bg-primary py-16 sm:py-24 text-center relative overflow-hidden" style={{ backgroundColor: 'var(--color-primary)' }}>
         <div className="container relative z-10 px-4">
-          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">MoaviaFragranse</span>
+          <span className="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-4 block">Al-Moavia Fragrance</span>
           <h1 className="text-white text-3xl sm:text-5xl md:text-6xl mb-4">Active Fragrance Sales</h1>
           <p className="text-gray-300 max-w-xl mx-auto text-sm sm:text-base font-light">
             Discover curated authentic fragrances, premium attars, and exclusive perfume offers from top artisans.
@@ -150,8 +150,8 @@ const SalesBrowse = () => {
                 <option value="NSW">New South Wales (NSW)</option>
                 <option value="VIC">Victoria (VIC)</option>
                 <option value="QLD">Queensland (QLD)</option>
-                <option value="WA">Western Australia (WA)</option>
-                <option value="SA">South Australia (SA)</option>
+                <option value="WA">Western  (WA)</option>
+                <option value="SA">South  (SA)</option>
                 <option value="TAS">Tasmania (TAS)</option>
               </select>
             </div>
@@ -185,7 +185,7 @@ const SalesBrowse = () => {
             {filteredSales.length === 0 ? (
               <div className="bg-white p-12 rounded-xl text-center border border-gray-100 shadow-sm flex flex-col items-center justify-center">
                 <Tag size={48} className="text-gray-200 mb-4" />
-                <p className="text-gray-500 font-light mb-2">No active moaviafragranse match your filters.</p>
+                <p className="text-gray-500 font-light mb-2">No active al-moavia fragrance match your filters.</p>
                 <button 
                   onClick={() => { setSearchTerm(''); setSelectedCategory('All'); setSelectedState('All'); setMinDiscount(0); }}
                   className="text-xs font-bold text-secondary uppercase tracking-widest hover:underline"

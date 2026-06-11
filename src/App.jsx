@@ -30,7 +30,7 @@ import MaintenancePage from './pages/MaintenancePage';
 import { supabase } from './lib/supabase';
 import { CartProvider } from './context/CartContext';
 
-// MoaviaFragranse new pages
+// Al-Moavia Fragrance new pages
 import SalesBrowse from './pages/SalesBrowse';
 import SaleDetail from './pages/SaleDetail';
 import MerchantDirectory from './pages/MerchantDirectory';

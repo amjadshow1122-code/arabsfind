@@ -142,7 +142,7 @@ const AdminClicks = () => {
                   <td className="px-6 py-4 text-xs text-gray-600 font-bold">{getMerchantName(click.merchant_id)}</td>
                   <td className="px-6 py-4 text-xs font-medium text-gray-500">{getEntityName(click)}</td>
                   <td className="px-6 py-4 text-xs text-gray-400">
-                    {new Date(click.clicked_at).toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}
+                    {new Date(click.clicked_at).toLocaleString('en-AU', { timeZone: '/Sydney' })}
                   </td>
                   <td className="px-6 py-4 text-xs font-mono text-gray-400">{click.session_id ? `...${click.session_id}` : 'Anonymous'}</td>
                 </tr>

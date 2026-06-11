@@ -41,7 +41,7 @@ const About = () => {
               <span className="text-secondary font-bold uppercase tracking-[0.2em] text-sm mb-4 block" style={{ color: 'var(--color-secondary)' }}>Our Philosophy</span>
               <h2 className="text-4xl md:text-5xl mb-8 leading-tight">Authentic Perfumes & Attars — All In One Place</h2>
               <p className="text-gray-500 mb-6 leading-relaxed font-light">
-                MoaviaFragranse.com.au was founded to aggregate the finest authentic fragrances, oud wood, and premium attars from the most respected master perfumers. We believe premium scents should be accessible without sacrificing authenticity.
+                Al-Moavia Fragrance.com was founded to aggregate the finest authentic fragrances, oud wood, and premium attars from the most respected master perfumers. We believe premium scents should be accessible without sacrificing authenticity.
               </p>
               <p className="text-gray-500 mb-10 leading-relaxed font-light">
                 Our platform brings you closer to the authentic traditions of perfumery, connecting you directly to authorized artisans and global fragrance houses.

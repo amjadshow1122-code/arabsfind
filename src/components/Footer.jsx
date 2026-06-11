@@ -38,7 +38,7 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-end gap-1 mb-2">
                   <span className="font-heading text-2xl leading-none text-ink tracking-tight">
-                    Moavia<span className="italic text-gold-deep">Fragrance</span>
+                    Al-Moavia<span className="italic text-gold-deep">Fragrance</span>
                   </span>
                   <span className="font-mono text-[8px] opacity-50 mb-0.5">.pk</span>
             </Link>
@@ -123,7 +123,7 @@ const Footer = () => {
 
         <div className="border-t border-line pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[12px] text-ink-muted">
-            {copyright || `© ${new Date().getFullYear()} MoaviaFragranse. Made in Pakistan.`}
+            {copyright ? copyright.replace(/Al-Moavia Fragrance\.com\|Al-Moavia Fragrance/gi, 'Al-MoaviaFragrance.pk') : `© ${new Date().getFullYear()} Al-MoaviaFragrance.pk. Made in Pakistan.`}
           </p>
           <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-muted">
             AUTHENTIC FRAGRANCE SPECIALISTS

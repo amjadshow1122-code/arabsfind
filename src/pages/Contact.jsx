@@ -47,9 +47,9 @@ const Contact = () => {
           {/* Info Cards */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="flex flex-col gap-4">
             {[
-              { icon: Mail, label: 'Email', value: 'support@moaviafragranse.com.au', href: 'mailto:support@moaviafragranse.com.au' },
+              { icon: Mail, label: 'Email', value: 'support@al-moavia fragrance.com', href: 'mailto:support@al-moavia fragrance.com' },
               { icon: Clock, label: 'Response Time', value: 'Within 1–2 business days' },
-              { icon: MapPin, label: 'Based In', value: 'Australia 🇦🇺' },
+              { icon: MapPin, label: 'Based In', value: ' 🇦🇺' },
             ].map(({ icon: Icon, label, value, href }) => (
               <div key={label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
                 <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center shrink-0">

@@ -11,7 +11,7 @@ const CookiePolicy = () => (
           <span className="text-[10px] font-bold uppercase tracking-widest text-secondary">Legal</span>
         </div>
         <h1 className="text-4xl font-heading font-bold text-primary mb-2">Cookie Policy</h1>
-        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | MoaviaFragranse.com.au</p>
+        <p className="text-gray-400 text-sm mb-12">Last updated: May 2026 | Al-Moavia Fragrance.com</p>
 
         <div className="space-y-8 text-gray-600 leading-relaxed text-sm">
 
@@ -74,7 +74,7 @@ const CookiePolicy = () => (
 
           <section>
             <h2 className="text-xl font-heading font-bold text-primary mb-3">Questions?</h2>
-            <p>Contact us at <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">support@moaviafragranse.com.au</a>. For more on our data practices, see our <a href="/privacy" className="text-secondary hover:underline">Privacy Policy</a>.</p>
+            <p>Contact us at <a href="mailto:support@al-moavia fragrance.com" className="text-secondary hover:underline">support@al-moavia fragrance.com</a>. For more on our data practices, see our <a href="/privacy" className="text-secondary hover:underline">Privacy Policy</a>.</p>
           </section>
         </div>
       </motion.div>

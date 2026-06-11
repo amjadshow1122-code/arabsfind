@@ -7,7 +7,7 @@ const steps = [
   {
     icon: Search,
     number: '01',
-    title: 'Discover MoaviaFragranse',
+    title: 'Discover Al-Moavia Fragrance',
     description: 'Browse our curated feed of active authentic fragrances from top master perfumers and global brands. See teasers, notes, and details without signing up.',
     color: 'from-purple-500 to-indigo-500',
   },
@@ -35,8 +35,8 @@ const steps = [
   {
     icon: ShoppingBag,
     number: '05',
-    title: 'Or Buy Directly on MoaviaFragranse',
-    description: 'Some products are available to purchase directly through MoaviaFragranse.com.au. Add to cart and checkout securely via Stripe — we handle fulfilment and dispatch.',
+    title: 'Or Buy Directly on Al-Moavia Fragrance',
+    description: 'Some products are available to purchase directly through Al-Moavia Fragrance.com. Add to cart and checkout securely via Stripe — we handle fulfilment and dispatch.',
     color: 'from-pink-500 to-rose-500',
   },
 ];
@@ -46,8 +46,8 @@ const faqs = [
   { q: 'Why do I need an account to see prices?', a: 'Price and link gating is how we protect our affiliate relationships and verify users are genuine shoppers. Registration takes under a minute.' },
   { q: 'Do you earn commission on my purchase?', a: 'When you click through to a partner and make a purchase, we may earn a small affiliate commission at no extra cost to you. This is how we fund the platform. Full disclosure is in our Terms of Use.' },
   { q: 'Are the listings real-time?', a: 'We source and verify product data manually, with a daily automated check for expired items and broken links. Prices and availability are always confirmed on the merchant\'s site at checkout.' },
-  { q: 'Can I buy directly on MoaviaFragranse?', a: 'Yes — select products from partners can be purchased directly. Payments are processed securely by Stripe. We never handle your card details.' },
-  { q: 'How do I report a stale or expired item?', a: 'Use the "Report" flag on any listing, or contact us at support@moaviafragranse.com.au. We review all reports within 24 hours.' },
+  { q: 'Can I buy directly on Al-Moavia Fragrance?', a: 'Yes — select products from partners can be purchased directly. Payments are processed securely by Stripe. We never handle your card details.' },
+  { q: 'How do I report a stale or expired item?', a: 'Use the "Report" flag on any listing, or contact us at support@al-moavia fragrance.com. We review all reports within 24 hours.' },
 ];
 
 const HowItWorks = () => (
@@ -57,8 +57,8 @@ const HowItWorks = () => (
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
         <span className="text-[10px] font-bold uppercase tracking-widest text-secondary block mb-4">Platform Guide</span>
         <h1 className="text-4xl sm:text-6xl font-heading font-bold text-primary mb-5 leading-tight">
-          How MoaviaFragranse<br />
-          <span className="text-secondary">.com.au</span> Works
+          How Al-Moavia Fragrance<br />
+          <span className="text-secondary">.com</span> Works
         </h1>
         <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base leading-relaxed mb-8">
           Premium perfumes and attars — all in one place. Sign up free and unlock prices, direct links, and curated fragrance selections.
@@ -115,7 +115,7 @@ const HowItWorks = () => (
           <Lock size={32} className="mx-auto mb-5 text-secondary" />
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-4">Why Is It Free?</h2>
           <p className="text-white/70 leading-relaxed text-sm sm:text-base">
-            MoaviaFragranse.com.au earns a small affiliate commission when you click through to a partner and make a purchase — at <strong className="text-white">no extra cost to you</strong>. This funds the platform and keeps it completely free. Account gating ensures clicks come from genuine shoppers, maintaining the quality of our affiliate relationships. Full disclosure in our{' '}
+            Al-Moavia Fragrance.com earns a small affiliate commission when you click through to a partner and make a purchase — at <strong className="text-white">no extra cost to you</strong>. This funds the platform and keeps it completely free. Account gating ensures clicks come from genuine shoppers, maintaining the quality of our affiliate relationships. Full disclosure in our{' '}
             <a href="/terms" className="text-secondary hover:underline">Terms of Use</a>.
           </p>
         </motion.div>

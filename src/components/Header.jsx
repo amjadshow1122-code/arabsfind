@@ -113,7 +113,7 @@ const Header = () => {
       <div className="pointer-events-auto">
         {config?.top_bar && !isScrolled && (
           <div className="bg-ink text-bg text-center py-2 font-mono text-[10.5px] tracking-[0.18em] uppercase transition-all duration-300">
-            {config.top_bar}
+            {typeof config.top_bar === 'string' ? config.top_bar.replace(/Al-Moavia Fragrance/gi, 'Al-MoaviaFragrance.pk') : config.top_bar}
           </div>
         )}
       </div>
@@ -131,7 +131,7 @@ const Header = () => {
           ) : (
             <div className="flex items-end gap-1">
               <span className="font-heading text-[26px] leading-none text-ink tracking-tight">
-                Moavia<span className="italic text-gold-deep">Fragrance</span>
+                Al-Moavia<span className="italic text-gold-deep">Fragrance</span>
               </span>
               <span className="font-mono text-[9px] opacity-50 mb-1">.pk</span>
             </div>

@@ -54,11 +54,11 @@ const Unsubscribe = () => {
             <h1 className="text-2xl font-heading font-bold text-primary mb-3">You've been unsubscribed</h1>
             <p className="text-gray-500 text-sm leading-relaxed mb-6">
               {email && <><strong>{email}</strong> has been removed from our mailing list.<br /><br /></>}
-              You won't receive any further marketing emails from MoaviaFragranse.com.au. Transactional emails (order confirmations, password resets) will still be sent as needed.
+              You won't receive any further marketing emails from Al-Moavia Fragrance.com. Transactional emails (order confirmations, password resets) will still be sent as needed.
             </p>
             <p className="text-gray-400 text-xs mb-8">Changed your mind? You can re-subscribe in your <Link to="/profile/settings" className="text-secondary hover:underline">Account Settings</Link>.</p>
             <Link to="/" className="btn btn-primary py-3.5 px-8 text-sm gap-2">
-              Back to MoaviaFragranse
+              Back to Al-Moavia Fragrance
             </Link>
           </>
         )}
@@ -80,7 +80,7 @@ const Unsubscribe = () => {
           <>
             <XCircle size={48} className="text-red-400 mx-auto mb-5" />
             <h1 className="text-2xl font-heading font-bold text-primary mb-3">Something went wrong</h1>
-            <p className="text-gray-500 text-sm mb-6">We couldn't process your request. Please email us directly at <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">support@moaviafragranse.com.au</a> and we'll unsubscribe you manually.</p>
+            <p className="text-gray-500 text-sm mb-6">We couldn't process your request. Please email us directly at <a href="mailto:support@al-moavia fragrance.com" className="text-secondary hover:underline">support@al-moavia fragrance.com</a> and we'll unsubscribe you manually.</p>
           </>
         )}
       </motion.div>

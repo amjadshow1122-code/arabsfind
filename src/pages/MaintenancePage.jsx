@@ -24,7 +24,7 @@ const MaintenancePage = () => {
             Refining the <span className="italic text-secondary">Fragrance</span> Experience
           </h1>
           <p className="text-gray-400 text-lg leading-relaxed">
-            MoaviaFragranse.com.au is currently undergoing scheduled updates to enhance your fragrance shopping experience. We'll be back shortly with new active sales.
+            Al-Moavia Fragrance.com is currently undergoing scheduled updates to enhance your fragrance shopping experience. We'll be back shortly with new active sales.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ const MaintenancePage = () => {
           <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center gap-2">
             <Mail className="text-secondary" size={20} />
             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Support</span>
-            <span className="text-white font-bold">support@moaviafragranse.com.au</span>
+            <span className="text-white font-bold">support@al-moavia fragrance.com</span>
           </div>
         </div>
 

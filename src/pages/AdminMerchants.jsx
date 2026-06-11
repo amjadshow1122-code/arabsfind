@@ -100,7 +100,7 @@ const AdminMerchants = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-heading font-bold text-primary">Brands & Brand Partners</h1>
-          <p className="text-gray-500 text-sm">Create and manage Australia's premium partner brands and affiliate configurations.</p>
+          <p className="text-gray-500 text-sm">Create and manage 's premium partner brands and affiliate configurations.</p>
         </div>
         <button 
           onClick={() => { setEditingMerchant(null); setFormData({ name: '', slug: '', logo_url: '', website_url: '', description: '', location_city: '', location_state: '', social_instagram: '', status: 'active', affiliate_url_template: '' }); setIsModalOpen(true); }}

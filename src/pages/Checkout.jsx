@@ -31,7 +31,7 @@ const Checkout = () => {
     address: '',
     city: '',
     postalCode: '',
-    country: 'Australia',
+    country: '',
     phone: ''
   });
   const [saveAddress, setSaveAddress] = useState(false);
@@ -327,7 +327,7 @@ const Checkout = () => {
                         onChange={(e) => setFormData({...formData, country: e.target.value})}
                         className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all"
                       >
-                        <option>Australia</option>
+                        <option></option>
                         <option>New Zealand</option>
                       </select>
                     </div>

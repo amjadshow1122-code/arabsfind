@@ -52,7 +52,7 @@ const OrderSuccess = () => {
           Order Confirmed!
         </h1>
         <p className="text-gray-500 text-sm leading-relaxed mb-8">
-          Thank you for your purchase from <strong>MoaviaFragranse.com.au</strong>. Your order has been received and is being processed. You'll receive a confirmation email shortly.
+          Thank you for your purchase from <strong>Al-Moavia Fragrance.com</strong>. Your order has been received and is being processed. You'll receive a confirmation email shortly.
         </p>
 
         {order && (
@@ -104,8 +104,8 @@ const OrderSuccess = () => {
 
         <p className="text-[10px] text-gray-400 mt-8 leading-relaxed">
           Questions? Contact us at{' '}
-          <a href="mailto:support@moaviafragranse.com.au" className="text-secondary hover:underline">
-            support@moaviafragranse.com.au
+          <a href="mailto:support@al-moavia fragrance.com" className="text-secondary hover:underline">
+            support@al-moavia fragrance.com
           </a>
         </p>
       </motion.div>

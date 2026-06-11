@@ -111,7 +111,7 @@ const AdminOrders = () => {
         </head>
         <body>
           <div class="header">
-            <div class="logo">MOAVIAFRAGRANSE.COM.AU</div>
+            <div class="logo">AL-MOAVIA FRAGRANCE.COM</div>
             <div class="invoice-info">
               <div class="label">Invoice Number</div>
               <div class="value">#ORD-${order.id.slice(0, 8)}</div>
@@ -168,7 +168,7 @@ const AdminOrders = () => {
           </div>
 
           <div style="margin-top: 80px; text-align: center; font-size: 12px; color: #999;">
-            Thank you for your purchase from MoaviaFragranse.com.au. Your order is on its way!
+            Thank you for your purchase from Al-Moavia Fragrance.com. Your order is on its way!
           </div>
         </body>
       </html>

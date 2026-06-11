@@ -44,21 +44,29 @@ const Home = () => {
     }
     setContent(contentMap);
 
+    const shuffleArray = (array) => {
+      let shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
     const { data: products } = await supabase
       .from('products')
       .select('*')
       .eq('is_featured', true)
-      .limit(4);
+      .limit(50);
     
     if (products && products.length > 0) {
-      setFeaturedProducts(products);
+      setFeaturedProducts(shuffleArray(products).slice(0, 12));
     } else {
       const { data: fallback } = await supabase
         .from('products')
         .select('*')
-        .order('rating', { ascending: false })
-        .limit(4);
-      if (fallback) setFeaturedProducts(fallback);
+        .limit(50);
+      if (fallback) setFeaturedProducts(shuffleArray(fallback).slice(0, 12));
     }
     
     // Fetch categories that have an image
@@ -390,7 +398,7 @@ const Home = () => {
       {content.newsletter && (
         <section className="bg-ink text-bg py-24 sm:py-32 px-6 text-center">
           <div className="container max-w-3xl mx-auto">
-            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-gold-soft mb-6">THE MOAVIAFRAGRANSE LIST</div>
+            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-gold-soft mb-6">THE AL-MOAVIA FRAGRANCE LIST</div>
             <h2 className="text-4xl sm:text-6xl font-display mb-4 tracking-tight">Never miss a new arrival.</h2>
             <p className="text-bg/70 max-w-lg mx-auto mb-10 text-[15px] leading-relaxed">
               Join our newsletter for the latest premium fragrances, authentic attars, and traditional wear straight to your inbox.
@@ -405,7 +413,7 @@ const Home = () => {
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row w-full max-w-md gap-3 sm:gap-0 mx-auto mt-8 mb-4">
                 <input 
                   type="email" 
-                  placeholder="your@email.com.au" 
+                  placeholder="your@email.com" 
                   required 
                   className="flex-1 bg-white border border-line px-5 py-3.5 text-sm outline-none focus:border-gold transition-colors w-full sm:w-auto text-ink"
                 />

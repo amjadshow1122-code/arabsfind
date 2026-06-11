@@ -66,7 +66,7 @@ const AdminLogin = () => {
             </div>
             <div>
               <h1 className="text-3xl font-heading font-bold text-white tracking-tight">Admin Terminal</h1>
-              <p className="text-gray-400 text-sm mt-1 uppercase tracking-[0.2em] font-bold">MoaviaFragranse Management System</p>
+              <p className="text-gray-400 text-sm mt-1 uppercase tracking-[0.2em] font-bold">Al-Moavia Fragrance Management System</p>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ const AdminLogin = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@moaviafragranse.com.au"
+                  placeholder="admin@al-moavia fragrance.com"
                   className="w-full bg-[#002a70] border border-white/5 px-12 py-4 rounded-xl outline-none focus:border-secondary focus:bg-[#00348a] transition-all text-sm text-white placeholder:text-gray-600"
                 />
               </div>

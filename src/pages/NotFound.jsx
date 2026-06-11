@@ -28,7 +28,7 @@ const NotFound = () => {
           Page Not Found
         </h1>
         <p className="text-gray-500 text-sm leading-relaxed mb-10 max-w-sm mx-auto">
-          The page you're looking for may have moved, expired, or never existed. Try browsing our active moaviafragranse instead.
+          The page you're looking for may have moved, expired, or never existed. Try browsing our active al-moavia fragrance instead.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
