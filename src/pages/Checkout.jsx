@@ -8,7 +8,8 @@ import {
   ArrowLeft,
   Lock,
   ChevronRight,
-  Info
+  Info,
+  Plus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrency } from '../lib/useCurrency';
@@ -18,7 +19,7 @@ import { useEffect } from 'react';
 
 const Checkout = () => {
   const { formatPrice } = useCurrency();
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, cartTotal, clearCart, addToCart } = useCart();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
@@ -35,9 +36,19 @@ const Checkout = () => {
     phone: ''
   });
   const [saveAddress, setSaveAddress] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('Card');
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
 
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [showAddressPicker, setShowAddressPicker] = useState(false);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false }).limit(3);
+      if (data) setSuggestedProducts(data);
+    };
+    fetchSuggestions();
+  }, []);
 
   useEffect(() => {
     const fetchUserAndAddresses = async () => {
@@ -108,7 +119,7 @@ const Checkout = () => {
           total_amount: cartTotal + (cartTotal > 500 ? 0 : 25),
           status: 'Pending',
           shipping_address: formData,
-          payment_method: 'Card',
+          payment_method: paymentMethod,
           items_count: cartItems.length,
           image: cartItems[0]?.image
         })
@@ -367,34 +378,66 @@ const Checkout = () => {
                     <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Payment Details</h2>
                   </div>
 
-                  <div className="p-6 border border-secondary bg-secondary/5 rounded-sm flex flex-col gap-6" style={{ borderColor: 'var(--color-secondary)' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <CreditCard className="text-secondary" />
-                        <span className="font-bold text-primary">Credit or Debit Card</span>
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="w-8 h-5 bg-gray-200 rounded-sm"></div>
-                        <div className="w-8 h-5 bg-gray-200 rounded-sm"></div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="md:col-span-2 flex flex-col gap-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Card Number</label>
-                        <div className="relative">
-                          <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
-                          <Lock size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300" />
+                  <div className="flex flex-col gap-6">
+                    {/* Card Option */}
+                    <div 
+                      onClick={() => setPaymentMethod('Card')}
+                      className={`p-6 border rounded-sm flex flex-col gap-6 cursor-pointer transition-all ${paymentMethod === 'Card' ? 'border-secondary bg-secondary/5' : 'border-gray-100 bg-white hover:border-gray-300'}`}
+                      style={paymentMethod === 'Card' ? { borderColor: 'var(--color-secondary)' } : {}}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'Card' ? 'border-secondary' : 'border-gray-300'}`}>
+                            {paymentMethod === 'Card' && <div className="w-2 h-2 rounded-full bg-secondary" />}
+                          </div>
+                          <CreditCard className={paymentMethod === 'Card' ? 'text-secondary' : 'text-gray-400'} />
+                          <span className={`font-bold ${paymentMethod === 'Card' ? 'text-primary' : 'text-gray-500'}`}>Credit or Debit Card</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="w-8 h-5 bg-gray-200 rounded-sm"></div>
+                          <div className="w-8 h-5 bg-gray-200 rounded-sm"></div>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Expiry Date</label>
-                        <input type="text" placeholder="MM / YY" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
+
+                      {paymentMethod === 'Card' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="md:col-span-2 flex flex-col gap-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Card Number</label>
+                            <div className="relative">
+                              <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
+                              <Lock size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300" />
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Expiry Date</label>
+                            <input type="text" placeholder="MM / YY" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">CVV</label>
+                            <input type="text" placeholder="000" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* COD Option */}
+                    <div 
+                      onClick={() => setPaymentMethod('COD')}
+                      className={`p-6 border rounded-sm flex flex-col gap-6 cursor-pointer transition-all ${paymentMethod === 'COD' ? 'border-secondary bg-secondary/5' : 'border-gray-100 bg-white hover:border-gray-300'}`}
+                      style={paymentMethod === 'COD' ? { borderColor: 'var(--color-secondary)' } : {}}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'COD' ? 'border-secondary' : 'border-gray-300'}`}>
+                            {paymentMethod === 'COD' && <div className="w-2 h-2 rounded-full bg-secondary" />}
+                          </div>
+                          <Truck className={paymentMethod === 'COD' ? 'text-secondary' : 'text-gray-400'} />
+                          <span className={`font-bold ${paymentMethod === 'COD' ? 'text-primary' : 'text-gray-500'}`}>Cash on Delivery (COD)</span>
+                        </div>
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">CVV</label>
-                        <input type="text" placeholder="000" className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" />
-                      </div>
+                      {paymentMethod === 'COD' && (
+                        <p className="text-sm text-gray-500 pl-7">Pay with cash upon delivery of your order.</p>
+                      )}
                     </div>
                   </div>
 
@@ -466,6 +509,42 @@ const Checkout = () => {
                 </p>
               </div>
             </div>
+
+            {/* Order More Section */}
+            {suggestedProducts.length > 0 && (
+              <div className="bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-6 mt-8">
+                <h3 className="text-lg sm:text-xl font-heading font-bold border-b border-gray-50 pb-4">Order More Items</h3>
+                <div className="flex flex-col gap-4">
+                  {suggestedProducts.map((product) => {
+                    const inCart = cartItems.some(item => item.product_id === product.id);
+                    return (
+                      <div key={product.id} className="flex gap-4 items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                        <img src={product.image_url} alt={product.name} className="w-14 h-14 rounded-lg object-cover" />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-bold text-primary truncate">{product.name}</h4>
+                          <span className="text-xs font-bold text-secondary" style={{ color: 'var(--color-secondary)' }}>{formatPrice(product.price)}</span>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            if (!inCart) {
+                              addToCart(product, 1);
+                            }
+                          }}
+                          disabled={inCart}
+                          className={`w-8 h-8 rounded-full flex flex-shrink-0 items-center justify-center transition-colors ${
+                            inCart 
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                              : 'bg-secondary/10 text-secondary hover:bg-secondary hover:text-white'
+                          }`}
+                        >
+                          {inCart ? <CheckCircle2 size={16} /> : <Plus size={16} />}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </aside>
         </div>
       </div>

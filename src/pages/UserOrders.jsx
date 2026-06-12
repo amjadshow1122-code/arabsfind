@@ -9,7 +9,8 @@ import {
   Clock,
   CheckCircle2,
   Truck,
-  Loader2
+  Loader2,
+  MessageCircle
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useCurrency } from '../lib/useCurrency';
@@ -24,6 +25,15 @@ const UserOrders = () => {
   const [showTracking, setShowTracking] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
   const [itemsLoading, setItemsLoading] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data } = await supabase.from('site_settings').select('*').eq('id', 1).single();
+      if (data) setSiteSettings(data);
+    };
+    fetchSettings();
+  }, []);
 
   const fetchOrderItems = async (orderId) => {
     setItemsLoading(true);
@@ -219,6 +229,12 @@ const UserOrders = () => {
     order.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleContactSupport = (order) => {
+    const number = siteSettings?.footer_config?.whatsapp_order?.number?.replace(/\D/g, '') || '923175587278';
+    const message = encodeURIComponent(`Hello, I need help with my order ${order.displayId} placed on ${order.date}.`);
+    window.open(`https://wa.me/${number}?text=${message}`, '_blank');
+  };
+
   return (
     <div className="flex flex-col gap-8">
       {/* ... (Header) */}
@@ -293,16 +309,25 @@ const UserOrders = () => {
                   </button>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 sm:px-6 py-2.5 sm:py-3 border-t border-gray-50 flex items-center justify-between">
+              <div className="bg-gray-50 px-4 sm:px-6 py-2.5 sm:py-3 border-t border-gray-50 flex flex-wrap items-center justify-between gap-4">
                 <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-400">
                   {order.status === 'Delivered' ? 'Order delivered successfully' : 'Status will update dynamically'}
                 </p>
-                <button 
-                  onClick={() => handlePrintInvoice(order)}
-                  className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-secondary hover:underline"
-                >
-                  Invoice (PDF)
-                </button>
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => handleContactSupport(order)}
+                    className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#25D366] hover:underline flex items-center gap-1.5"
+                  >
+                    <MessageCircle size={12} />
+                    Contact Support
+                  </button>
+                  <button 
+                    onClick={() => handlePrintInvoice(order)}
+                    className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-secondary hover:underline"
+                  >
+                    Invoice (PDF)
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))
