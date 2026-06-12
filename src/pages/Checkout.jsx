@@ -26,6 +26,14 @@ const Checkout = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Auth States for inline Login/Signup (Step 0)
+  const [authMode, setAuthMode] = useState('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -50,7 +58,7 @@ const Checkout = () => {
     const fetchUserAndAddresses = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        navigate('/login?redirect=/checkout');
+        setStep(0);
         return;
       }
       setUser(user);
@@ -84,6 +92,69 @@ const Checkout = () => {
     };
     fetchUserAndAddresses();
   }, [navigate]);
+
+  const handleAuthSubmit = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthLoading(true);
+    
+    try {
+      let data, error;
+      if (authMode === 'signup') {
+        const res = await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+          options: { data: { full_name: authName } }
+        });
+        data = res.data; error = res.error;
+      } else {
+        const res = await supabase.auth.signInWithPassword({
+          email: authEmail,
+          password: authPassword
+        });
+        data = res.data; error = res.error;
+      }
+      
+      if (error) throw error;
+      
+      if (data.user) {
+        setUser(data.user);
+        setStep(1); // Move to Shipping
+        
+        if (authMode === 'login') {
+          const { data: addresses } = await supabase
+            .from('user_addresses')
+            .select('*')
+            .eq('user_id', data.user.id)
+            .order('is_default', { ascending: false });
+          
+          if (addresses && addresses.length > 0) {
+            setSavedAddresses(addresses);
+            const defaultAddr = addresses.find(a => a.is_default) || addresses[0];
+            const names = defaultAddr.full_name.split(' ');
+            setFormData({
+              firstName: names[0] || '',
+              lastName: names.slice(1).join(' ') || '',
+              address: defaultAddr.address_line1 + (defaultAddr.address_line2 ? ', ' + defaultAddr.address_line2 : ''),
+              city: defaultAddr.city,
+              postalCode: defaultAddr.postal_code || '',
+              country: defaultAddr.country || 'Pakistan',
+              phone: defaultAddr.phone || ''
+            });
+            setSaveAddress(false);
+          } else {
+            setSaveAddress(true);
+          }
+        } else {
+          setSaveAddress(true);
+        }
+      }
+    } catch (err) {
+      setAuthError(err.message);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   const selectAddress = (addr) => {
     const names = addr.full_name.split(' ');
@@ -227,15 +298,20 @@ const Checkout = () => {
     <div className="bg-background min-h-screen py-10 sm:py-20 px-4 sm:px-0">
       <div className="container">
         {/* Progress Header */}
-        <div className="flex items-center justify-center gap-3 sm:gap-8 mb-10 sm:mb-16">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>1</div>
-            <span className={`text-[10px] sm:text-sm font-bold uppercase tracking-widest ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Shipping</span>
+        <div className="flex items-center justify-center gap-2 sm:gap-6 mb-10 sm:mb-16">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 0 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>1</div>
+            <span className={`text-[9px] sm:text-sm font-bold uppercase tracking-widest ${step >= 0 ? 'text-primary' : 'text-gray-400'}`}>Account</span>
           </div>
-          <div className="w-8 sm:w-12 h-[1px] bg-gray-200"></div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>2</div>
-            <span className={`text-[10px] sm:text-sm font-bold uppercase tracking-widest ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Payment</span>
+          <div className="w-6 sm:w-8 h-[1px] bg-gray-200"></div>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>2</div>
+            <span className={`text-[9px] sm:text-sm font-bold uppercase tracking-widest ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>Shipping</span>
+          </div>
+          <div className="w-6 sm:w-8 h-[1px] bg-gray-200"></div>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
+            <span className={`text-[9px] sm:text-sm font-bold uppercase tracking-widest ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>Payment</span>
           </div>
         </div>
 
@@ -243,7 +319,74 @@ const Checkout = () => {
           {/* Main Form Area */}
           <div className="w-full lg:w-2/3 flex flex-col gap-10">
             <AnimatePresence mode="wait">
-              {step === 1 ? (
+              {step === 0 ? (
+                <motion.div 
+                  key="step0"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="flex flex-col gap-6 w-full max-w-md mx-auto"
+                >
+                  <div className="bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
+                    <h2 className="text-2xl font-heading font-bold text-primary mb-2">
+                      {authMode === 'login' ? 'Sign In to Checkout' : 'Create an Account'}
+                    </h2>
+                    <p className="text-sm text-gray-500 mb-6">
+                      {authMode === 'login' 
+                        ? 'Log in to use your saved addresses and speed up checkout.' 
+                        : 'Sign up to track orders, save addresses, and more.'}
+                    </p>
+
+                    {authError && (
+                      <div className="bg-red-50 text-red-500 p-3 rounded text-sm mb-4">
+                        {authError}
+                      </div>
+                    )}
+
+                    <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4">
+                      {authMode === 'signup' && (
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Full Name</label>
+                          <input 
+                            type="text" required value={authName} onChange={e => setAuthName(e.target.value)}
+                            className="bg-gray-50 border border-gray-200 px-4 py-3 rounded-sm outline-none focus:border-secondary transition-all" 
+                          />
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Email Address</label>
+                        <input 
+                          type="email" required value={authEmail} onChange={e => setAuthEmail(e.target.value)}
+                          className="bg-gray-50 border border-gray-200 px-4 py-3 rounded-sm outline-none focus:border-secondary transition-all" 
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Password</label>
+                        <input 
+                          type="password" required value={authPassword} onChange={e => setAuthPassword(e.target.value)}
+                          className="bg-gray-50 border border-gray-200 px-4 py-3 rounded-sm outline-none focus:border-secondary transition-all" 
+                        />
+                      </div>
+
+                      <button type="submit" disabled={authLoading} className="btn btn-primary w-full py-4 mt-2">
+                        {authLoading ? 'Please wait...' : authMode === 'login' ? 'Sign In & Continue' : 'Sign Up & Continue'}
+                      </button>
+                    </form>
+
+                    <div className="mt-6 text-center text-sm">
+                      <span className="text-gray-500">
+                        {authMode === 'login' ? "Don't have an account? " : "Already have an account? "}
+                      </span>
+                      <button 
+                        onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                        className="text-secondary font-bold hover:underline"
+                      >
+                        {authMode === 'login' ? 'Sign Up' : 'Log In'}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : step === 1 ? (
                 <motion.div 
                   key="step1"
                   initial={{ opacity: 0, x: -20 }}

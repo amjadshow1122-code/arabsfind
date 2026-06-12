@@ -678,10 +678,29 @@ const AdminProducts = () => {
                   </div>
                 </div>
 
-                {/* Price */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Price (AUD)</label>
-                  <input type="number" required step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" />
+                {/* Pricing & Discount */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Original Price</label>
+                    <input type="number" step="0.01" value={formData.compare_at_price || ''} onChange={(e) => setFormData({...formData, compare_at_price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="e.g. 100.00" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Discount (%)</label>
+                    <input type="number" step="1" max="100" min="0" 
+                      onChange={(e) => {
+                        const discount = parseFloat(e.target.value);
+                        const orig = parseFloat(formData.compare_at_price) || 0;
+                        if (orig > 0 && !isNaN(discount)) {
+                          const newPrice = orig - (orig * discount / 100);
+                          setFormData({...formData, price: newPrice.toFixed(2)});
+                        }
+                      }} 
+                      className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="Optional %" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Final Price *</label>
+                    <input type="number" required step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-100 px-4 py-3 rounded-lg text-sm outline-none" placeholder="Final Price" />
+                  </div>
                 </div>
 
                 {/* Teaser & Description */}
