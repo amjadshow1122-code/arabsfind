@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import CookieBanner from './CookieBanner';
+import WhatsAppWidget from './WhatsAppWidget';
 import { motion } from 'framer-motion';
 
 import { useLocation } from 'react-router-dom';
@@ -23,6 +24,7 @@ const Layout = ({ children }) => {
       </motion.main>
       {!isAdminPath && <Footer />}
       {!isAdminPath && <CookieBanner />}
+      {!isAdminPath && <WhatsAppWidget />}
     </div>
   );
 };

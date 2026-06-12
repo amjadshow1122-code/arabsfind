@@ -90,6 +90,10 @@ const AdminSettings = () => {
       whatsapp_order: {
         enabled: true,
         number: '+923175587278'
+      },
+      whatsapp_widget: {
+        enabled: true,
+        number: '+923175587278'
       }
     }
   });
@@ -118,7 +122,8 @@ const AdminSettings = () => {
             columns: data.footer_config?.columns || settings.footer_config.columns,
             social_links: data.footer_config?.social_links || settings.footer_config.social_links,
             contact_info: data.footer_config?.contact_info || settings.footer_config.contact_info,
-            whatsapp_order: data.footer_config?.whatsapp_order || settings.footer_config.whatsapp_order
+            whatsapp_order: data.footer_config?.whatsapp_order || settings.footer_config.whatsapp_order,
+            whatsapp_widget: data.footer_config?.whatsapp_widget || settings.footer_config.whatsapp_widget
           }
         });
       }

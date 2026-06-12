@@ -27,7 +27,7 @@ const SearchResults = () => {
 
     // 1. Search Sales (using secure view)
     const { data: salesData } = await supabase
-      .from('sales')
+      .from('sales_secure')
       .select('*')
       .eq('status', 'active')
       .ilike('title', `%${searchQuery}%`);
@@ -35,7 +35,7 @@ const SearchResults = () => {
 
     // 2. Search Products (using secure view)
     const { data: prodData } = await supabase
-      .from('products')
+      .from('products_secure')
       .select('*')
       .eq('status', 'active')
       .ilike('name', `%${searchQuery}%`);

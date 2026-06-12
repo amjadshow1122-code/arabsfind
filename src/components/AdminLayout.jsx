@@ -62,7 +62,7 @@ const AdminLayout = ({ children }) => {
         }
       } catch (err) { console.warn('Orders table not accessible.'); }
       try {
-        const { data: lowStock, error } = await supabase.from('products').select('name, stock_qty').lt('stock_qty', 5).gt('stock_qty', 0);
+        const { data: lowStock, error } = await supabase.from('products_secure').select('name, stock_qty').lt('stock_qty', 5).gt('stock_qty', 0);
         if (!error && lowStock) {
           lowStock.forEach(product => {
             newNotifications.push({ id: `stock-${product.name}`, type: 'stock', title: 'Low Stock Alert', message: `${product.name} has only ${product.stock_qty} units left.`, time: 'System', icon: AlertCircle, color: 'text-red-500', bg: 'bg-red-50' });

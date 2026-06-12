@@ -34,7 +34,7 @@ const MerchantProfile = () => {
 
         // Fetch their active sales
         const { data: salesData } = await supabase
-          .from('sales')
+          .from('sales_secure')
           .select('*')
           .eq('merchant_id', merchData.id)
           .eq('status', 'active');
@@ -42,7 +42,7 @@ const MerchantProfile = () => {
 
         // Fetch their active products
         const { data: prodData } = await supabase
-          .from('products')
+          .from('products_secure')
           .select('*')
           .eq('merchant_id', merchData.id)
           .eq('status', 'active');

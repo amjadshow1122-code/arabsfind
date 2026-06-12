@@ -40,52 +40,50 @@ const Checkout = () => {
   const [suggestedProducts, setSuggestedProducts] = useState([]);
 
   const [savedAddresses, setSavedAddresses] = useState([]);
-  const [showAddressPicker, setShowAddressPicker] = useState(false);
-
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false }).limit(3);
-      if (data) setSuggestedProducts(data);
-    };
-    fetchSuggestions();
-  }, []);
+  const [useDifferentDelivery, setUseDifferentDelivery] = useState(false);
+  const [deliveryData, setDeliveryData] = useState({
+    firstName: '', lastName: '', address: '', city: '', phone: ''
+  });
+  const [saveDeliveryAddress, setSaveDeliveryAddress] = useState(false);
 
   useEffect(() => {
     const fetchUserAndAddresses = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
+      if (!user) {
+        navigate('/login?redirect=/checkout');
+        return;
+      }
+      setUser(user);
+      
+      // Fetch all addresses
+      const { data: addresses } = await supabase
+        .from('user_addresses')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('is_default', { ascending: false });
+      
+      if (addresses && addresses.length > 0) {
+        setSavedAddresses(addresses);
         
-        // Fetch all addresses
-        const { data: addresses } = await supabase
-          .from('user_addresses')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('is_default', { ascending: false });
-        
-        if (addresses && addresses.length > 0) {
-          setSavedAddresses(addresses);
-          
-          // Pre-fill with default or first one
-          const defaultAddr = addresses.find(a => a.is_default) || addresses[0];
-          const names = defaultAddr.full_name.split(' ');
-          setFormData({
-            firstName: names[0] || '',
-            lastName: names.slice(1).join(' ') || '',
-            address: defaultAddr.address_line1 + (defaultAddr.address_line2 ? ', ' + defaultAddr.address_line2 : ''),
-            city: defaultAddr.city,
-            postalCode: defaultAddr.postal_code || '',
-            country: defaultAddr.country,
-            phone: defaultAddr.phone
-          });
-          setSaveAddress(false);
-        } else {
-          setSaveAddress(true);
-        }
+        // Pre-fill with default or first one
+        const defaultAddr = addresses.find(a => a.is_default) || addresses[0];
+        const names = defaultAddr.full_name.split(' ');
+        setFormData({
+          firstName: names[0] || '',
+          lastName: names.slice(1).join(' ') || '',
+          address: defaultAddr.address_line1 + (defaultAddr.address_line2 ? ', ' + defaultAddr.address_line2 : ''),
+          city: defaultAddr.city,
+          postalCode: defaultAddr.postal_code || '',
+          country: defaultAddr.country || 'Pakistan',
+          phone: defaultAddr.phone || ''
+        });
+        setSaveAddress(false);
+      } else {
+        setSaveAddress(true);
       }
     };
     fetchUserAndAddresses();
-  }, []);
+  }, [navigate]);
 
   const selectAddress = (addr) => {
     const names = addr.full_name.split(' ');
@@ -95,10 +93,10 @@ const Checkout = () => {
       address: addr.address_line1 + (addr.address_line2 ? ', ' + addr.address_line2 : ''),
       city: addr.city,
       postalCode: addr.postal_code || '',
-      country: addr.country,
-      phone: addr.phone
+      country: addr.country || 'Pakistan',
+      phone: addr.phone || ''
     });
-    setShowAddressPicker(false);
+    setShowNewAddressForm(false);
   };
 
   const handlePlaceOrder = async () => {
@@ -118,7 +116,9 @@ const Checkout = () => {
           customer_email: user.email,
           total_amount: cartTotal + (cartTotal > 500 ? 0 : 25),
           status: 'Pending',
-          shipping_address: formData,
+          shipping_address: useDifferentDelivery 
+            ? { ...deliveryData, country: 'Pakistan' } 
+            : formData,
           payment_method: paymentMethod,
           items_count: cartItems.length,
           image: cartItems[0]?.image
@@ -129,7 +129,21 @@ const Checkout = () => {
       if (orderError) throw orderError;
 
       // 1.5. Save address if requested
-      if (saveAddress) {
+      if (useDifferentDelivery && saveDeliveryAddress) {
+        await supabase
+          .from('user_addresses')
+          .insert([{
+            user_id: user.id,
+            full_name: `${deliveryData.firstName} ${deliveryData.lastName}`,
+            address_line1: deliveryData.address,
+            city: deliveryData.city,
+            postal_code: '',
+            country: 'Pakistan',
+            phone: deliveryData.phone,
+            is_default: false,
+            label: 'Other'
+          }]);
+      } else if (!useDifferentDelivery && saveAddress) {
         await supabase
           .from('user_addresses')
           .insert([{
@@ -238,130 +252,127 @@ const Checkout = () => {
                   className="flex flex-col gap-8"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Shipping Information</h2>
-                    {savedAddresses.length > 0 && (
-                      <button 
-                        onClick={() => setShowAddressPicker(!showAddressPicker)}
-                        className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-secondary hover:underline flex items-center gap-2 w-fit"
-                      >
-                        <CheckCircle2 size={14} className="sm:w-4 sm:h-4" />
-                        {showAddressPicker ? 'Close Saved' : 'Use Saved Address'}
-                      </button>
-                    )}
+                    <h2 className="text-2xl sm:text-3xl font-heading font-bold text-primary">Billing Information</h2>
                   </div>
 
-                  {/* Saved Address Picker */}
-                  <AnimatePresence>
-                    {showAddressPicker && (
-                      <motion.div 
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden"
-                      >
-                        {savedAddresses.map((addr) => (
-                          <button 
-                            key={addr.id}
-                            onClick={() => selectAddress(addr)}
-                            className="text-left p-4 rounded-lg border border-gray-100 hover:border-secondary hover:bg-secondary/5 transition-all flex flex-col gap-1"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-primary">{addr.full_name}</span>
-                              <span className="text-[10px] uppercase font-bold text-gray-400">{addr.label}</span>
+                  <div className="flex flex-col gap-6 mt-2">
+                    {/* Always show the primary billing profile if we have data, or just the title if empty (though it shouldn't be empty for new users) */}
+                    {(formData.firstName || formData.address) && (
+                      <div className="bg-white p-6 rounded-lg border border-gray-100 shadow-sm flex flex-col gap-2">
+                        <span className="font-bold text-primary text-lg">{formData.firstName} {formData.lastName}</span>
+                        <p className="text-sm text-gray-500">{formData.phone}</p>
+                        <p className="text-sm text-gray-500">{formData.address}{formData.city ? `, ${formData.city}` : ''}</p>
+                        <p className="text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-500 uppercase tracking-widest font-bold w-fit mt-2">Primary Billing Profile</p>
+                      </div>
+                    )}
+
+                    {!useDifferentDelivery ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button 
+                          onClick={() => setUseDifferentDelivery(true)}
+                          className="btn bg-white text-secondary border border-secondary hover:bg-secondary hover:text-white py-4 transition-colors font-bold shadow-sm"
+                        >
+                          Delivery to new address
+                        </button>
+                        <button 
+                          onClick={() => setStep(2)}
+                          className="btn btn-primary py-4 gap-2 flex items-center justify-center shadow-lg shadow-primary/10"
+                        >
+                          Continue Payment
+                          <ChevronRight size={18} />
+                        </button>
+                      </div>
+                    ) : (
+                      <AnimatePresence>
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="flex flex-col gap-6 overflow-hidden"
+                        >
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-bold text-primary text-lg">New Delivery Address</h3>
+                            <button 
+                              onClick={() => setUseDifferentDelivery(false)} 
+                              className="text-xs text-gray-400 hover:text-red-500 font-bold uppercase tracking-widest"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-lg border border-gray-100">
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs font-bold uppercase tracking-widest text-gray-400">First Name</label>
+                              <input 
+                                type="text" 
+                                required={useDifferentDelivery}
+                                value={deliveryData.firstName}
+                                onChange={(e) => setDeliveryData({...deliveryData, firstName: e.target.value})}
+                                className="w-full bg-white border border-gray-200 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
+                              />
                             </div>
-                            <p className="text-[10px] text-gray-500 line-clamp-1">{addr.address_line1}, {addr.city}</p>
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Last Name</label>
+                              <input 
+                                type="text" 
+                                required={useDifferentDelivery}
+                                value={deliveryData.lastName}
+                                onChange={(e) => setDeliveryData({...deliveryData, lastName: e.target.value})}
+                                className="w-full bg-white border border-gray-200 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
+                              />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Phone Number</label>
+                              <input 
+                                type="tel" 
+                                required={useDifferentDelivery}
+                                value={deliveryData.phone}
+                                onChange={(e) => setDeliveryData({...deliveryData, phone: e.target.value})}
+                                className="w-full bg-white border border-gray-200 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
+                              />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs font-bold uppercase tracking-widest text-gray-400">City</label>
+                              <input 
+                                type="text" 
+                                required={useDifferentDelivery}
+                                value={deliveryData.city}
+                                onChange={(e) => setDeliveryData({...deliveryData, city: e.target.value})}
+                                className="w-full bg-white border border-gray-200 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
+                              />
+                            </div>
+                            <div className="md:col-span-2 flex flex-col gap-2">
+                              <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Complete Address</label>
+                              <textarea 
+                                rows="2"
+                                required={useDifferentDelivery}
+                                value={deliveryData.address}
+                                onChange={(e) => setDeliveryData({...deliveryData, address: e.target.value})}
+                                className="w-full bg-white border border-gray-200 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all resize-none" 
+                              />
+                            </div>
+                            <label className="md:col-span-2 flex items-center gap-3 cursor-pointer group mt-2">
+                              <input 
+                                type="checkbox" 
+                                checked={saveDeliveryAddress}
+                                onChange={(e) => setSaveDeliveryAddress(e.target.checked)}
+                                className="w-4 h-4 rounded border-gray-300 text-secondary focus:ring-secondary" 
+                              />
+                              <span className="text-sm text-gray-500 group-hover:text-primary transition-colors font-medium">
+                                Save this address to my profile for future orders
+                              </span>
+                            </label>
+                          </div>
+                          <button 
+                            onClick={() => setStep(2)} 
+                            className="btn btn-primary py-4 gap-2 flex items-center justify-center w-full md:w-fit self-end shadow-lg shadow-primary/10 mt-2"
+                          >
+                            Continue Payment
+                            <ChevronRight size={18} />
                           </button>
-                        ))}
-                      </motion.div>
+                        </motion.div>
+                      </AnimatePresence>
                     )}
-                  </AnimatePresence>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">First Name</label>
-                      <input 
-                        type="text" 
-                        value={formData.firstName}
-                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Last Name</label>
-                      <input 
-                        type="text" 
-                        value={formData.lastName}
-                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="md:col-span-2 flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Street Address</label>
-                      <input 
-                        type="text" 
-                        value={formData.address}
-                        onChange={(e) => setFormData({...formData, address: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">City</label>
-                      <input 
-                        type="text" 
-                        value={formData.city}
-                        onChange={(e) => setFormData({...formData, city: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Postal Code</label>
-                      <input 
-                        type="text" 
-                        value={formData.postalCode}
-                        onChange={(e) => setFormData({...formData, postalCode: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Phone Number</label>
-                      <input 
-                        type="text" 
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Country</label>
-                      <select 
-                        value={formData.country}
-                        onChange={(e) => setFormData({...formData, country: e.target.value})}
-                        className="w-full bg-white border border-gray-100 px-4 py-3.5 rounded-sm outline-none focus:border-secondary transition-all"
-                      >
-                        <option></option>
-                        <option>New Zealand</option>
-                      </select>
-                    </div>
                   </div>
-
-                  {user && (
-                    <label className="flex items-center gap-3 cursor-pointer group mt-2">
-                      <input 
-                        type="checkbox" 
-                        checked={saveAddress}
-                        onChange={(e) => setSaveAddress(e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-secondary focus:ring-secondary" 
-                      />
-                      <span className="text-sm text-gray-500 group-hover:text-primary transition-colors font-medium">
-                        Save this address to my profile for future orders
-                      </span>
-                    </label>
-                  )}
-
-                  <button onClick={() => setStep(2)} className="btn btn-primary py-4 gap-3 w-full md:w-fit px-12 self-end">
-                    Continue to Payment
-                    <ChevronRight size={18} />
-                  </button>
                 </motion.div>
               ) : (
                 <motion.div 

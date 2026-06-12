@@ -34,7 +34,7 @@ const AdminDashboard = () => {
     
     // 1. Fetch Products count & Group by Category
     const { data: products, count: productCount } = await supabase
-      .from('products')
+      .from('products_secure')
       .select('category', { count: 'exact' });
 
     // 2. Fetch Customers count

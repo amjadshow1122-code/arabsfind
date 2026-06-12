@@ -91,24 +91,24 @@ const AdminPages = () => {
     
     // Fetch full objects for selected IDs
     if (page.curated_product_ids?.length > 0) {
-      const { data } = await supabase.from('products').select('id, name, image_url, image_urls').in('id', page.curated_product_ids);
+      const { data } = await supabase.from('products_secure').select('id, name, image_url, image_urls').in('id', page.curated_product_ids);
       if (data) setSelectedProducts(data);
     } else {
       setSelectedProducts([]);
     }
 
     if (page.curated_sale_ids?.length > 0) {
-      const { data } = await supabase.from('sales').select('id, title, image_urls').in('id', page.curated_sale_ids);
+      const { data } = await supabase.from('sales_secure').select('id, title, image_urls').in('id', page.curated_sale_ids);
       if (data) setSelectedSales(data);
     } else {
       setSelectedSales([]);
     }
 
     // Fetch initial list of items to pick from
-    const { data: prods } = await supabase.from('products').select('id, name, image_url, image_urls').limit(20).order('created_at', { ascending: false });
+    const { data: prods } = await supabase.from('products_secure').select('id, name, image_url, image_urls').limit(20).order('created_at', { ascending: false });
     if (prods) setInitialProducts(prods);
 
-    const { data: sales } = await supabase.from('sales').select('id, title, image_urls').limit(20).order('created_at', { ascending: false });
+    const { data: sales } = await supabase.from('sales_secure').select('id, title, image_urls').limit(20).order('created_at', { ascending: false });
     if (sales) setInitialSales(sales);
 
     setLoading(false);
@@ -117,7 +117,7 @@ const AdminPages = () => {
   const handleProductSearch = async (term) => {
     setProductSearch(term);
     if (term.length > 2) {
-      const { data } = await supabase.from('products').select('id, name, image_url, image_urls').ilike('name', `%${term}%`).limit(10);
+      const { data } = await supabase.from('products_secure').select('id, name, image_url, image_urls').ilike('name', `%${term}%`).limit(10);
       if (data) setProductResults(data);
     } else {
       setProductResults([]);
@@ -127,7 +127,7 @@ const AdminPages = () => {
   const handleSaleSearch = async (term) => {
     setSaleSearch(term);
     if (term.length > 2) {
-      const { data } = await supabase.from('sales').select('id, title, image_urls').ilike('title', `%${term}%`).limit(10);
+      const { data } = await supabase.from('sales_secure').select('id, title, image_urls').ilike('title', `%${term}%`).limit(10);
       if (data) setSaleResults(data);
     } else {
       setSaleResults([]);

@@ -32,7 +32,7 @@ const Shop = () => {
 
       // Fetch products
       const { data: prodData } = await supabase
-        .from('products')
+        .from('products_secure')
         .select('*')
         .order('created_at', { ascending: false });
       
@@ -99,7 +99,7 @@ const Shop = () => {
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Sidebar */}
-          <aside className={`w-full lg:w-1/4 flex flex-col gap-10 ${isFilterOpen ? 'block' : 'hidden lg:flex'}`}>
+          <aside className={`w-full lg:w-1/4 flex-col gap-10 ${isFilterOpen ? 'flex' : 'hidden lg:flex'}`}>
             {/* Search */}
             <div className="flex flex-col gap-4 px-4 lg:px-0">
               <h3 className="text-xs sm:text-sm font-bold uppercase tracking-widest text-primary">Search</h3>
@@ -216,7 +216,12 @@ const Shop = () => {
                     <Link to={`/product/${product.id}`}>
                       <h3 className="text-lg font-heading group-hover:text-secondary transition-colors cursor-pointer">{product.name}</h3>
                     </Link>
-                    <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>
+                    <div className="flex items-baseline gap-2">
+                      {product.compare_at_price && (
+                        <p className="text-sm font-medium text-gray-400 line-through">{formatPrice(product.compare_at_price)}</p>
+                      )}
+                      <p className="text-xl font-bold text-primary">{formatPrice(product.price)}</p>
+                    </div>
                     {view === 'list' && (
                       <p className="text-sm text-gray-500 mb-4">
                         A curated fragrance piece, hand-selected for its quality and exceptional scent.

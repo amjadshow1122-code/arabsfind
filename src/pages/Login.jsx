@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Globe, Share2 } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Globe, Share2, Phone, MapPin, Building2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 
@@ -9,6 +9,9 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -26,6 +29,13 @@ const Login = () => {
     setError(null);
 
     try {
+      if (!isLogin && !email.toLowerCase().endsWith('@gmail.com')) {
+        throw new Error('Registration is restricted to Gmail addresses only.');
+      }
+
+      const params = new URLSearchParams(location.search);
+      const redirectUrl = params.get('redirect') || '/profile';
+
       if (isLogin) {
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
           email,
@@ -46,7 +56,7 @@ const Login = () => {
           throw new Error('Invalid login credentials');
         }
 
-        navigate('/profile');
+        navigate(redirectUrl);
       } else {
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -59,9 +69,26 @@ const Login = () => {
         });
         if (error) throw error;
         
+        if (data?.user) {
+          // Save the default delivery address
+          const { error: addressError } = await supabase
+            .from('user_addresses')
+            .insert([{
+              user_id: data.user.id,
+              full_name: fullName,
+              phone: phone,
+              address_line1: address,
+              city: city,
+              is_default: true,
+              label: 'Home'
+            }]);
+            
+          if (addressError) console.error("Error saving address:", addressError);
+        }
+
         if (data?.user && data?.session) {
-          // User is signed up and logged in (email confirmation might be disabled)
-          navigate('/profile');
+          // User is signed up and logged in
+          navigate(redirectUrl);
         } else {
           // User is signed up but needs to confirm email
           alert('Check your email for the confirmation link!');
@@ -128,19 +155,66 @@ const Login = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="flex flex-col gap-2"
+                  className="flex flex-col gap-5"
                 >
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Full Name</label>
-                  <div className="relative">
-                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input 
-                      type="text" 
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Enter your name"
-                      className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm"
-                    />
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Full Name</label>
+                    <div className="relative">
+                      <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input 
+                        type="text" 
+                        required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Enter your name"
+                        className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Phone Number</label>
+                    <div className="relative">
+                      <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input 
+                        type="tel" 
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+92 300 0000000"
+                        className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Complete Address</label>
+                    <div className="relative">
+                      <MapPin size={18} className="absolute left-4 top-4 text-gray-400" />
+                      <textarea 
+                        required
+                        rows="2"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="House no, Street, Area..."
+                        className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">City</label>
+                    <div className="relative">
+                      <Building2 size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input 
+                        type="text" 
+                        required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="E.g. Lahore, Karachi"
+                        className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm"
+                      />
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -155,7 +229,7 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder="name@gmail.com"
                   className="w-full bg-gray-50 border border-gray-100 px-12 py-4 rounded-sm outline-none focus:border-secondary transition-all text-sm"
                 />
               </div>

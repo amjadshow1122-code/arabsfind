@@ -33,7 +33,7 @@ const Footer = () => {
   return (
     <footer className="bg-bg-card text-ink pt-20 pb-10 border-t border-line">
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-12 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-12 mb-16">
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-end gap-1 mb-2">

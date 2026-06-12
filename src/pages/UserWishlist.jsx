@@ -38,7 +38,7 @@ const UserWishlist = () => {
 
           // Step 3: Fetch the corresponding products
           const { data: productsData } = await supabase
-            .from('products')
+            .from('products_secure')
             .select('*')
             .in('id', productIds);
 

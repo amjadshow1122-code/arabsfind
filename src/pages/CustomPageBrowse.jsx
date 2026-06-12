@@ -42,7 +42,7 @@ const CustomPageBrowse = () => {
         // Fetch curated sales
         if (pData.curated_sale_ids && pData.curated_sale_ids.length > 0) {
           const { data: salesData } = await supabase
-            .from('sales')
+            .from('sales_secure')
             .select('*')
             .in('id', pData.curated_sale_ids)
             .eq('status', 'active')
@@ -55,7 +55,7 @@ const CustomPageBrowse = () => {
         // Fetch curated products
         if (pData.curated_product_ids && pData.curated_product_ids.length > 0) {
           const { data: prodsData } = await supabase
-            .from('products')
+            .from('products_secure')
             .select('*')
             .in('id', pData.curated_product_ids)
             .eq('status', 'active');

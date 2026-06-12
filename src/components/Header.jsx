@@ -130,7 +130,7 @@ const Header = () => {
             <div className="h-8 w-32 bg-ink/5 animate-pulse rounded"></div>
           ) : (
             <div className="flex items-end gap-1">
-              <span className="font-heading text-[26px] leading-none text-ink tracking-tight">
+              <span className="font-heading text-[22px] sm:text-[26px] leading-none text-ink tracking-tight">
                 Al-Moavia<span className="italic text-gold-deep">Fragrance</span>
               </span>
               <span className="font-mono text-[9px] opacity-50 mb-1">.pk</span>
@@ -182,12 +182,6 @@ const Header = () => {
             )}
           </Link>
 
-          <button 
-            onClick={() => setIsNewsletterModalOpen(true)}
-            className="hidden lg:inline-flex bg-ink text-bg font-bold tracking-widest text-[10px] uppercase py-3 px-6 hover:bg-ink-soft transition-colors rounded-sm ml-2"
-          >
-            EMAIL SIGN-UP
-          </button>
           <button 
             className="md:hidden w-[38px] h-[38px] rounded-full inline-flex items-center justify-center transition-colors hover:bg-blush-soft text-ink"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

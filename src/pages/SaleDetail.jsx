@@ -22,7 +22,7 @@ const SaleDetail = () => {
 
       // Fetch sale by slug (queries view public.sales which automatically returns nulls for gated columns if unauthenticated)
       const { data: saleData } = await supabase
-        .from('sales')
+        .from('sales_secure')
         .select('*')
         .eq('slug', slug)
         .single();

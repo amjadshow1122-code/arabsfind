@@ -34,7 +34,7 @@ const SalesBrowse = () => {
       if (merchData) setMerchants(merchData);
 
       // Fetch Sales (uses the public.sales view which handles data masking automatically)
-      const { data: salesData } = await supabase.from('sales').select('*').eq('status', 'active');
+      const { data: salesData } = await supabase.from('sales_secure').select('*').eq('status', 'active');
       if (salesData) setSales(salesData);
 
       setLoading(false);

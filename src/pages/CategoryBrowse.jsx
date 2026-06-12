@@ -41,7 +41,7 @@ const CategoryBrowse = () => {
       if (cat) {
         // Fetch sales in this category
         const { data: salesData } = await supabase
-          .from('sales')
+          .from('sales_secure')
           .select('*')
           .contains('category_ids', [cat.id])
           .eq('status', 'active')
@@ -50,7 +50,7 @@ const CategoryBrowse = () => {
 
         // Fetch products in this category
         const { data: prodsData } = await supabase
-          .from('products')
+          .from('products_secure')
           .select('*')
           .contains('category_ids', [cat.id])
           .eq('status', 'active');
