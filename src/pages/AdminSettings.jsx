@@ -44,6 +44,7 @@ import SecurityTab from '../components/AdminSettingsTabs/SecurityTab';
 import NotificationsTab from '../components/AdminSettingsTabs/NotificationsTab';
 import BrandingTab from '../components/AdminSettingsTabs/BrandingTab';
 import PaymentTab from '../components/AdminSettingsTabs/PaymentTab';
+import OrderSettingsTab from '../components/AdminSettingsTabs/OrderSettingsTab';
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState('General Information');
@@ -85,7 +86,11 @@ const AdminSettings = () => {
         phone: '',
         email: ''
       },
-      columns: []
+      columns: [],
+      whatsapp_order: {
+        enabled: true,
+        number: '+923175587278'
+      }
     }
   });
 
@@ -112,7 +117,8 @@ const AdminSettings = () => {
             ...(data.footer_config || {}),
             columns: data.footer_config?.columns || settings.footer_config.columns,
             social_links: data.footer_config?.social_links || settings.footer_config.social_links,
-            contact_info: data.footer_config?.contact_info || settings.footer_config.contact_info
+            contact_info: data.footer_config?.contact_info || settings.footer_config.contact_info,
+            whatsapp_order: data.footer_config?.whatsapp_order || settings.footer_config.whatsapp_order
           }
         });
       }
@@ -180,6 +186,7 @@ const AdminSettings = () => {
   };
   const tabs = [
     { name: 'General Information', icon: Globe },
+    { name: 'Order Settings', icon: ShoppingBag },
     { name: 'Header & Footer', icon: Layout },
     { name: 'Security & Access', icon: Lock },
     { name: 'Notifications', icon: Bell },
@@ -236,6 +243,7 @@ const AdminSettings = () => {
         <div className="lg:col-span-2">
           <AnimatePresence mode="wait">
             {activeTab === 'General Information' && <GeneralTab settings={settings} setSettings={setSettings} />}
+            {activeTab === 'Order Settings' && <OrderSettingsTab settings={settings} setSettings={setSettings} />}
             {activeTab === 'Header & Footer' && <HeaderFooterTab settings={settings} setSettings={setSettings} handleLogoUpload={handleLogoUpload} />}
             {activeTab === 'Security & Access' && <SecurityTab settings={settings} setSettings={setSettings} />}
             {activeTab === 'Notifications' && <NotificationsTab settings={settings} setSettings={setSettings} />}

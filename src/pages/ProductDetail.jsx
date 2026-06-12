@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Share2, ShoppingCart, ShieldCheck, Truck, RotateCcw, ChevronRight, Minus, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
+import { useCart } from '../context/CartContext';
 import { useCurrency } from '../lib/useCurrency';
 
 const ProductDetail = () => {
@@ -12,6 +13,21 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState(null);
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data } = await supabase.from('site_settings').select('footer_config').eq('id', 1).single();
+      if (data) {
+        setSiteSettings(data.footer_config);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -101,7 +117,29 @@ const ProductDetail = () => {
     }
   };
 
+  const handleOrderNow = async () => {
+    setAddingToCart(true);
+    await addToCart(product, quantity);
+    setAdded(true);
+    setAddingToCart(false);
+  };
+
+  const handleAddMore = () => {
+    setAdded(false);
+    setQuantity(1);
+  };
+
+  const handleCompleteOrder = () => {
+    navigate('/checkout');
+  };
+
   const { formatPrice } = useCurrency();
+
+  const handleWhatsappOrder = () => {
+    const number = siteSettings?.whatsapp_order?.number?.replace(/\D/g, '') || '923175587278';
+    const text = `Hi, I would like to order:\n\nProduct: ${product.name}\nQuantity: ${quantity}\nTotal: ${formatPrice(product.price * quantity)}`;
+    window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
+  };
 
   if (loading) {
     return (
@@ -185,7 +223,20 @@ const ProductDetail = () => {
             </p>
 
             <div className="flex flex-col gap-6 border-y border-gray-100 py-6 sm:py-8">
-              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Quantity</span>
+                <div className="flex items-center border border-gray-200 rounded-sm">
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:bg-gray-50 transition-colors text-gray-500">
+                    <Minus size={16} />
+                  </button>
+                  <span className="w-12 text-center font-bold text-lg">{quantity}</span>
+                  <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:bg-gray-50 transition-colors text-gray-500">
+                    <Plus size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 mt-2">
                 {product.external_url ? (
                   <a 
                     href={product.external_url}
@@ -195,13 +246,46 @@ const ProductDetail = () => {
                   >
                     View on Retailer
                   </a>
-                ) : (
+                ) : !added ? (
                   <button 
-                    disabled
-                    className="btn btn-primary flex-grow py-5 text-center flex items-center justify-center gap-3 opacity-50 cursor-not-allowed"
+                    onClick={handleOrderNow}
+                    disabled={addingToCart}
+                    className="btn btn-primary flex-grow py-5 text-center flex items-center justify-center gap-3"
                   >
-                    Not Available
+                    {addingToCart ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <>
+                        <ShoppingCart size={20} />
+                        Order Now
+                      </>
+                    )}
                   </button>
+                ) : (
+                  <>
+                    <button 
+                      onClick={handleAddMore}
+                      className="btn border border-primary text-primary flex-grow py-5 text-center flex items-center justify-center gap-3 hover:bg-gray-50"
+                    >
+                      <ShoppingCart size={20} />
+                      Add More
+                    </button>
+                    <button 
+                      onClick={handleCompleteOrder}
+                      className="btn btn-primary flex-grow py-5 text-center flex items-center justify-center gap-3"
+                    >
+                      Complete Order
+                    </button>
+                    {siteSettings?.whatsapp_order?.enabled !== false && (
+                      <button 
+                        onClick={handleWhatsappOrder}
+                        className="btn bg-[#25D366] hover:bg-[#128C7E] text-white flex-grow py-5 text-center flex items-center justify-center gap-3"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="css-i6dzq1"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        WhatsApp
+                      </button>
+                    )}
+                  </>
                 )}
 
                 <button 

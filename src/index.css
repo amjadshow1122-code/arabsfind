@@ -155,11 +155,18 @@
 
   /* Grids and Cards */
   .tile-grid {
-    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4;
+    @apply flex flex-wrap justify-center gap-4;
   }
   
   .tile {
     @apply relative aspect-[3/4] overflow-hidden bg-blush cursor-pointer transition-transform duration-300;
+    width: calc(50% - 8px);
+  }
+  @media (min-width: 768px) {
+    .tile { width: calc(33.333% - 10.66px); }
+  }
+  @media (min-width: 1024px) {
+    .tile { width: calc(16.666% - 13.33px); }
   }
   .tile:hover {
     transform: translateY(-2px);
